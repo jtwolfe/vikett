@@ -60,6 +60,11 @@ fn l0_guest_hides_mail_and_calendar() {
     assert!(tree.contains("scene.lock_private"), "{tree}");
     assert!(tree.contains("scene.guest"), "{tree}");
     assert!(tree.contains("guest flag"), "{tree}");
+    let (live, _) = live_and_dead(&cat.pages, snap, Some("how many downloads"));
+    assert!(
+        !live.iter().any(|l| l.page_id == "browser.downloads"),
+        "guest saw browser.downloads"
+    );
 }
 
 #[test]
@@ -182,4 +187,157 @@ fn slots_asserted_on_volume() {
     let r = run_golden(&cat, g);
     assert!(r.pass, "{r:?}");
     assert!(r.slots_ok);
+}
+
+#[test]
+fn browser_new_tab_uses_send_shortcut() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let r = decide(&cat, "new tab", snap, RefereeKind::Lexical);
+    assert_eq!(r.take.page_id.as_deref(), Some("browser.tab_new"));
+    let walk = r.walk.unwrap().command;
+    assert!(walk.contains("hl.dsp.send_shortcut"), "{walk}");
+    assert!(walk.contains("address:0xzen"), "{walk}");
+    assert!(walk.contains("mods = \"CTRL\""), "{walk}");
+    assert!(walk.contains("key = \"T\""), "{walk}");
+    assert!(!walk.contains("focuswindow"), "{walk}");
+    assert!(!walk.contains("dispatch exec "), "{walk}");
+}
+
+#[test]
+fn browser_fullscreen_keeps_empty_mods() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let r = decide(&cat, "fullscreen the page", snap, RefereeKind::Lexical);
+    let walk = r.walk.unwrap().command;
+    assert!(walk.contains("mods = \"\""), "{walk}");
+    assert!(walk.contains("key = \"F11\""), "{walk}");
+    assert!(!walk.contains("dispatch fullscreen"), "{walk}");
+}
+
+#[test]
+fn browser_focus_exec_or_address() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let mapped = decide(&cat, "focus the browser", snap, RefereeKind::Lexical);
+    let focus = mapped.walk.unwrap().command;
+    assert_eq!(
+        focus,
+        "hyprctl dispatch 'hl.dsp.focus({ window = \"address:0xzen\" })'"
+    );
+    let unmapped = decide(&cat, "firefox window", snap, RefereeKind::Lexical);
+    assert_eq!(unmapped.take.page_id.as_deref(), Some("browser.focus"));
+    assert_eq!(
+        unmapped.walk.unwrap().command,
+        "hyprctl dispatch 'hl.dsp.exec_cmd(\"firefox\")'"
+    );
+}
+
+#[test]
+fn browser_zoom_lot_repeats_chord() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let little = decide(&cat, "zoom in", snap, RefereeKind::Lexical);
+    let lot = decide(&cat, "zoom in a lot", snap, RefereeKind::Lexical);
+    assert_eq!(
+        little
+            .walk
+            .as_ref()
+            .unwrap()
+            .command
+            .matches("send_shortcut")
+            .count(),
+        1
+    );
+    assert_eq!(
+        lot.walk
+            .as_ref()
+            .unwrap()
+            .command
+            .matches("send_shortcut")
+            .count(),
+        3
+    );
+    assert!(lot.walk.unwrap().command.contains("key = \"plus\""));
+}
+
+#[test]
+fn browser_downloads_bucket_not_ok() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let r = decide(&cat, "how many downloads", snap, RefereeKind::Lexical);
+    assert_eq!(r.take.page_id.as_deref(), Some("browser.downloads"));
+    assert_eq!(r.answer, Some(serde_json::json!({ "bucket": "few" })));
+}
+
+#[test]
+fn mute_does_not_score_browser_pages() {
+    let cat = cat();
+    let snap = cat.snap("desk").unwrap();
+    let (live, _) = live_and_dead(&cat.pages, snap, Some("mute"));
+    let ids: std::collections::HashSet<&str> = live.iter().map(|l| l.page_id.as_str()).collect();
+    let scored = vikett::lexical::score_live(&cat.pages, &ids, "mute", snap);
+    assert!(
+        scored.iter().all(|s| !s.page_id.starts_with("browser.")),
+        "{:?}",
+        scored.iter().map(|s| &s.page_id).collect::<Vec<_>>()
+    );
+}
+
+#[test]
+fn foot_only_dead_alias_silences() {
+    let cat = cat();
+    let mut snap = cat.snap("desk").unwrap().clone();
+    snap.clients = vec![vikett::types::Client {
+        address: "0xfoot".into(),
+        class: "foot".into(),
+        title: "~".into(),
+        workspace: "1".into(),
+        focused: true,
+        fullscreen: false,
+        floating: false,
+    }];
+    snap.media_playing = false;
+    snap.now_playing = None;
+    for utt in ["close tab", "next tab", "fullscreen the page"] {
+        let r = decide(&cat, utt, &snap, RefereeKind::Lexical);
+        assert!(r.take.page_id.is_none(), "{utt} got {:?}", r.take);
+        assert!(r.walk.is_none(), "{utt}");
+        assert!(r.answer.is_none(), "{utt}");
+    }
+}
+
+#[test]
+fn browser_reserved_and_chrome_private_stay_dead() {
+    let cat = cat();
+    let zen = cat.snap("desk-zen").unwrap();
+    for (utt, id) in [
+        ("pin tab", "browser.tab_pin"),
+        ("mute tab", "browser.tab_mute"),
+        ("reader mode", "browser.reader"),
+        ("picture in picture", "browser.pip"),
+        ("bookmark this page", "browser.bookmark"),
+        ("translate this page", "browser.translate"),
+        ("cancel the download", "browser.download_cancel"),
+    ] {
+        let (live, dead) = live_and_dead(&cat.pages, zen, Some(utt));
+        assert!(!live.iter().any(|l| l.page_id == id), "{id} live");
+        let why = &dead.iter().find(|d| d.page_id == id).unwrap().why;
+        assert!(
+            why.contains("no chord") || why.contains("reserved"),
+            "{id} {why}"
+        );
+    }
+    let browsers = cat.snap("desk-browsers").unwrap();
+    let (live, dead) = live_and_dead(&cat.pages, browsers, Some("chrome private window"));
+    assert!(!live.iter().any(|l| l.page_id == "browser.private"));
+    let why = &dead
+        .iter()
+        .find(|d| d.page_id == "browser.private")
+        .unwrap()
+        .why;
+    assert!(
+        why.contains("no chord") || why.contains("reserved"),
+        "{why}"
+    );
 }

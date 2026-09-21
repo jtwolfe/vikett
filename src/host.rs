@@ -161,8 +161,109 @@ pub fn live_snap() -> Result<Snap> {
         mic_muted: false,
         sinks,
         focused_output,
+        bins: present_bins(),
+        chord_overlay: BTreeMap::new(),
+        lists: discover_lists(),
+        downloads: None,
     }
     .with_active_workspace())
+}
+
+/// Bookmark folder titles only. The other three discovered lists land with their families.
+pub fn discover_lists() -> BTreeMap<String, Vec<String>> {
+    let mut lists = BTreeMap::new();
+    lists.insert("bookmark_folder".into(), bookmark_folders());
+    lists
+}
+
+fn present_bins() -> Vec<String> {
+    [
+        "zen-browser",
+        "firefox",
+        "google-chrome",
+        "chromium",
+        "brave",
+        "foot",
+        "kitty",
+    ]
+    .into_iter()
+    .filter(|bin| which(bin))
+    .map(str::to_string)
+    .collect()
+}
+
+fn bookmark_folders() -> Vec<String> {
+    let Some(home) = std::env::var_os("HOME").map(std::path::PathBuf::from) else {
+        return Vec::new();
+    };
+    let mut files = Vec::new();
+    collect_places(&home.join(".zen"), &mut files);
+    collect_places(&home.join(".mozilla").join("firefox"), &mut files);
+    collect_places(&home.join(".config").join("zen"), &mut files);
+    let mut out = Vec::new();
+    for path in files {
+        for title in sqlite_folders(&path) {
+            let id = crate::text::norm(&title);
+            if id.is_empty() || out.iter().any(|e| e == &id) {
+                continue;
+            }
+            out.push(id);
+        }
+    }
+    out
+}
+
+fn collect_places(dir: &std::path::Path, out: &mut Vec<std::path::PathBuf>) {
+    let Ok(rd) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for ent in rd.flatten() {
+        let places = ent.path().join("places.sqlite");
+        if places.is_file() {
+            out.push(places);
+        }
+    }
+}
+
+fn sqlite_folders(path: &std::path::Path) -> Vec<String> {
+    let uri = sqlite_uri(path);
+    let Ok(out) = Command::new("sqlite3")
+        .args([
+            "-batch",
+            "-noinit",
+            "-json",
+            &uri,
+            "SELECT title FROM moz_bookmarks WHERE type = 2 AND ifnull(title, '') != '';",
+        ])
+        .output()
+    else {
+        return Vec::new();
+    };
+    if !out.status.success() {
+        return Vec::new();
+    }
+    let text = String::from_utf8_lossy(&out.stdout);
+    let Ok(rows) = serde_json::from_str::<Vec<serde_json::Value>>(text.trim()) else {
+        return Vec::new();
+    };
+    rows.into_iter()
+        .filter_map(|row| row.get("title")?.as_str().map(str::to_string))
+        .filter(|t| !t.trim().is_empty())
+        .collect()
+}
+
+fn sqlite_uri(path: &std::path::Path) -> String {
+    let mut enc = String::from("file:");
+    for b in path.to_string_lossy().bytes() {
+        match b {
+            b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'/' | b'.' | b'_' | b'-' => {
+                enc.push(b as char);
+            }
+            _ => enc.push_str(&format!("%{b:02X}")),
+        }
+    }
+    enc.push_str("?immutable=1");
+    enc
 }
 
 impl Snap {
@@ -300,4 +401,16 @@ fn which(bin: &str) -> bool {
 
 fn whoami() -> String {
     std::env::var("USER").unwrap_or_else(|_| "jim".into())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn discover_lists_is_bookmark_folders_only() {
+        let lists = discover_lists();
+        assert_eq!(lists.len(), 1);
+        assert!(lists.contains_key("bookmark_folder"));
+    }
 }

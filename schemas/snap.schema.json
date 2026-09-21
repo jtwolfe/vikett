@@ -37,6 +37,10 @@
         "inMin": { "type": "number" }
       }
     },
-    "weather": { "type": ["string", "null"] }
+    "weather": { "type": ["string", "null"] },
+    "bins": { "type": "array", "items": { "type": "string" } },
+    "chordOverlay": { "type": "object" },
+    "lists": { "type": "object" },
+    "downloads": { "type": ["number", "null"] }
   }
 }

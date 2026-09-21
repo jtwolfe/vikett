@@ -52,11 +52,12 @@ pub fn score_live(
         if !live_ids.contains(page.id.as_str()) {
             continue;
         }
-        let filled = slots::fill(page, utterance);
+        let filled = slots::fill(page, utterance, snap);
         if !filled.missing.is_empty() {
             continue;
         }
-        let mut a = alias_score(page, utterance);
+        let alias = alias_score(page, utterance);
+        let mut a = alias;
         if page.id == "launch.app"
             && regex_is(
                 utterance,
@@ -78,6 +79,10 @@ pub fn score_live(
             if !v.is_empty() {
                 score += 4 + k.len() as i32;
             }
+        }
+        // Before the `a <= 0` guard this would put every browser page on "mute".
+        if alias > 0 && filled.defaulted.contains("app") {
+            score += FOCUS_PRIOR;
         }
         if page.kind == crate::types::PageKind::Ask
             && regex_is(
@@ -147,6 +152,8 @@ fn regex_is(hay: &str, pat: &str) -> bool {
 
 pub const CONFIDENCE_FLOOR: f32 = 0.62;
 pub const AMBIGUITY_MARGIN: i32 = 3;
+/// Focused-class `app` prior. Only after a real alias hit, never on a zero score.
+pub const FOCUS_PRIOR: i32 = 4;
 
 pub fn confidence(score: i32) -> f32 {
     (0.55 + score as f32 / 40.0).min(0.98)

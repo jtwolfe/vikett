@@ -118,5 +118,13 @@
     "driver": "HA weather entity / wttr.in LAN cache",
     "snap": "short condition or null if offline",
     "priority": 12
+  },
+  {
+    "id": "browser",
+    "title": "Browser",
+    "summary": "Shared focus, tabs, zoom, find, and fullscreen for Zen, Firefox, Chrome, Chromium, and Brave.",
+    "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap; exec_cmd only for unmapped focus",
+    "snap": "clients, allowlist, bins, lists.bookmark_folder, downloads",
+    "priority": 48
   }
 ]

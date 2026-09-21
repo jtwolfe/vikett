@@ -2,7 +2,7 @@
 
 Humans author pages. The referee only chooses among doors that are live.
 
-Dump: [`ontology/pages.json`](../ontology/pages.json) (50 pages), [`ontology/modules.json`](../ontology/modules.json) (15 modules).
+Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
 
 Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 
@@ -25,6 +25,7 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | climate | HA climate group | °C or null |
 | capture | grim / hyprshot | focused output |
 | weather | HA weather / LAN cache | short condition or null |
+| browser | `hl.dsp.focus` / `hl.dsp.send_shortcut` / `hl.dsp.exec_cmd` | clients, allowlist, `bins`, `lists.bookmark_folder`, `downloads` |
 
 ## Page kinds
 
@@ -60,6 +61,11 @@ A page that cannot happen is not offered:
 | climate.* | no climate entity in this room |
 | weather.ask | weather snap null |
 | scene.handoff | always, until the driver is wired |
+| browser.focus | no matching client, and not (allowlisted and `bins` contains the binary) |
+| browser.ask_open | app not on the allowlist |
+| other browser acts | no matching client, or no chord (`mods` empty only for F11) |
+| browser.downloads | `downloads` is null, or the caller is a guest |
+| browser.dev_tools | guest, or `who` is not the owner |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 
@@ -80,3 +86,5 @@ House-scale later (not v0 pages): vacuum, locks, cameras, printer, VPN, bluetoot
 3. Add at least one golden that takes it and one that refuses a nearby cheat.
 4. Guest-test if policy is private.
 5. Do not teach the referee a walk string.
+
+Family pages (`browser` and later modules) live in `src/drivers/`. `slots::fill` may default `app` from the focused class. A dead family alias that is a strictly longer phrase than every live alias silences instead of walking a neighbor. No `browser.*` alias is the bare word `browser`.

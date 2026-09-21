@@ -5,7 +5,7 @@ use crate::catalog::Catalog;
 use crate::lexical::{self, AMBIGUITY_MARGIN, CONFIDENCE_FLOOR};
 use crate::prune;
 use crate::refuse;
-use crate::text::{norm, split_compound};
+use crate::text::{contains_phrase, norm, split_compound};
 use crate::trace::{Trace, TraceNode, TraceStatus};
 use crate::types::{EngineResult, PageKind, Policy, RefereeKind, Snap, Take, WalkPlan};
 use crate::walk;
@@ -163,6 +163,28 @@ pub fn decide_with_model(
                 trace,
             };
         }
+    }
+
+    if let Some(why) = dead_alias_silence(cat, first, snap, &live_ids, &dead) {
+        trace.push(TraceNode::new(
+            "dead-alias",
+            "silence",
+            TraceStatus::Fail,
+            why.clone(),
+        ));
+        return EngineResult {
+            utterance: utterance.into(),
+            snap_id: snap.id.clone(),
+            referee,
+            live,
+            dead,
+            take: Take::silence(why),
+            walk: None,
+            answer: None,
+            confirm: false,
+            remaining,
+            trace,
+        };
     }
 
     let take = match (referee, model_take) {
@@ -366,6 +388,78 @@ fn merge_live_slots(mut take: Take, live: &[crate::types::LiveVikett]) -> Take {
         }
     }
     take
+}
+
+/// Longest `contains_phrase` alias on a dead family page silences when it is
+/// strictly longer than every live alias. Equal length keeps the live door.
+/// An app-missing dead page still counts in that guest case ("close tab");
+/// it is skipped only when a live phrase already ties or beats its length,
+/// so a dead `term.next` cannot veto a live `browser.tab_next`.
+fn dead_alias_silence(
+    cat: &Catalog,
+    utterance: &str,
+    snap: &Snap,
+    live_ids: &HashSet<&str>,
+    dead: &[crate::types::DeadVikett],
+) -> Option<String> {
+    let mut live_best = 0usize;
+    for page in &cat.pages {
+        if !live_ids.contains(page.id.as_str()) {
+            continue;
+        }
+        for alias in &page.aliases {
+            if contains_phrase(utterance, alias) {
+                live_best = live_best.max(alias.len());
+            }
+        }
+    }
+
+    let mut best_len: Option<usize> = None;
+    let mut best_count = 0usize;
+    let mut best_alias = String::new();
+    for d in dead {
+        let Some(page) = cat.page(&d.page_id) else {
+            continue;
+        };
+        if !crate::drivers::is_family(&page.module) {
+            continue;
+        }
+        let filled = crate::slots::fill(page, utterance, snap);
+        let app_missing =
+            page.slots.iter().any(|s| s.id == "app") && !filled.slots.contains_key("app");
+        for alias in &page.aliases {
+            if !contains_phrase(utterance, alias) {
+                continue;
+            }
+            if app_missing && live_best >= alias.len() {
+                continue;
+            }
+            match best_len {
+                Some(n) if alias.len() > n => {
+                    best_len = Some(alias.len());
+                    best_count = 1;
+                    best_alias = alias.clone();
+                }
+                Some(n) if alias.len() == n => {
+                    best_count += 1;
+                }
+                None => {
+                    best_len = Some(alias.len());
+                    best_count = 1;
+                    best_alias = alias.clone();
+                }
+                _ => {}
+            }
+        }
+    }
+
+    let len = best_len?;
+    if best_count != 1 || live_best >= len {
+        return None;
+    }
+    Some(format!(
+        "dead alias {best_alias} longer than live phrases — silence"
+    ))
 }
 
 fn module_of<'a>(cat: &'a Catalog, id: &str) -> &'a str {
