@@ -1,3 +1,9 @@
 node_modules/
 .DS_Store
 *.log
+/target
+.env
+*.profraw
+.idea/
+/jev-int8/
+/jev-fp32/

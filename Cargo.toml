@@ -1,0 +1,29 @@
+[package]
+name = "vikett"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+description = "Closed-door control protocol: authored pages, live prune, typed take, walk."
+repository = "https://github.com/jtwolfe/vikett"
+readme = "README.md"
+default-run = "vikett"
+
+[[bin]]
+name = "vikett"
+path = "src/bin/vikett.rs"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+crossterm = "0.28"
+ratatui = "0.29"
+regex = "1"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+unicode-width = "0.2"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

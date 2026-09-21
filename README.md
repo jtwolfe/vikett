@@ -33,7 +33,7 @@ Vikett authors every legal move as a **page**. A snapshot of the world **prunes*
 
 ## Everyday ontology (v0)
 
-**15 modules, 50 pages.** Humans author them. The model only chooses.
+**15 modules, 50 pages** in the v0 JSON, plus research extras in Rust (`session`, `network`, `bluetooth`, extra `wm`/`audio`/`capture` doors). Humans author them. The model only chooses.
 
 | Module | Typical doors | Hard refuse |
 | --- | --- | --- |
@@ -50,8 +50,11 @@ Vikett authors every legal move as a **page**. A snapshot of the world **prunes*
 | `calendar` | what’s next, how busy (private) | schedule / invite |
 | `display` | dim the screen, night light | free kelvin / percent |
 | `climate` | warmer/colder one degree, air off | “set to 22.7” |
-| `capture` | screenshot | email the PNG |
+| `capture` | screenshot, region (grim+slurp) | email the PNG |
 | `weather` | condition string | packing advice |
+| `session` | lock (hyprlock), screens off (dpms) | suspend / shutdown |
+| `network` | am I online | turn off wifi, free SSID |
+| `bluetooth` | is bluetooth on | pair / connect |
 
 Amounts are **notches** (`little` / `lot`), never model-invented numbers. Slots are **enums**. Policy is `household` | `private` | `owner` | `confirm`. Guests hide `private` and the whole `mail` module.
 
@@ -89,7 +92,17 @@ Three layers, in order. Never skip to “let Laya talk to hyprctl.”
 | **L2** | Laya on held-out paraphrases | Take-match ≥ 85%; prefer silence over a wrong act; false-positive walk < 1% |
 | **L3** | In-room STT clips | WER on a 50-clip command set. Not LibriSpeech |
 
-This tree ships L0+L1. 31 goldens + compound split, run with:
+This tree ships L0+L1 in both the original TypeScript gold referee and the Rust interpreter.
+
+```bash
+cargo test
+cargo run --release -- test
+./scripts/run_prompt_suite.sh                 # 200+ prompts, lexical gate + Laya compare
+cargo run --release -- suite --tag refuse
+cargo run --release -- suite --referee laya --compare
+```
+
+The original TypeScript gate still runs:
 
 ```bash
 node --experimental-strip-types --test tests/goldens.test.ts
@@ -97,14 +110,48 @@ node --experimental-strip-types --test tests/goldens.test.ts
 
 Full protocol: [docs/TESTING.md](docs/TESTING.md). Fixtures: [`ontology/goldens.json`](ontology/goldens.json).
 
+## Test rig (Rust)
+
+The interpreter, decision tree, and TUI live in Rust. Natural language in; prune + referee + expected walk out. Nothing is dispatched unless you copy the walk yourself.
+
+```bash
+cargo run --release                  # TUI
+cargo run --release -- tree -u "increase the volume a bit" -s desk
+cargo run --release -- tree -u "focus zen" --live
+cargo run --release -- eval -u "mute" -s desk
+```
+
+| Referee | When |
+| --- | --- |
+| `lexical` | Default. Alias + slot gold. No network. Always on. |
+| `laya` | Typed `choice`/`noul` over live labels. POST `VIKETT_LAYA_URL` (default `http://127.0.0.1:8009/v1/systemone`). Not a chat LLM. |
+
+TUI keys: type a phrase, Enter to take, `C-s` cycle fixture snap, `C-l` live Hyprland snap, `C-r` lexical/laya, `C-g` next golden, `C-t` run goldens, `C-p` paraphrase.
+
+Bring Laya up (once), then the Rust binary only HTTP-calls it:
+
+```bash
+# Preferred Linux CPU path — ONNX INT8, no torch at runtime (~15 ms/q published)
+# Torch 2.14 dynamo export needs onnxscript; EdgeJev 0.3.2 does not declare it.
+./scripts/setup_edgejev.sh
+edgejev serve --model ./jev-int8 --port 8009
+
+# Or official PyTorch Laya if you already have torch (slower on CPU)
+pip install laya
+python scripts/laya_sidecar.py --port 8009
+```
+
+Research that shaped the extra pages (Hyprland 0.56.2 + this workstation): `hyprctl dispatch` for focus/fullscreen/workspace/pin/center/cyclenext/movefocus/dpms; `wpctl` for sink/source mute and HDMI vs analog; `grim`+`slurp` for capture; `hyprlock` / `hyprsunset`; `nmcli` and `bluetoothctl` as **ask-only**. Classes on this box are `foot` (terminal) and `zen` (browser).
+
 ## Layout
 
 ```
 docs/           CONCEPT ARCHITECTURE MODELS TESTING FAMILY ONTOLOGY GLOSSARY
-ontology/       pages.json modules.json goldens.json snaps.json
+ontology/       pages.json modules.json goldens.json snaps.json phrases.json
 schemas/        page snap take JSON Schema
-src/            lexical gold referee (TypeScript, no weights)
-tests/          node:test goldens
+src/            Rust interpreter (prune, lexical, model, TUI, host snap)
+src/*.ts        original TypeScript gold referee
+tests/          cargo tests + node:test goldens
 ```
 
 ## Non-goals

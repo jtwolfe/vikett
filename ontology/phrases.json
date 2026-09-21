@@ -1,0 +1,72 @@
+[
+  {
+    "id": "vol-little-p1",
+    "golden": "vol-little",
+    "utterance": "turn it up a little",
+    "expectPage": "audio.bump",
+    "notes": "Paraphrase of volume notch."
+  },
+  {
+    "id": "vol-little-p2",
+    "golden": "vol-little",
+    "utterance": "a bit louder please",
+    "expectPage": "audio.bump",
+    "notes": "Paraphrase."
+  },
+  {
+    "id": "mute-p1",
+    "golden": "mute",
+    "utterance": "silence the speakers",
+    "expectPage": "audio.mute",
+    "notes": "Paraphrase of mute."
+  },
+  {
+    "id": "open-grokbot-p1",
+    "golden": "open-grokbot",
+    "utterance": "launch the bot",
+    "expectPage": "launch.app",
+    "notes": "Grok Bot alias."
+  },
+  {
+    "id": "mail-dave-p1",
+    "golden": "mail-dave",
+    "utterance": "anything from Dave in my inbox",
+    "expectPage": "mail.from",
+    "notes": "Ask paraphrase."
+  },
+  {
+    "id": "pause-p1",
+    "golden": "pause",
+    "utterance": "pause the show",
+    "expectPage": "media.play_pause",
+    "notes": "Living-room player."
+  },
+  {
+    "id": "dim-p1",
+    "golden": "dim-screen",
+    "utterance": "make the screen a bit darker",
+    "expectPage": "display.bump",
+    "notes": "Panel brightness paraphrase."
+  },
+  {
+    "id": "lock-p1",
+    "golden": "lock-screen",
+    "utterance": "lock the box",
+    "expectPage": "session.lock",
+    "notes": "hyprlock paraphrase."
+  },
+  {
+    "id": "refuse-send-p1",
+    "golden": "refuse-send",
+    "utterance": "send Dave a message that I'm running late",
+    "expectPage": null,
+    "notes": "Must silence."
+  },
+  {
+    "id": "refuse-percent-p1",
+    "golden": "refuse-percent",
+    "utterance": "set the volume to 40%",
+    "expectPage": null,
+    "notes": "Free percent is not a slot."
+  }
+]
