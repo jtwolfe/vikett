@@ -35,7 +35,7 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
 pub fn family_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> Value {
     match page.module.as_str() {
         "browser" => browser::fill_ask(page, slots, snap),
-        "term" => term::fill_ask(page, slots, snap),
+        // No term page is an ask. A later ask should get its own fill_ask.
         _ => serde_json::json!({ "unarmed": page.id }),
     }
 }

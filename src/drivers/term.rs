@@ -4,8 +4,6 @@
 
 use std::collections::BTreeMap;
 
-use serde_json::{json, Value};
-
 use crate::classes::{bin_for_app, client_for_app};
 use crate::keymap::{self, Chord};
 use crate::types::{Page, Snap, WalkPlan};
@@ -107,10 +105,6 @@ fn shaped_chord(page: &Page, slots: &BTreeMap<String, String>, mut chord: Chord)
         chord.key = "minus".into();
     }
     chord
-}
-
-pub fn fill_ask(page: &Page, _slots: &BTreeMap<String, String>, _snap: &Snap) -> Value {
-    json!({ "unarmed": page.id })
 }
 
 fn window_sel(address: &str) -> String {
