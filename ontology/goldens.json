@@ -1,0 +1,255 @@
+[
+  {
+    "id": "vol-little",
+    "snap": "desk",
+    "utterance": "increase the volume a bit",
+    "expectPage": "audio.bump",
+    "expectSlots": {
+      "direction": "up",
+      "amount": "little"
+    },
+    "notes": "Notch, not a percent."
+  },
+  {
+    "id": "open-grokbot",
+    "snap": "desk",
+    "utterance": "open up grokbot",
+    "expectPage": "launch.app",
+    "expectSlots": {
+      "app": "grokbot"
+    },
+    "notes": "Not running → exec."
+  },
+  {
+    "id": "mail-dave",
+    "snap": "desk",
+    "utterance": "have I received any emails from Dave",
+    "expectPage": "mail.from",
+    "expectSlots": {
+      "who": "dave"
+    },
+    "notes": "Ask, not send."
+  },
+  {
+    "id": "mail-dave-guest",
+    "snap": "guest-living",
+    "utterance": "have I received any emails from Dave",
+    "expectPage": null,
+    "notes": "Private pages do not sprout with a guest."
+  },
+  {
+    "id": "jellyfin-fs",
+    "snap": "desk-jellyfin",
+    "utterance": "switch to jellyfin and fullscreen",
+    "expectPage": "wm.focus",
+    "expectSlots": {
+      "target": "jellyfin"
+    },
+    "notes": "First take of a compound. Second take is wm.fullscreen."
+  },
+  {
+    "id": "focus-missing",
+    "snap": "desk",
+    "utterance": "switch to jellyfin",
+    "expectPage": "launch.app",
+    "expectSlots": {
+      "app": "jellyfin"
+    },
+    "notes": "No client → launch page if allowlisted, not a dead focus."
+  },
+  {
+    "id": "kitchen-cook",
+    "snap": "kitchen",
+    "utterance": "kitchen cook",
+    "expectPage": "scene.apply",
+    "expectSlots": {
+      "scene": "kitchen-cook"
+    },
+    "notes": "Named scene, already possibly active — engine may still take apply."
+  },
+  {
+    "id": "timer-left",
+    "snap": "kitchen",
+    "utterance": "how long on the oven",
+    "expectPage": "timer.ask",
+    "notes": "Ask against running timer."
+  },
+  {
+    "id": "pause",
+    "snap": "guest-living",
+    "utterance": "pause",
+    "expectPage": "media.play_pause",
+    "notes": "Player live."
+  },
+  {
+    "id": "refuse-send",
+    "snap": "desk",
+    "utterance": "email Dave that I'll be late",
+    "expectPage": null,
+    "notes": "No send page. Silence."
+  },
+  {
+    "id": "refuse-buy",
+    "snap": "desk",
+    "utterance": "buy the thing in that tab",
+    "expectPage": null,
+    "notes": "Pixels are not pages."
+  },
+  {
+    "id": "mute",
+    "snap": "desk",
+    "utterance": "mute",
+    "expectPage": "audio.mute",
+    "notes": "Sink not muted."
+  },
+  {
+    "id": "put-three",
+    "snap": "desk",
+    "utterance": "put this on three",
+    "expectPage": "wm.move_ws",
+    "expectSlots": {
+      "ws": "3"
+    },
+    "notes": "Focused firefox moves."
+  },
+  {
+    "id": "workspace-two",
+    "snap": "desk",
+    "utterance": "workspace two",
+    "expectPage": "wm.workspace",
+    "expectSlots": {
+      "ws": "2"
+    },
+    "notes": "Already on two — walk is still legal (idempotent)."
+  },
+  {
+    "id": "guest-lock",
+    "snap": "guest-living",
+    "utterance": "shared only",
+    "expectPage": "scene.lock_private",
+    "notes": "Owner can lock while guest is present."
+  },
+  {
+    "id": "how-loud",
+    "snap": "desk",
+    "utterance": "how loud am I",
+    "expectPage": "audio.ask_level",
+    "notes": "Ask."
+  },
+  {
+    "id": "hide-buddy",
+    "snap": "desk",
+    "utterance": "I'm done hide the buddy",
+    "expectPage": "bucky.hide",
+    "notes": "Buddy-native."
+  },
+  {
+    "id": "add-five",
+    "snap": "kitchen",
+    "utterance": "add five minutes",
+    "expectPage": "timer.add",
+    "notes": "Timer running."
+  },
+  {
+    "id": "add-five-desk",
+    "snap": "desk",
+    "utterance": "add five minutes",
+    "expectPage": null,
+    "notes": "No timer → page not live."
+  },
+  {
+    "id": "is-grokbot",
+    "snap": "desk",
+    "utterance": "is grokbot already open",
+    "expectPage": "launch.ask_running",
+    "expectSlots": {
+      "app": "grokbot"
+    },
+    "notes": "Ask."
+  },
+  {
+    "id": "cal-next",
+    "snap": "desk",
+    "utterance": "what's next on my calendar",
+    "expectPage": "calendar.ask_next",
+    "notes": "Private ask."
+  },
+  {
+    "id": "cal-next-guest",
+    "snap": "guest-living",
+    "utterance": "what's next on my calendar",
+    "expectPage": null,
+    "notes": "Calendar is private — guest hides it."
+  },
+  {
+    "id": "refuse-schedule",
+    "snap": "desk",
+    "utterance": "schedule a meeting with Dave",
+    "expectPage": null,
+    "notes": "No compose-calendar page."
+  },
+  {
+    "id": "dim-screen",
+    "snap": "desk",
+    "utterance": "dim the screen",
+    "expectPage": "display.bump",
+    "expectSlots": {
+      "direction": "down",
+      "amount": "little"
+    },
+    "notes": "Panel, not room lights."
+  },
+  {
+    "id": "night-light",
+    "snap": "desk",
+    "utterance": "night light",
+    "expectPage": "display.night",
+    "notes": "Authored preset."
+  },
+  {
+    "id": "warmer",
+    "snap": "kitchen",
+    "utterance": "a bit warmer",
+    "expectPage": "climate.bump",
+    "expectSlots": {
+      "direction": "up",
+      "amount": "little"
+    },
+    "notes": "Notch, not a setpoint."
+  },
+  {
+    "id": "air-off",
+    "snap": "kitchen",
+    "utterance": "air off",
+    "expectPage": "climate.off",
+    "notes": "Climate group off."
+  },
+  {
+    "id": "screenshot",
+    "snap": "desk",
+    "utterance": "screenshot",
+    "expectPage": "capture.screenshot",
+    "notes": "grim on focused output."
+  },
+  {
+    "id": "rain",
+    "snap": "desk",
+    "utterance": "is it going to rain",
+    "expectPage": "weather.ask",
+    "notes": "Condition string, not advice."
+  },
+  {
+    "id": "refuse-percent",
+    "snap": "desk",
+    "utterance": "set volume to 37 percent",
+    "expectPage": null,
+    "notes": "No free setpoints. Silence."
+  },
+  {
+    "id": "headphones",
+    "snap": "desk",
+    "utterance": "headphones",
+    "expectPage": "audio.headphones",
+    "notes": "Sink switch."
+  }
+]

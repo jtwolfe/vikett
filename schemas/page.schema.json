@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jtwolfe/vikett/schemas/page.schema.json",
+  "title": "Vikett page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "module", "kind", "title", "summary", "aliases", "slots", "when", "policy", "examples", "refuse"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z]+\\.[a-z0-9_]+$" },
+    "module": { "type": "string" },
+    "kind": { "enum": ["act", "ask"] },
+    "title": { "type": "string" },
+    "summary": { "type": "string" },
+    "aliases": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "required", "values"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "required": { "type": "boolean" },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "label", "aliases"],
+              "properties": {
+                "id": { "type": "string" },
+                "label": { "type": "string" },
+                "aliases": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "when": { "type": "string" },
+    "policy": { "enum": ["household", "private", "owner", "confirm"] },
+    "walk": { "type": "string" },
+    "askShape": { "type": "string" },
+    "pose": { "type": "string" },
+    "examples": { "type": "array", "items": { "type": "string" } },
+    "refuse": { "type": "array", "items": { "type": "string" } }
+  }
+}

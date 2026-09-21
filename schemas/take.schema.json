@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jtwolfe/vikett/schemas/take.schema.json",
+  "title": "Vikett take",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pageId", "slots", "confidence", "reason"],
+  "properties": {
+    "pageId": { "type": ["string", "null"] },
+    "slots": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "reason": { "type": "string" }
+  }
+}

@@ -1,0 +1,82 @@
+# Ontology
+
+Humans author pages. The referee only chooses among doors that are live.
+
+Dump: [`ontology/pages.json`](../ontology/pages.json) (50 pages), [`ontology/modules.json`](../ontology/modules.json) (15 modules).
+
+Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
+
+## Modules
+
+| id | Driver | Snap |
+| --- | --- | --- |
+| wm | hyprctl dispatch | clients / workspaces / activewindow |
+| audio | wpctl | default sink volume + mute |
+| launch | hyprctl exec / focus | allowlist + running classes |
+| mail | notmuch / local IMAP | speaker-bound unread |
+| media | playerctl | now playing |
+| bucky | buckyboi.sock | listening, chip, gate |
+| scene | GlassSpear Surface API | scene library + active |
+| notify | mako / dunst history | last notification |
+| lights | HA light group | room brightness 0–1 |
+| timer | local daemon | remaining_sec or null |
+| calendar | khal / CalDAV socket | next event, private |
+| display | brightnessctl / ddcutil | panel 0–1 |
+| climate | HA climate group | °C or null |
+| capture | grim / hyprshot | focused output |
+| weather | HA weather / LAN cache | short condition or null |
+
+## Page kinds
+
+- **act** — walk a driver. Idempotent when possible (workspace two while already on two is legal).
+- **ask** — return `askShape` JSON. Not a paragraph.
+
+## Slots are enums
+
+`audio.bump` direction is `up|down`. Amount is `little|lot`. There is no `percent` slot. “Set volume to 37%” is a refuse, not a fill.
+
+`launch.app` app is an allowlist id. There is no free `bin` string.
+
+`mail.from` who is a contact-book id (`dave`, `school`, `anyone`). The model does not invent an email address.
+
+`scene.apply` scene is a library id. “Make it cozy” is a refuse.
+
+`timer.start` mins is `5|10|15|20`. “Wake me at seven” is a refuse.
+
+## When-clauses (prune)
+
+A page that cannot happen is not offered:
+
+| Page | Dead when |
+| --- | --- |
+| wm.focus | no client matches target |
+| launch.app | app not on allowlist |
+| audio.mute | already muted |
+| audio.bump up | volume ≥ 0.99 |
+| mail.* | guest, or mail offline |
+| calendar.* | guest |
+| media.* | no player |
+| timer.add / ask / cancel | no running timer |
+| climate.* | no climate entity in this room |
+| weather.ask | weather snap null |
+| scene.handoff | always, until the driver is wired |
+
+Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
+
+## Everyday coverage (v0)
+
+Desk: focus / launch / volume / headphones / screenshot / night light / calendar ask / mail ask / hide buddy.
+
+Kitchen: scene kitchen-cook, timer, climate notch, lights, weather.
+
+Living + guest: media, volume, guest mode / lock private. Mail and calendar gone.
+
+House-scale later (not v0 pages): vacuum, locks, cameras, printer, VPN, bluetooth pair. Each needs a snap + allowlisted driver before it is a door. Do not add a page whose walk is “the LLM will figure it out.”
+
+## Adding a page
+
+1. Write the page in the catalogue with aliases, slots, when, policy, examples, refuses.
+2. Add a snap field if prune needs new state.
+3. Add at least one golden that takes it and one that refuses a nearby cheat.
+4. Guest-test if policy is private.
+5. Do not teach the referee a walk string.

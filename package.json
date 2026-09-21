@@ -1,0 +1,13 @@
+{
+  "name": "vikett",
+  "private": true,
+  "type": "module",
+  "description": "Closed-door control protocol: authored pages, live prune, typed take, walk.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --experimental-strip-types --test tests/goldens.test.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

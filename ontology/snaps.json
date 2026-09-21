@@ -1,0 +1,315 @@
+[
+  {
+    "id": "desk",
+    "title": "Desk — afternoon",
+    "who": "jim",
+    "where": "desk",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0x1",
+        "class": "firefox",
+        "title": "GitHub — vikett",
+        "workspace": "2",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0x2",
+        "class": "kitty",
+        "title": "~",
+        "workspace": "2",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0x3",
+        "class": "code",
+        "title": "vikett",
+        "workspace": "3",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1",
+      "2",
+      "3"
+    ],
+    "activeWorkspace": "2",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "grokbot",
+      "firefox",
+      "kitty",
+      "jellyfin",
+      "thunderbird",
+      "files",
+      "code"
+    ],
+    "running": [
+      "firefox",
+      "kitty",
+      "code"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave",
+      "school"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 2,
+        "subjects": [
+          "Re: invoice",
+          "lunch"
+        ]
+      },
+      "school": {
+        "count": 0,
+        "subjects": []
+      }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "showers"
+  },
+  {
+    "id": "desk-jellyfin",
+    "title": "Desk — Jellyfin open",
+    "who": "jim",
+    "where": "desk",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0x1",
+        "class": "firefox",
+        "title": "GitHub — vikett",
+        "workspace": "2",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0x2",
+        "class": "kitty",
+        "title": "~",
+        "workspace": "2",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0x3",
+        "class": "code",
+        "title": "vikett",
+        "workspace": "3",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0x9",
+        "class": "jellyfin",
+        "title": "Jellyfin — Living Room",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1",
+      "2",
+      "3"
+    ],
+    "activeWorkspace": "2",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "grokbot",
+      "firefox",
+      "kitty",
+      "jellyfin",
+      "thunderbird",
+      "files",
+      "code"
+    ],
+    "running": [
+      "firefox",
+      "kitty",
+      "code",
+      "jellyfin"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave",
+      "school"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 2,
+        "subjects": [
+          "Re: invoice",
+          "lunch"
+        ]
+      }
+    },
+    "mediaPlaying": true,
+    "nowPlaying": "The Bear S3E1",
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "showers"
+  },
+  {
+    "id": "kitchen",
+    "title": "Kitchen — cooking",
+    "who": "jim",
+    "where": "kitchen",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xa",
+        "class": "chromium",
+        "title": "recipe-active",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1"
+    ],
+    "activeWorkspace": "1",
+    "volume": 0.3,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "jellyfin"
+    ],
+    "running": [
+      "chromium"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 2,
+        "subjects": [
+          "Re: invoice",
+          "lunch"
+        ]
+      }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": "kitchen-cook",
+    "lights": 0.85,
+    "timerSec": 420,
+    "buckyListening": false,
+    "brightness": 0.9,
+    "climate": 23,
+    "nextEvent": {
+      "title": "pickup",
+      "inMin": 90
+    },
+    "weather": "clear"
+  },
+  {
+    "id": "guest-living",
+    "title": "Living room — guest",
+    "who": "jim",
+    "where": "living",
+    "occupants": [
+      "jim",
+      "guest"
+    ],
+    "guest": true,
+    "clients": [
+      {
+        "address": "0xb",
+        "class": "jellyfin",
+        "title": "Jellyfin",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": true,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1"
+    ],
+    "activeWorkspace": "1",
+    "volume": 0.55,
+    "muted": false,
+    "defaultSink": "tv",
+    "allowlist": [
+      "jellyfin"
+    ],
+    "running": [
+      "jellyfin"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 2,
+        "subjects": [
+          "Re: invoice",
+          "lunch"
+        ]
+      }
+    },
+    "mediaPlaying": true,
+    "nowPlaying": "The Bear S3E1",
+    "scene": "living-watch",
+    "lights": 0.35,
+    "timerSec": null,
+    "buckyListening": false,
+    "brightness": 0.35,
+    "climate": 22,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "clear"
+  }
+]

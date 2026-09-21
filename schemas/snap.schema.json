@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jtwolfe/vikett/schemas/snap.schema.json",
+  "title": "Vikett snapshot",
+  "type": "object",
+  "required": ["id", "who", "where", "occupants", "guest"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "who": { "type": "string" },
+    "where": { "type": "string" },
+    "occupants": { "type": "array", "items": { "type": "string" } },
+    "guest": { "type": "boolean" },
+    "clients": { "type": "array" },
+    "workspaces": { "type": "array", "items": { "type": "string" } },
+    "activeWorkspace": { "type": "string" },
+    "volume": { "type": "number" },
+    "muted": { "type": "boolean" },
+    "defaultSink": { "type": "string" },
+    "allowlist": { "type": "array", "items": { "type": "string" } },
+    "running": { "type": "array", "items": { "type": "string" } },
+    "mailOnline": { "type": "boolean" },
+    "contacts": { "type": "array", "items": { "type": "string" } },
+    "unreadFrom": { "type": "object" },
+    "mediaPlaying": { "type": "boolean" },
+    "nowPlaying": { "type": ["string", "null"] },
+    "scene": { "type": ["string", "null"] },
+    "lights": { "type": "number" },
+    "timerSec": { "type": ["number", "null"] },
+    "buckyListening": { "type": "boolean" },
+    "brightness": { "type": "number" },
+    "climate": { "type": ["number", "null"] },
+    "nextEvent": {
+      "type": ["object", "null"],
+      "properties": {
+        "title": { "type": "string" },
+        "inMin": { "type": "number" }
+      }
+    },
+    "weather": { "type": ["string", "null"] }
+  }
+}
