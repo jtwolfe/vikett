@@ -2160,9 +2160,9 @@ fn browser() -> Vec<Case> {
             "zen workspace two",
             Some("browser.zen_ws"),
             &[("app", "zen"), ("ws", "2")],
-            Some("key = \"1\""),
+            Some("key = \"2\""),
             &["browser", "exact"],
-            "Index slot is 2. The fiction key stays 1.",
+            "Fiction key is the filled ws id.",
         ),
         c(
             "browser-zen-ws-dead",

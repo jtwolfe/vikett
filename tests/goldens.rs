@@ -421,7 +421,8 @@ fn vendor_doors_follow_class_and_zen_index_stays_reserved() {
     let walk = index.walk.unwrap().command;
     assert!(walk.contains("hl.dsp.send_shortcut"), "{walk}");
     assert!(walk.contains("address:"), "{walk}");
-    assert!(walk.contains("key = \"1\""), "{walk}");
+    assert!(walk.contains("key = \"2\""), "{walk}");
+    assert!(!walk.contains("key = \"1\""), "{walk}");
 
     let page = cat.page("browser.container").unwrap();
     let mut slots = std::collections::BTreeMap::new();

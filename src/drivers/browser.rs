@@ -26,11 +26,16 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (b
             Some(n) => (true, format!("{n} downloads")),
             None => (false, "downloads unknown".into()),
         },
-        _ => act_live(page, snap, app),
+        _ => act_live(page, snap, app, slots),
     }
 }
 
-fn act_live(page: &Page, snap: &Snap, app: &str) -> (bool, String) {
+fn act_live(
+    page: &Page,
+    snap: &Snap,
+    app: &str,
+    slots: &BTreeMap<String, String>,
+) -> (bool, String) {
     // The slot enum already limits app. A forced slot still must not arm the wrong class.
     if !vendor_app(&page.id, app) {
         return (false, "wrong browser".into());
@@ -38,7 +43,7 @@ fn act_live(page: &Page, snap: &Snap, app: &str) -> (bool, String) {
     let Some(c) = client_for_app(snap, app) else {
         return (false, "no matching client".into());
     };
-    if keymap::chord_for(&page.id, app, &snap.id).is_none() {
+    if keymap::chord_for(&page.id, app, &snap.id, slots).is_none() {
         return (false, "reserved — no chord".into());
     }
     (true, format!("client {}", c.class))
@@ -112,7 +117,7 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             driver,
         };
     };
-    let Some(chord) = keymap::chord_for(&page.id, app, &snap.id) else {
+    let Some(chord) = keymap::chord_for(&page.id, app, &snap.id, slots) else {
         return WalkPlan {
             command: "reserved".into(),
             driver,
