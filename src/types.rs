@@ -17,16 +17,6 @@ pub enum Policy {
     Confirm,
 }
 
-/// Snap overlay for one `pageId/app` chord. A bool cannot arm a door.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "kind", rename_all = "camelCase")]
-pub enum ChordOverride {
-    /// User deleted the bind. Dead even when a builtin exists.
-    ForceDead,
-    /// Suite fiction or a copied user bind. `key` must be non-empty.
-    Use { mods: String, key: String },
-}
-
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SlotValue {
     pub id: String,
@@ -179,9 +169,6 @@ pub struct Snap {
     /// Binaries `browser.focus` may `exec_cmd` when the window is unmapped.
     #[serde(default)]
     pub bins: Vec<String>,
-    /// Keyed `pageId/app`. Missing entry means use the builtin chord.
-    #[serde(default)]
-    pub chord_overlay: BTreeMap<String, ChordOverride>,
     /// Closed name lists. `bookmark_folder` is discovered on the live snap.
     #[serde(default)]
     pub lists: BTreeMap<String, Vec<String>>,

@@ -29,7 +29,7 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (b
             let Some(c) = client_for_app(snap, app) else {
                 return (false, "no matching client".into());
             };
-            if keymap::chord_for(&page.id, app, snap).is_none() {
+            if keymap::chord_for(&page.id, app).is_none() {
                 return (false, "reserved — no chord".into());
             }
             (true, format!("client {}", c.class))
@@ -72,7 +72,7 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             driver,
         };
     };
-    let Some(chord) = keymap::chord_for(&page.id, app, snap) else {
+    let Some(chord) = keymap::chord_for(&page.id, app) else {
         return WalkPlan {
             command: "reserved".into(),
             driver,

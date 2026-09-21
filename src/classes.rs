@@ -47,8 +47,6 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "chrome" => Some("google-chrome"),
         "chromium" => Some("chromium"),
         "brave" => Some("brave"),
-        "foot" => Some("foot"),
-        "kitty" => Some("kitty"),
         _ => None,
     }
 }

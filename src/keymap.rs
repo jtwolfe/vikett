@@ -3,8 +3,6 @@
 //! `CTRL + SHIFT` is the dry-run spelling (spaces around `+`). Empty `mods` is
 //! only legal for F11 — the field is still required by the dispatcher.
 
-use crate::types::{ChordOverride, Snap};
-
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Chord {
     pub mods: String,
@@ -57,35 +55,27 @@ pub fn builtin(page_id: &str, app: &str) -> Option<Chord> {
     Some(chord(pair.0, pair.1))
 }
 
-/// Overlay, else builtin, then the empty-mods gate. The success arm is the final `Some`.
-pub fn chord_for(page_id: &str, app: &str, snap: &Snap) -> Option<Chord> {
-    let id = format!("{page_id}/{app}");
-    let candidate = if let Some(ov) = snap.chord_overlay.get(&id) {
-        match ov {
-            ChordOverride::ForceDead => return None,
-            ChordOverride::Use { mods, key } => Some(chord(mods, key)),
-        }
-    } else {
-        builtin(page_id, app)
-    };
-    let chord = candidate?;
+/// Builtin, then the empty-mods gate. Success is the final `Some`.
+pub fn chord_for(page_id: &str, app: &str) -> Option<Chord> {
+    arm(builtin(page_id, app)?)
+}
+
+/// Empty `mods` is dead unless the key is F11. Empty `key` is always dead.
+fn arm(chord: Chord) -> Option<Chord> {
     if chord.key.is_empty() || (chord.mods.is_empty() && chord.key != "F11") {
-        return None;
+        None
+    } else {
+        Some(chord)
     }
-    Some(chord)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::catalog::Catalog;
-    use crate::types::ChordOverride;
 
     #[test]
     fn f11_empty_mods_and_private_firefox_only() {
-        let cat = Catalog::load();
-        let snap = cat.snap("desk").unwrap();
-        let fs = chord_for("browser.fullscreen", "firefox", snap).unwrap();
+        let fs = chord_for("browser.fullscreen", "firefox").unwrap();
         assert_eq!(fs.mods, "");
         assert_eq!(fs.key, "F11");
         let p = builtin("browser.private", "firefox").unwrap();
@@ -100,27 +90,9 @@ mod tests {
 
     #[test]
     fn empty_mods_other_than_f11_is_dead() {
-        let cat = Catalog::load();
-        let mut snap = cat.snap("desk").unwrap().clone();
-        snap.chord_overlay.insert(
-            "browser.tab_new/firefox".into(),
-            ChordOverride::Use {
-                mods: String::new(),
-                key: "T".into(),
-            },
-        );
-        assert!(chord_for("browser.tab_new", "firefox", &snap).is_none());
-        snap.chord_overlay
-            .insert("browser.tab_new/firefox".into(), ChordOverride::ForceDead);
-        assert!(chord_for("browser.tab_new", "firefox", &snap).is_none());
-        snap.chord_overlay.insert(
-            "browser.fullscreen/zen".into(),
-            ChordOverride::Use {
-                mods: String::new(),
-                key: "F11".into(),
-            },
-        );
-        let fs = chord_for("browser.fullscreen", "zen", &snap).unwrap();
+        assert!(arm(chord("", "T")).is_none());
+        assert!(arm(chord("CTRL", "")).is_none());
+        let fs = arm(chord("", "F11")).unwrap();
         assert_eq!(fs.key, "F11");
         assert_eq!(fs.mods, "");
     }

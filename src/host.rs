@@ -162,7 +162,6 @@ pub fn live_snap() -> Result<Snap> {
         sinks,
         focused_output,
         bins: present_bins(),
-        chord_overlay: BTreeMap::new(),
         lists: discover_lists(),
         downloads: None,
     }
@@ -183,8 +182,6 @@ fn present_bins() -> Vec<String> {
         "google-chrome",
         "chromium",
         "brave",
-        "foot",
-        "kitty",
     ]
     .into_iter()
     .filter(|bin| which(bin))

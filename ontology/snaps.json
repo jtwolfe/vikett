@@ -396,8 +396,7 @@
       "firefox",
       "google-chrome",
       "chromium",
-      "brave",
-      "foot"
+      "brave"
     ],
     "lists": {
       "bookmark_folder": [
