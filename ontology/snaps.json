@@ -90,7 +90,10 @@
       "title": "standup",
       "inMin": 40
     },
-    "weather": "showers"
+    "weather": "showers",
+    "bins": [
+      "foot"
+    ]
   },
   {
     "id": "desk-jellyfin",
@@ -396,7 +399,8 @@
       "firefox",
       "google-chrome",
       "chromium",
-      "brave"
+      "brave",
+      "foot"
     ],
     "lists": {
       "bookmark_folder": [

@@ -27,6 +27,7 @@ const ADVERSARIAL: &[&str] = &[
     "read me the whole thread",
     "open a random website",
     "run this curl",
+    "run this command",
     "the red one",
     "click the second tab",
     "wake me at seven",
@@ -86,5 +87,6 @@ mod tests {
         assert!(refused("open this link").is_some());
         assert!(refused("see https://example.com").is_some());
         assert!(refused("open www.example.com").is_some());
+        assert!(refused("run this command").is_some());
     }
 }

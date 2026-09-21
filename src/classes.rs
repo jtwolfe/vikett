@@ -8,6 +8,9 @@ const ARMS: &[(&str, &[&str])] = &[
     ("brave", &["brave"]),
     ("foot", &["foot"]),
     ("kitty", &["kitty"]),
+    ("ghostty", &["com.mitchellh.ghostty", "ghostty"]),
+    ("alacritty", &["alacritty"]),
+    ("wezterm", &["org.wezfurlong.wezterm", "wezterm"]),
     ("jellyfin", &["jellyfin"]),
     ("code", &["codium", "code"]),
     ("thunderbird", &["thunderbird"]),
@@ -47,6 +50,11 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "chrome" => Some("google-chrome"),
         "chromium" => Some("chromium"),
         "brave" => Some("brave"),
+        "foot" => Some("foot"),
+        "kitty" => Some("kitty"),
+        "ghostty" => Some("ghostty"),
+        "alacritty" => Some("alacritty"),
+        "wezterm" => Some("wezterm"),
         _ => None,
     }
 }
@@ -91,7 +99,13 @@ mod tests {
         assert_eq!(class_to_app("Google-Chrome"), "chrome");
         assert_eq!(class_to_app("chromium"), "chromium");
         assert_eq!(class_to_app("brave-browser"), "brave");
+        assert_eq!(class_to_app("ghostty"), "ghostty");
+        assert_eq!(class_to_app("com.mitchellh.ghostty"), "ghostty");
+        assert_eq!(class_to_app("Alacritty"), "alacritty");
+        assert_eq!(class_to_app("org.wezfurlong.wezterm"), "wezterm");
         assert_eq!(class_to_app("NotMapped"), "notmapped");
+        assert_eq!(bin_for_app("foot"), Some("foot"));
+        assert_eq!(bin_for_app("wezterm"), Some("wezterm"));
     }
 
     #[test]

@@ -117,6 +117,7 @@ fn authored() -> Vec<Case> {
     v.extend(compound());
     v.extend(paraphrases());
     v.extend(browser());
+    v.extend(term());
     v
 }
 
@@ -1240,6 +1241,7 @@ fn refuses() -> Vec<Case> {
         desk_none("refuse-whole-thread", "read me the whole thread", ""),
         desk_none("refuse-random-site", "open a random website", ""),
         desk_none("refuse-curl", "run this curl", ""),
+        desk_none("refuse-run-command", "run this command", "No shell slot."),
         desk_none("refuse-wake-seven", "wake me at seven", ""),
         desk_none("refuse-email-png", "email that screenshot", ""),
         desk_none("refuse-wifi", "turn off wifi", ""),
@@ -2357,6 +2359,191 @@ fn browser() -> Vec<Case> {
     ]
 }
 
+fn term() -> Vec<Case> {
+    vec![
+        c(
+            "term-focus-foot",
+            "desk-zen",
+            "focus the foot terminal",
+            Some("term.focus"),
+            &[("app", "foot")],
+            Some("address:0xfoot"),
+            &["term", "exact"],
+            "Mapped Foot is hl.dsp.focus, not exec.",
+        ),
+        c(
+            "term-focus-exec",
+            "desk",
+            "focus the foot terminal",
+            Some("term.focus"),
+            &[("app", "foot")],
+            Some("exec_cmd(\"foot\")"),
+            &["term", "exact"],
+            "Allowlisted, unmapped, bins contains foot.",
+        ),
+        c(
+            "term-focus-kitty",
+            "desk",
+            "focus the kitty terminal",
+            Some("term.focus"),
+            &[("app", "kitty")],
+            Some("address:0x2"),
+            &["term", "exact"],
+            "Does not steal focus kitty.",
+        ),
+        c(
+            "term-new-window",
+            "desk-zen",
+            "new foot window",
+            Some("term.new_window"),
+            &[("app", "foot")],
+            Some("key = \"N\""),
+            &["term", "exact"],
+            "Chord only. Foot is already mapped.",
+        ),
+        c(
+            "term-new-window-unmapped",
+            "desk",
+            "new foot window",
+            None,
+            &[],
+            None,
+            &["term", "dead"],
+            "Unmapped new window does not exec.",
+        ),
+        c(
+            "term-new-tab-kitty",
+            "desk",
+            "kitty terminal tab",
+            Some("term.new_tab"),
+            &[("app", "kitty")],
+            Some("key = \"T\""),
+            &["term", "exact"],
+            "Ctrl+Shift+T inside Kitty.",
+        ),
+        c(
+            "term-new-tab-foot-dead",
+            "desk-zen",
+            "new foot tab",
+            None,
+            &[],
+            None,
+            &["term", "dead"],
+            "Foot has no tab chord.",
+        ),
+        c(
+            "term-close-kitty",
+            "desk",
+            "close the kitty terminal",
+            Some("term.close"),
+            &[("app", "kitty")],
+            Some("key = \"W\""),
+            &["term", "exact", "confirm"],
+            "Not wm.close.",
+        ),
+        c(
+            "term-close-foot-dead",
+            "desk-zen",
+            "close the foot terminal",
+            None,
+            &[],
+            None,
+            &["term", "dead"],
+            "Foot has no close chord.",
+        ),
+        c(
+            "term-next-kitty",
+            "desk",
+            "next kitty terminal",
+            Some("term.next"),
+            &[("app", "kitty")],
+            Some("key = \"Right\""),
+            &["term", "exact"],
+            "Not next tab.",
+        ),
+        c(
+            "term-prev-kitty",
+            "desk",
+            "previous kitty terminal",
+            Some("term.prev"),
+            &[("app", "kitty")],
+            Some("key = \"Left\""),
+            &["term", "exact"],
+            "",
+        ),
+        c(
+            "term-next-foot-dead",
+            "desk-zen",
+            "next foot terminal",
+            None,
+            &[],
+            None,
+            &["term", "dead"],
+            "Foot has no cycle chord.",
+        ),
+        c(
+            "term-prev-foot-dead",
+            "desk-zen",
+            "previous foot terminal",
+            None,
+            &[],
+            None,
+            &["term", "dead"],
+            "",
+        ),
+        c(
+            "term-next-bare",
+            "desk-zen",
+            "next terminal",
+            None,
+            &[],
+            None,
+            &["term", "dead"],
+            "Does not take browser.tab_next.",
+        ),
+        c(
+            "term-font-little",
+            "desk-zen",
+            "bigger foot font",
+            Some("term.font"),
+            &[("app", "foot"), ("direction", "up"), ("amount", "little")],
+            Some("key = \"plus\""),
+            &["term", "exact"],
+            "Unnamed amount is little.",
+        ),
+        c(
+            "term-font-lot",
+            "desk-zen",
+            "bigger foot font a lot",
+            Some("term.font"),
+            &[("app", "foot"), ("direction", "up"), ("amount", "lot")],
+            Some("key = \"plus\""),
+            &["term", "exact"],
+            "Lot repeats the chord.",
+        ),
+        c(
+            "term-font-down",
+            "desk-zen",
+            "smaller foot font",
+            Some("term.font"),
+            &[("app", "foot"), ("direction", "down"), ("amount", "little")],
+            Some("key = \"minus\""),
+            &["term", "exact"],
+            "",
+        ),
+        c(
+            "term-font-kitty",
+            "desk",
+            "bigger kitty font",
+            Some("term.font"),
+            &[("app", "kitty"), ("direction", "up"), ("amount", "little")],
+            Some("key = \"equal\""),
+            &["term", "exact"],
+            "Kitty font is Ctrl+Shift+equal.",
+        ),
+    ]
+}
+
 pub fn run_case(cat: &Catalog, case: &Case, referee: RefereeKind) -> CaseResult {
     let Some(snap) = cat.snap(&case.snap) else {
         return CaseResult {
@@ -2627,11 +2814,24 @@ mod tests {
             "workspace",
         ];
         let mut errs = Vec::new();
-        for page in cat.pages.iter().filter(|p| p.module == "browser") {
+        for page in cat
+            .pages
+            .iter()
+            .filter(|p| p.module == "browser" || p.module == "term")
+        {
             for alias in &page.aliases {
                 let n = crate::text::norm(alias);
-                if n == "browser" {
+                if page.module == "browser" && n == "browser" {
                     errs.push(format!("{} alias is the bare word browser", page.id));
+                }
+                if page.module == "term"
+                    && (crate::text::contains_phrase(alias, "next tab")
+                        || crate::text::contains_phrase(alias, "go back"))
+                {
+                    errs.push(format!(
+                        "{} alias {alias:?} steals next tab or go back",
+                        page.id
+                    ));
                 }
                 let raw: Vec<&str> = n.split_whitespace().collect();
                 if raw.len() == 1 && banned.contains(&raw[0]) {

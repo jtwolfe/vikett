@@ -278,7 +278,9 @@ fn mute_does_not_score_browser_pages() {
     let ids: std::collections::HashSet<&str> = live.iter().map(|l| l.page_id.as_str()).collect();
     let scored = vikett::lexical::score_live(&cat.pages, &ids, "mute", snap);
     assert!(
-        scored.iter().all(|s| !s.page_id.starts_with("browser.")),
+        scored
+            .iter()
+            .all(|s| !s.page_id.starts_with("browser.") && !s.page_id.starts_with("term.")),
         "{:?}",
         scored.iter().map(|s| &s.page_id).collect::<Vec<_>>()
     );
@@ -447,4 +449,86 @@ fn vendor_doors_follow_class_and_zen_index_stays_reserved() {
         Some("work")
     );
     assert_eq!(filled.slots.get("app").map(String::as_str), Some("chrome"));
+}
+
+#[test]
+fn term_focus_is_address_or_exec_cmd() {
+    let cat = cat();
+    let zen = cat.snap("desk-zen").unwrap();
+    let mapped = decide(&cat, "focus the foot terminal", zen, RefereeKind::Lexical);
+    assert_eq!(mapped.take.page_id.as_deref(), Some("term.focus"));
+    let focus = mapped.walk.unwrap().command;
+    assert_eq!(
+        focus,
+        "hyprctl dispatch 'hl.dsp.focus({ window = \"address:0xfoot\" })'"
+    );
+    assert!(!focus.contains("dispatch exec"), "{focus}");
+    assert!(!focus.contains("exec_cmd"), "{focus}");
+
+    let desk = cat.snap("desk").unwrap();
+    let unmapped = decide(&cat, "focus the foot terminal", desk, RefereeKind::Lexical);
+    assert_eq!(unmapped.take.page_id.as_deref(), Some("term.focus"));
+    assert_eq!(
+        unmapped.walk.unwrap().command,
+        "hyprctl dispatch 'hl.dsp.exec_cmd(\"foot\")'"
+    );
+}
+
+#[test]
+fn term_new_window_never_execs() {
+    let cat = cat();
+    let zen = cat.snap("desk-zen").unwrap();
+    let mapped = decide(&cat, "new foot window", zen, RefereeKind::Lexical);
+    assert_eq!(mapped.take.page_id.as_deref(), Some("term.new_window"));
+    let walk = mapped.walk.unwrap().command;
+    assert!(walk.contains("hl.dsp.send_shortcut"), "{walk}");
+    assert!(walk.contains("address:0xfoot"), "{walk}");
+    assert!(walk.contains("key = \"N\""), "{walk}");
+    assert!(!walk.contains("exec_cmd"), "{walk}");
+    assert!(!walk.contains("dispatch exec"), "{walk}");
+
+    let desk = cat.snap("desk").unwrap();
+    let unmapped = decide(&cat, "new foot window", desk, RefereeKind::Lexical);
+    assert!(unmapped.take.page_id.is_none(), "{:?}", unmapped.take);
+    assert!(unmapped.walk.is_none());
+}
+
+#[test]
+fn term_font_lot_repeats_and_little_is_default() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let little = decide(&cat, "bigger foot font", snap, RefereeKind::Lexical);
+    let lot = decide(&cat, "bigger foot font a lot", snap, RefereeKind::Lexical);
+    assert_eq!(
+        little.take.slots.get("amount").map(String::as_str),
+        Some("little")
+    );
+    assert_eq!(
+        little
+            .walk
+            .as_ref()
+            .unwrap()
+            .command
+            .matches("send_shortcut")
+            .count(),
+        1
+    );
+    assert_eq!(
+        lot.walk
+            .as_ref()
+            .unwrap()
+            .command
+            .matches("send_shortcut")
+            .count(),
+        3
+    );
+    assert!(lot.walk.unwrap().command.contains("key = \"plus\""));
+}
+
+#[test]
+fn desk_zen_next_tab_stays_browser() {
+    let cat = cat();
+    let snap = cat.snap("desk-zen").unwrap();
+    let r = decide(&cat, "next tab", snap, RefereeKind::Lexical);
+    assert_eq!(r.take.page_id.as_deref(), Some("browser.tab_next"));
 }

@@ -2,7 +2,7 @@
 
 Humans author pages. The referee only chooses among doors that are live.
 
-Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
+Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*` and `term.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
 
 Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 
@@ -26,6 +26,7 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | capture | grim / hyprshot | focused output |
 | weather | HA weather / LAN cache | short condition or null |
 | browser | `hl.dsp.focus` / `hl.dsp.send_shortcut` / `hl.dsp.exec_cmd` | clients, allowlist, `bins`, `lists.bookmark_folder`, `downloads` |
+| term | `hl.dsp.focus` / `hl.dsp.send_shortcut`; `exec_cmd` only for unmapped focus | clients, allowlist, `bins` |
 
 ## Page kinds
 
@@ -43,6 +44,8 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 `scene.apply` scene is a library id. “Make it cozy” is a refuse.
 
 `timer.start` mins is `5|10|15|20`. “Wake me at seven” is a refuse.
+
+`term` app is `foot|kitty|ghostty|alacritty|wezterm`. Font amount is `little|lot` (unnamed is little). There is no shell slot and no free command.
 
 ## When-clauses (prune)
 
@@ -70,6 +73,9 @@ A page that cannot happen is not offered:
 | Zen index, compact, glance, new workspace, web panel, essential, move-tab | no builtin chord. Compact and glance are not guessed |
 | browser.downloads | `downloads` is null, or the caller is a guest |
 | browser.dev_tools | guest, or `who` is not the owner |
+| term.focus | no matching client, and not (allowlisted and `bins` contains the binary) |
+| term.new_window and other term acts | no matching client, or no chord for that app. New window never execs |
+| term.next / term.prev | aliases are `next terminal` / `previous terminal`, not `next tab` |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 

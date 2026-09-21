@@ -166,7 +166,7 @@ pub struct Snap {
     pub sinks: Vec<String>,
     #[serde(default)]
     pub focused_output: Option<String>,
-    /// Binaries `browser.focus` may `exec_cmd` when the window is unmapped.
+    /// Binaries an unmapped family focus may `exec_cmd`.
     #[serde(default)]
     pub bins: Vec<String>,
     /// Closed name lists. `bookmark_folder` is discovered on the live snap.
