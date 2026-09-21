@@ -64,6 +64,10 @@ A page that cannot happen is not offered:
 | browser.focus | no matching client, and not (allowlisted and `bins` contains the binary) |
 | browser.ask_open | app not on the allowlist |
 | other browser acts | no matching client, or no chord (`mods` empty only for F11) |
+| browser.container / container_tab | class is not firefox, or no chord (none builtin) |
+| browser.profile / profile_window / tab_group_collapse | class is not chrome or chromium, or no chord |
+| Zen next, prev, sidebar, split, unsplit | class is not zen |
+| Zen index, compact, glance, new workspace, web panel, essential, move-tab | no builtin chord. Compact and glance are not guessed |
 | browser.downloads | `downloads` is null, or the caller is a guest |
 | browser.dev_tools | guest, or `who` is not the owner |
 

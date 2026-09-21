@@ -1,4 +1,5 @@
-//! Shared browser doors. Focus may exec; every other act needs a mapped client and a chord.
+//! Browser doors. Focus may exec; every other act needs a mapped client and a chord.
+//! Vendor pages also require that class: Firefox containers, Chrome profiles, Zen chords.
 
 use std::collections::BTreeMap;
 
@@ -25,15 +26,54 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (b
             Some(n) => (true, format!("{n} downloads")),
             None => (false, "downloads unknown".into()),
         },
-        _ => {
-            let Some(c) = client_for_app(snap, app) else {
-                return (false, "no matching client".into());
-            };
-            if keymap::chord_for(&page.id, app).is_none() {
-                return (false, "reserved — no chord".into());
-            }
-            (true, format!("client {}", c.class))
-        }
+        _ => act_live(page, snap, app),
+    }
+}
+
+fn act_live(page: &Page, snap: &Snap, app: &str) -> (bool, String) {
+    // The slot enum already limits app. A forced slot still must not arm the wrong class.
+    if !vendor_app(&page.id, app) {
+        return (false, "wrong browser".into());
+    }
+    let Some(c) = client_for_app(snap, app) else {
+        return (false, "no matching client".into());
+    };
+    if keymap::chord_for(&page.id, app, &snap.id).is_none() {
+        return (false, "reserved — no chord".into());
+    }
+    (true, format!("client {}", c.class))
+}
+
+fn vendor_app(page_id: &str, app: &str) -> bool {
+    const FIREFOX: &[&str] = &["browser.container", "browser.container_tab"];
+    const CHROME: &[&str] = &[
+        "browser.profile",
+        "browser.profile_window",
+        "browser.tab_group_collapse",
+    ];
+    const ZEN: &[&str] = &[
+        "browser.zen_ws_next",
+        "browser.zen_ws_prev",
+        "browser.zen_ws",
+        "browser.zen_ws_new",
+        "browser.compact",
+        "browser.sidebar",
+        "browser.split",
+        "browser.unsplit",
+        "browser.glance_open",
+        "browser.glance_close",
+        "browser.web_panel",
+        "browser.essential",
+        "browser.tab_move_ws",
+    ];
+    if FIREFOX.contains(&page_id) {
+        app == "firefox"
+    } else if CHROME.contains(&page_id) {
+        app == "chrome" || app == "chromium"
+    } else if ZEN.contains(&page_id) {
+        app == "zen"
+    } else {
+        true
     }
 }
 
@@ -72,13 +112,13 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             driver,
         };
     };
-    let Some(chord) = keymap::chord_for(&page.id, app) else {
+    let Some(chord) = keymap::chord_for(&page.id, app, &snap.id) else {
         return WalkPlan {
             command: "reserved".into(),
             driver,
         };
     };
-    let chord = zoom_key(page, slots, chord);
+    let chord = shaped_chord(page, slots, chord);
     let reps =
         if page.id == "browser.zoom" && slots.get("amount").map(String::as_str) == Some("lot") {
             3
@@ -95,13 +135,21 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
     }
 }
 
-fn zoom_key(page: &Page, slots: &BTreeMap<String, String>, mut chord: Chord) -> Chord {
+fn shaped_chord(page: &Page, slots: &BTreeMap<String, String>, mut chord: Chord) -> Chord {
     if page.id == "browser.zoom" {
         chord.key = if slots.get("direction").map(String::as_str) == Some("down") {
             "minus".into()
         } else {
             "plus".into()
         };
+    } else if page.id == "browser.split" {
+        // Shortcuts table: horizontal H, vertical V, grid G.
+        chord.key = match slots.get("layout").map(String::as_str) {
+            Some("v") => "V",
+            Some("grid") => "G",
+            _ => "H",
+        }
+        .into();
     }
     chord
 }

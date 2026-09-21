@@ -190,5 +190,158 @@
       "app": "firefox"
     },
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-zen-ws-next",
+    "snap": "desk-zen",
+    "utterance": "forward workspace",
+    "expectPage": "browser.zen_ws_next",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "zen"
+    }
+  },
+  {
+    "id": "h-browser-zen-ws-prev",
+    "snap": "desk-zen",
+    "utterance": "backward workspace",
+    "expectPage": "browser.zen_ws_prev",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "zen"
+    }
+  },
+  {
+    "id": "h-browser-sidebar",
+    "snap": "desk-zen",
+    "utterance": "show the zen sidebar",
+    "expectPage": "browser.sidebar",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "zen"
+    }
+  },
+  {
+    "id": "h-browser-split",
+    "snap": "desk-zen",
+    "utterance": "please split vertical",
+    "expectPage": "browser.split",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "zen",
+      "layout": "v"
+    }
+  },
+  {
+    "id": "h-browser-unsplit",
+    "snap": "desk-zen",
+    "utterance": "please unsplit tabs",
+    "expectPage": "browser.unsplit",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "zen"
+    }
+  },
+  {
+    "id": "h-browser-zen-ws",
+    "snap": "desk-browsers",
+    "utterance": "jump to zen workspace one",
+    "expectPage": "browser.zen_ws",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "zen",
+      "ws": "1"
+    }
+  },
+  {
+    "id": "h-browser-zen-ws-dead",
+    "snap": "desk-zen",
+    "utterance": "switch zen workspace two",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-compact",
+    "snap": "desk-zen",
+    "utterance": "enter compact mode",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-glance-open",
+    "snap": "desk-zen",
+    "utterance": "please open glance",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-glance-close",
+    "snap": "desk-zen",
+    "utterance": "please close glance",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-zen-ws-new",
+    "snap": "desk-zen",
+    "utterance": "make a new workspace",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-web-panel",
+    "snap": "desk-zen",
+    "utterance": "open the web panel",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-essential",
+    "snap": "desk-zen",
+    "utterance": "show essential tabs",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-move",
+    "snap": "desk-zen",
+    "utterance": "please move tab to workspace",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-container",
+    "snap": "desk",
+    "utterance": "use firefox container personal",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-container-tab",
+    "snap": "desk",
+    "utterance": "open a new container tab",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-profile",
+    "snap": "desk-browsers",
+    "utterance": "switch the chrome profile to default",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-profile-window",
+    "snap": "desk-browsers",
+    "utterance": "open a chrome profile window",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-group",
+    "snap": "kitchen",
+    "utterance": "please collapse tab group",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]
