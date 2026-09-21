@@ -39,7 +39,6 @@
     "when": { "type": "string" },
     "policy": { "enum": ["household", "private", "owner", "confirm"] },
     "confirm": { "type": "boolean" },
-    "reserved": { "type": "boolean" },
     "walk": { "type": "string" },
     "askShape": { "type": "string" },
     "pose": { "type": "string" },

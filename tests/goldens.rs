@@ -48,6 +48,18 @@ fn l0_guest_hides_mail_and_calendar() {
         .map(|l| l.page_id.as_str())
         .collect();
     assert!(leaked.is_empty(), "guest leaked private pages: {leaked:?}");
+    let (_, dead) = live_and_dead(&cat.pages, snap, Some("shared only"));
+    let lock = dead
+        .iter()
+        .find(|d| d.page_id == "scene.lock_private")
+        .expect("lock-private dead");
+    assert!(lock.why.contains("guest flag"), "lock why {}", lock.why);
+    let tree = decide(&cat, "shared only", snap, RefereeKind::Lexical)
+        .trace
+        .render();
+    assert!(tree.contains("scene.lock_private"), "{tree}");
+    assert!(tree.contains("scene.guest"), "{tree}");
+    assert!(tree.contains("guest flag"), "{tree}");
 }
 
 #[test]
@@ -64,7 +76,12 @@ fn l0_blank_or_unknown_who_hides_mail_and_private() {
         let mut snap = desk.clone();
         snap.who = who.into();
         snap.guest = false;
-        let (live, _) = live_and_dead(&cat.pages, &snap, None);
+        let (live, dead) = live_and_dead(&cat.pages, &snap, None);
+        let because = if who.is_empty() {
+            "who empty"
+        } else {
+            "who unknown"
+        };
         let leaked: Vec<_> = live
             .iter()
             .filter(|l| {
@@ -94,6 +111,16 @@ fn l0_blank_or_unknown_who_hides_mail_and_private() {
         assert!(
             owner.is_empty(),
             "who={who:?} leaked owner pages: {owner:?}"
+        );
+        assert!(
+            dead.iter()
+                .any(|d| d.page_id.starts_with("mail.") && d.why.contains(because)),
+            "who={who:?} mail why missing {because}: {dead:?}"
+        );
+        assert!(
+            dead.iter()
+                .any(|d| d.page_id == "scene.lock_private" && d.why.contains(because)),
+            "who={who:?} owner why missing {because}"
         );
     }
 }

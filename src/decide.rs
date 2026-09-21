@@ -118,6 +118,9 @@ pub fn decide_with_model(
             || d.page_id.starts_with("calendar.")
             || d.page_id == "scene.handoff"
             || d.why.contains("guest")
+            || d.why.contains("who empty")
+            || d.why.contains("who unknown")
+            || d.why.contains("owner-only")
             || d.why.contains("no timer")
     }) {
         prune_node = prune_node.child(TraceNode::new(

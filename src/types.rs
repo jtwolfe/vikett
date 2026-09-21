@@ -46,9 +46,6 @@ pub struct Page {
     /// Separate from `Policy::Confirm`. Either one sets `EngineResult.confirm`.
     #[serde(default, skip_serializing_if = "is_false")]
     pub confirm: bool,
-    /// Authored but not armed. Default false so v0 pages stay unchanged.
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub reserved: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub walk: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none", rename = "askShape")]

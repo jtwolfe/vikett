@@ -34,14 +34,30 @@ pub fn as_guest(snap: &Snap) -> bool {
     who.is_empty() || who.eq_ignore_ascii_case("unknown")
 }
 
+fn as_guest_why(snap: &Snap) -> &'static str {
+    if snap.guest {
+        "guest flag"
+    } else if snap.who.trim().is_empty() {
+        "who empty"
+    } else {
+        "who unknown"
+    }
+}
+
 pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Liveness {
     if (page.policy == Policy::Private || page.module == "mail") && as_guest(snap) {
         return Liveness {
             ok: false,
-            why: "private pages hidden — guest present".into(),
+            why: format!("private pages hidden — {}", as_guest_why(snap)),
         };
     }
-    if page.policy == Policy::Owner && (as_guest(snap) || snap.who != snap.owner_id()) {
+    if page.policy == Policy::Owner && as_guest(snap) {
+        return Liveness {
+            ok: false,
+            why: format!("owner-only page — {}", as_guest_why(snap)),
+        };
+    }
+    if page.policy == Policy::Owner && snap.who != snap.owner_id() {
         return Liveness {
             ok: false,
             why: "owner-only page".into(),

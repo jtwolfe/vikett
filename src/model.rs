@@ -332,20 +332,36 @@ mod tests {
         assert!(take.reason.contains("shortlist"), "{}", take.reason);
     }
 
+    struct LayaUrlGuard {
+        prev: Option<String>,
+    }
+
+    impl LayaUrlGuard {
+        fn set(url: &str) -> Self {
+            let prev = std::env::var("VIKETT_LAYA_URL").ok();
+            std::env::set_var("VIKETT_LAYA_URL", url);
+            Self { prev }
+        }
+    }
+
+    impl Drop for LayaUrlGuard {
+        fn drop(&mut self) {
+            match self.prev.take() {
+                Some(v) => std::env::set_var("VIKETT_LAYA_URL", v),
+                None => std::env::remove_var("VIKETT_LAYA_URL"),
+            }
+        }
+    }
+
     #[test]
     fn empty_shortlist_does_not_post() {
-        let prev = std::env::var("VIKETT_LAYA_URL").ok();
-        // Port 1 refuses. A POST would error; silence must return before the client.
-        std::env::set_var("VIKETT_LAYA_URL", "http://127.0.0.1:1");
         let cat = crate::catalog::Catalog::load();
         let snap = cat.snap("desk").unwrap();
         let (live, _) = crate::prune::live_and_dead(&cat.pages, snap, Some("other monitor"));
-        let take = laya_take("other monitor", snap, &live, &cat.pages);
-        match prev {
-            Some(v) => std::env::set_var("VIKETT_LAYA_URL", v),
-            None => std::env::remove_var("VIKETT_LAYA_URL"),
-        }
-        let take = take.expect("empty shortlist is silence, not a client error");
+        // Port 1 refuses. A POST would error; silence must return before the client.
+        let _guard = LayaUrlGuard::set("http://127.0.0.1:1");
+        let take = laya_take("other monitor", snap, &live, &cat.pages)
+            .expect("empty shortlist is silence, not a client error");
         assert!(take.page_id.is_none(), "{take:?}");
         assert!(take.reason.contains("shortlist"), "{}", take.reason);
     }
