@@ -6,6 +6,7 @@ use std::process::Command;
 use anyhow::{Context, Result};
 use serde::Deserialize;
 
+use crate::classes::class_to_app;
 use crate::types::{Client, Snap};
 
 #[derive(Deserialize)]
@@ -297,38 +298,6 @@ fn which(bin: &str) -> bool {
         .unwrap_or(false)
 }
 
-fn class_to_app(class: &str) -> String {
-    let c = class.to_lowercase();
-    if c.contains("zen") {
-        "zen".into()
-    } else if c.contains("foot") {
-        "foot".into()
-    } else if c.contains("firefox") {
-        "firefox".into()
-    } else if c.contains("kitty") {
-        "kitty".into()
-    } else if c.contains("jellyfin") {
-        "jellyfin".into()
-    } else if c.contains("code") || c.contains("codium") {
-        "code".into()
-    } else if c.contains("thunderbird") {
-        "thunderbird".into()
-    } else {
-        c
-    }
-}
-
 fn whoami() -> String {
     std::env::var("USER").unwrap_or_else(|_| "jim".into())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::class_to_app;
-
-    #[test]
-    fn maps_zen_and_foot() {
-        assert_eq!(class_to_app("zen"), "zen");
-        assert_eq!(class_to_app("foot"), "foot");
-    }
 }

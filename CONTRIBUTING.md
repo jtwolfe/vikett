@@ -8,8 +8,10 @@ This is a protocol repo. Prefer a new **page** over a new cleverness.
 4. Prune lives in `src/prune.rs`. Walks live in `src/walk.rs`. The referee must not see argv.
 5. Do not add send-mail, buy, click-pixel, or free-number slots.
 
+L1 is the Rust lexical suite (`cargo test` / `vikett suite`): `must_fail = 0` and `wrong_act = 0`. Node goldens are a v0 lock of `src/fixtures.ts`, not that gate.
+
 ```bash
 cargo test
-cargo run --release -- test
+cargo run --release -- suite --referee lexical
 node --experimental-strip-types --test tests/goldens.test.ts
 ```

@@ -11,8 +11,8 @@ echo "======== lexical must-pass ========"
 
 if curl -fsS -o /dev/null --max-time 2 http://127.0.0.1:8009/health 2>/dev/null; then
   echo
-  echo "======== laya compare (non-strict) ========"
-  "$BIN" suite --referee laya || true
+  echo "======== laya compare (miss-to-silence is non-strict; wrong_act fails) ========"
+  "$BIN" suite --referee laya
 else
   echo
   echo "Laya server not on :8009 — lexical only. Start with:"

@@ -32,6 +32,8 @@ fn l1_all_goldens() {
 fn l0_guest_hides_mail_and_calendar() {
     let cat = cat();
     let snap = cat.snap("guest-living").expect("guest snap");
+    assert_eq!(snap.who, "jim");
+    assert!(snap.guest);
     let (live, _) = live_and_dead(&cat.pages, snap, None);
     let leaked: Vec<_> = live
         .iter()
@@ -46,6 +48,54 @@ fn l0_guest_hides_mail_and_calendar() {
         .map(|l| l.page_id.as_str())
         .collect();
     assert!(leaked.is_empty(), "guest leaked private pages: {leaked:?}");
+}
+
+#[test]
+fn l0_blank_or_unknown_who_hides_mail_and_private() {
+    let cat = cat();
+    let desk = cat.snap("desk").expect("desk").clone();
+    assert!(!desk.guest);
+    let (live, _) = live_and_dead(&cat.pages, &desk, None);
+    assert!(
+        live.iter().any(|l| l.page_id.starts_with("mail.")),
+        "desk should still show mail before who is cleared"
+    );
+    for who in ["", "unknown", "UNKNOWN"] {
+        let mut snap = desk.clone();
+        snap.who = who.into();
+        snap.guest = false;
+        let (live, _) = live_and_dead(&cat.pages, &snap, None);
+        let leaked: Vec<_> = live
+            .iter()
+            .filter(|l| {
+                l.page_id.starts_with("mail.")
+                    || cat
+                        .page(&l.page_id)
+                        .is_some_and(|p| p.policy == vikett::types::Policy::Private)
+            })
+            .map(|l| l.page_id.clone())
+            .collect();
+        assert!(
+            leaked.is_empty(),
+            "who={who:?} leaked mail or private: {leaked:?}"
+        );
+        assert!(
+            live.iter().any(|l| l.page_id == "wm.workspace"),
+            "who={who:?} hid household pages"
+        );
+        let owner: Vec<_> = live
+            .iter()
+            .filter(|l| {
+                cat.page(&l.page_id)
+                    .is_some_and(|p| p.policy == vikett::types::Policy::Owner)
+            })
+            .map(|l| l.page_id.clone())
+            .collect();
+        assert!(
+            owner.is_empty(),
+            "who={who:?} leaked owner pages: {owner:?}"
+        );
+    }
 }
 
 #[test]

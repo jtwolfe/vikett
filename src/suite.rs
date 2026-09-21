@@ -1,8 +1,8 @@
 //! Extensive prompt suite: goldens + authored coverage + refuses + policy.
 //!
 //! Lexical cases without the `paraphrase` tag are a hard gate.
-//! Laya is compared when a System One server is up; disagreement is reported
-//! and only fails under `--strict`.
+//! Laya misses into silence are reported and only fail under `--strict`.
+//! A wrong act (expected silence, but a walk or an ask) fails both referees.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
@@ -1372,41 +1372,41 @@ fn policy() -> Vec<Case> {
             "policy-lock-guest",
             "guest-living",
             "lock this",
-            Some("scene.lock_private"),
+            None,
             &[],
             None,
             &["policy", "guest"],
-            "Guest mode lock private.",
+            "Guest is not the owner.",
         ),
         c(
             "policy-someone-coming",
             "guest-living",
             "someone's coming",
-            Some("scene.lock_private"),
+            None,
             &[],
             None,
             &["policy", "guest"],
-            "",
+            "Guest is not the owner.",
         ),
         c(
             "policy-shared-only",
             "guest-living",
             "shared only",
-            Some("scene.lock_private"),
+            None,
             &[],
             None,
             &["policy", "guest"],
-            "",
+            "Guest is not the owner.",
         ),
         c(
             "policy-guest-mode",
             "guest-living",
             "guest mode",
-            Some("scene.guest"),
+            None,
             &[],
             None,
             &["policy", "guest"],
-            "",
+            "Guest is not the owner.",
         ),
     ]
 }
@@ -1719,7 +1719,9 @@ pub fn run_case(cat: &Catalog, case: &Case, referee: RefereeKind) -> CaseResult 
                 None => true,
                 Some(sub) => walk.as_deref().is_some_and(|w| w.contains(sub)),
             };
-            let wrong_act = case.expect_page.is_none() && got.is_some() && r.walk.is_some();
+            let wrong_act = case.expect_page.is_none()
+                && got.is_some()
+                && (r.walk.is_some() || r.answer.is_some());
             CaseResult {
                 id: case.id.clone(),
                 snap: case.snap.clone(),
@@ -1744,13 +1746,30 @@ pub struct SuiteReport {
     pub must_fail: usize,
     pub soft_fail: usize,
     pub wrong_acts: usize,
+    /// Laya referee, server down. Cases were not run (no per-case client timeout).
+    pub skipped: bool,
 }
 
-pub fn run_suite(cat: &Catalog, referee: RefereeKind, tag: Option<&str>) -> SuiteReport {
+pub fn run_suite(cat: &Catalog, referee: RefereeKind, tag: Option<&str>) -> Result<SuiteReport> {
     let cases: Vec<Case> = all_cases(cat)
         .into_iter()
         .filter(|c| tag.is_none_or(|t| c.tags.iter().any(|x| x == t)))
         .collect();
+    if cases.is_empty() {
+        match tag {
+            Some(t) => bail!("{t} tag matched nothing"),
+            None => bail!("suite matched nothing"),
+        }
+    }
+    if referee == RefereeKind::Laya && !crate::model::available(RefereeKind::Laya) {
+        return Ok(SuiteReport {
+            results: Vec::new(),
+            must_fail: 0,
+            soft_fail: 0,
+            wrong_acts: 0,
+            skipped: true,
+        });
+    }
     let mut results = Vec::with_capacity(cases.len());
     let mut must_fail = 0;
     let mut soft_fail = 0;
@@ -1774,12 +1793,13 @@ pub fn run_suite(cat: &Catalog, referee: RefereeKind, tag: Option<&str>) -> Suit
         }
         results.push(r);
     }
-    SuiteReport {
+    Ok(SuiteReport {
         results,
         must_fail,
         soft_fail,
         wrong_acts,
-    }
+        skipped: false,
+    })
 }
 
 pub fn render_report(report: &SuiteReport, show_pass: bool) -> String {
@@ -1841,12 +1861,16 @@ pub fn run_and_print(
     strict: bool,
 ) -> Result<()> {
     println!("== {referee} ==");
-    let report = run_suite(cat, referee, tag);
+    let report = run_suite(cat, referee, tag)?;
+    if report.skipped {
+        println!("Laya unavailable — skip");
+        return Ok(());
+    }
     print!("{}", render_report(&report, show_pass));
     if referee == RefereeKind::Lexical && report.must_fail > 0 {
         bail!("{} lexical must-pass cases failed", report.must_fail);
     }
-    if referee == RefereeKind::Lexical && report.wrong_acts > 0 {
+    if report.wrong_acts > 0 {
         bail!("{} wrong acts on refuse/dead cases", report.wrong_acts);
     }
     if strict && !report.results.iter().all(|r| r.pass) {
@@ -1877,9 +1901,25 @@ mod tests {
     #[test]
     fn lexical_must_pass() {
         let cat = Catalog::load();
-        let report = run_suite(&cat, RefereeKind::Lexical, None);
+        let report = run_suite(&cat, RefereeKind::Lexical, None).expect("suite");
         if report.must_fail > 0 || report.wrong_acts > 0 {
             panic!("{}", render_report(&report, false));
         }
+    }
+
+    #[test]
+    fn empty_tag_fails() {
+        let cat = Catalog::load();
+        let err = match run_suite(&cat, RefereeKind::Lexical, Some("holdout")) {
+            Err(e) => e,
+            Ok(_) => panic!("empty tag must fail"),
+        };
+        assert!(
+            err.to_string().contains("holdout tag matched nothing"),
+            "{err}"
+        );
+        let wm = run_suite(&cat, RefereeKind::Lexical, Some("wm")).expect("wm tag");
+        assert!(!wm.skipped);
+        assert!(!wm.results.is_empty());
     }
 }

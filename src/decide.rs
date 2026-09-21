@@ -218,7 +218,7 @@ pub fn decide_with_model(
     let mut confirm = false;
     if let Some(id) = &take.page_id {
         if let Some(page) = cat.page(id) {
-            confirm = page.policy == Policy::Confirm;
+            confirm = page.confirm || page.policy == Policy::Confirm;
             match page.kind {
                 PageKind::Act => {
                     let plan = walk::fill_walk(page, &take.slots, snap);
@@ -446,5 +446,25 @@ mod tests {
         );
         assert!(r.walk.as_ref().unwrap().command.contains("5%+"));
         assert!(r.trace.render().contains("audio.bump"));
+    }
+
+    #[test]
+    fn confirm_is_flag_or_policy() {
+        let mut cat = Catalog::load();
+        let snap = cat.snap("desk").unwrap().clone();
+        let closed = decide(&cat, "close this", &snap, RefereeKind::Lexical);
+        assert_eq!(closed.take.page_id.as_deref(), Some("wm.close"));
+        assert!(closed.confirm);
+        let muted = decide(&cat, "mute", &snap, RefereeKind::Lexical);
+        assert_eq!(muted.take.page_id.as_deref(), Some("audio.mute"));
+        assert!(!muted.confirm);
+        cat.pages
+            .iter_mut()
+            .find(|p| p.id == "audio.mute")
+            .unwrap()
+            .confirm = true;
+        let flagged = decide(&cat, "mute", &snap, RefereeKind::Lexical);
+        assert_eq!(flagged.take.page_id.as_deref(), Some("audio.mute"));
+        assert!(flagged.confirm);
     }
 }

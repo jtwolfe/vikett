@@ -55,7 +55,7 @@ enum Cmd {
         /// Print passing cases too
         #[arg(long)]
         show_pass: bool,
-        /// Fail on paraphrase/Laya misses (default: lexical must-pass only)
+        /// Fail on paraphrase/Laya misses. A wrong act fails without this flag.
         #[arg(long)]
         strict: bool,
         /// Also run Laya if the System One server is up
@@ -228,14 +228,16 @@ fn run_suite_cmd(
     let tag_ref = tag.as_deref();
     match format {
         ReportFormat::Json => {
-            let report = vikett::suite::run_suite(cat, referee, tag_ref);
+            let report = vikett::suite::run_suite(cat, referee, tag_ref)?;
+            if report.skipped {
+                eprintln!("Laya unavailable — skip");
+            }
             println!("{}", serde_json::to_string_pretty(&json_report(&report))?);
-            if referee == RefereeKind::Lexical && (report.must_fail > 0 || report.wrong_acts > 0) {
-                anyhow::bail!(
-                    "{} lexical must-pass / {} wrong acts",
-                    report.must_fail,
-                    report.wrong_acts
-                );
+            if !report.skipped && referee == RefereeKind::Lexical && report.must_fail > 0 {
+                anyhow::bail!("{} lexical must-pass cases failed", report.must_fail);
+            }
+            if !report.skipped && report.wrong_acts > 0 {
+                anyhow::bail!("{} wrong acts on refuse/dead cases", report.wrong_acts);
             }
         }
         ReportFormat::Text => {
@@ -243,12 +245,8 @@ fn run_suite_cmd(
         }
     }
     if compare && referee == RefereeKind::Lexical {
-        if !vikett::model::available(RefereeKind::Laya) {
-            println!("laya unavailable — skip compare");
-        } else {
-            println!();
-            vikett::suite::run_and_print(cat, RefereeKind::Laya, tag_ref, false, false)?;
-        }
+        println!();
+        vikett::suite::run_and_print(cat, RefereeKind::Laya, tag_ref, false, false)?;
     }
     Ok(())
 }
@@ -258,6 +256,7 @@ fn json_report(report: &vikett::suite::SuiteReport) -> serde_json::Value {
         "must_fail": report.must_fail,
         "soft_fail": report.soft_fail,
         "wrong_acts": report.wrong_acts,
+        "skipped": report.skipped,
         "pass": report.results.iter().filter(|r| r.pass).count(),
         "total": report.results.len(),
         "results": report.results.iter().map(|r| serde_json::json!({

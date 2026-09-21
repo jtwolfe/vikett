@@ -25,14 +25,23 @@ pub fn client_match<'a>(snap: &'a Snap, target: Option<&str>) -> Option<&'a crat
     }
 }
 
+/// Guest flag, blank `who`, or `unknown` (any case). Not the owner.
+pub fn as_guest(snap: &Snap) -> bool {
+    if snap.guest {
+        return true;
+    }
+    let who = snap.who.trim();
+    who.is_empty() || who.eq_ignore_ascii_case("unknown")
+}
+
 pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Liveness {
-    if (page.policy == Policy::Private || page.module == "mail") && snap.guest {
+    if (page.policy == Policy::Private || page.module == "mail") && as_guest(snap) {
         return Liveness {
             ok: false,
             why: "private pages hidden — guest present".into(),
         };
     }
-    if page.policy == Policy::Owner && snap.who != snap.owner_id() {
+    if page.policy == Policy::Owner && (as_guest(snap) || snap.who != snap.owner_id()) {
         return Liveness {
             ok: false,
             why: "owner-only page".into(),

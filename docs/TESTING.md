@@ -8,7 +8,7 @@ Never skip to “let Laya talk to hyprctl.”
 
 Given a **snap**, is a page live.
 
-- Guest snap ⇒ zero `private` pages, zero `mail.*`.
+- Guest snap, empty `who`, or `who` equal to `unknown` (any case) ⇒ zero `private` pages, zero `mail.*`. That same rule fails owner checks. `guest-living.who` stays `jim`.
 - No timer ⇒ `timer.add` / `timer.ask` / `timer.cancel` dead.
 - No matching client ⇒ `wm.focus` dead; `launch.app` may be live if allowlisted.
 - `scene.handoff` is **authored and denied** until the driver exists.
@@ -16,17 +16,20 @@ Given a **snap**, is a page live.
 
 No GPU. Pure functions. Failures here are ontology or snap bugs.
 
-### L1 — Lexical gold
+### L1 — Lexical suite
 
-Exact aliases and slot enums. The table in [`ontology/goldens.json`](../ontology/goldens.json), run by [`tests/goldens.test.ts`](../tests/goldens.test.ts).
+Exact aliases and slot enums. The gate is the Rust lexical suite (`cargo test`, which includes `lexical_must_pass`, and `vikett suite`).
 
 ```bash
-node --experimental-strip-types --test tests/goldens.test.ts
+cargo test
+cargo run --release -- suite --referee lexical
 ```
 
-A regression here is an **ontology bug**, not a model bug. Gate: **exact-match ≥ 95%** (this tree: 31/31 plus compound split).
+`must_fail = 0` and `wrong_act = 0`. A case that expected silence and produced a walk or an ask answer is a `wrong_act` for both the lexical and Laya referees. A miss into silence stays soft. An empty `--tag` fails the run; it is not a 0/0 pass. Laya availability is checked once per suite — a dead server skips that pass instead of timing out every case.
 
-The lexical referee is allowed to be dumb. It is the oracle for “did we author the door.” Laya has to **beat it on paraphrase**, not on these strings.
+[`tests/goldens.test.ts`](../tests/goldens.test.ts) is a **v0 lock** of [`src/fixtures.ts`](../src/fixtures.ts). It does not load the Rust catalogue and is not the L1 gate.
+
+A regression in the Rust suite is an **ontology or prune bug**, not a model bug. The lexical referee is the oracle for “did we author the door.” Laya has to **beat it on paraphrase**, not on these strings.
 
 ### L2 — Laya on paraphrases
 

@@ -3,8 +3,10 @@
 
 pub mod ask;
 pub mod catalog;
+pub mod classes;
 pub mod decide;
 pub mod host;
+pub mod keymap;
 pub mod lexical;
 pub mod model;
 pub mod ontology;

@@ -153,6 +153,8 @@ fn page(
         slots,
         when: when.into(),
         policy,
+        confirm: false,
+        reserved: false,
         walk: walk.map(|s| s.into()),
         ask_shape: None,
         pose: None,

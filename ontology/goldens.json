@@ -126,8 +126,8 @@
     "id": "guest-lock",
     "snap": "guest-living",
     "utterance": "shared only",
-    "expectPage": "scene.lock_private",
-    "notes": "Owner can lock while guest is present."
+    "expectPage": null,
+    "notes": "Guest is not the owner, even when who is jim. lock-private stays dead."
   },
   {
     "id": "how-loud",
