@@ -24,6 +24,9 @@ fn browser_app(app: &str) -> bool {
 
 /// Builtin bind, if this page/app pair has one. No candidate means the door stays dead.
 pub fn builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if let Some(chord) = term_builtin(page_id, app) {
+        return Some(chord);
+    }
     if !browser_app(app) {
         return None;
     }
@@ -72,6 +75,48 @@ fn zen_builtin(page_id: &str, app: &str) -> Option<Chord> {
         "browser.sidebar" => ("ALT + CTRL", "S"),
         "browser.split" => ("ALT + CTRL", "H"),
         "browser.unsplit" => ("ALT + CTRL", "U"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// Linux defaults only. Alacritty has no SpawnNewInstance bind. Foot has no tabs.
+/// Kitty's layout window is Ctrl+Shift+Enter; this door is the OS window
+/// (Ctrl+Shift+N), same idea as foot `spawn-terminal`.
+fn term_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if !matches!(app, "foot" | "kitty" | "ghostty" | "alacritty" | "wezterm") {
+        return None;
+    }
+    let pair: (&str, &str) = match page_id {
+        "term.new_window" => match app {
+            "foot" | "kitty" | "ghostty" | "wezterm" => ("CTRL + SHIFT", "N"),
+            _ => return None,
+        },
+        "term.new_tab" => match app {
+            "kitty" | "ghostty" | "wezterm" => ("CTRL + SHIFT", "T"),
+            _ => return None,
+        },
+        "term.close" => match app {
+            // kitty close_window, ghostty close_surface/close_tab, wezterm CloseCurrentTab.
+            "kitty" | "ghostty" | "wezterm" => ("CTRL + SHIFT", "W"),
+            _ => return None,
+        },
+        "term.next" => match app {
+            "kitty" => ("CTRL + SHIFT", "Right"),
+            "ghostty" | "wezterm" => ("CTRL", "Tab"),
+            _ => return None,
+        },
+        "term.prev" => match app {
+            "kitty" => ("CTRL + SHIFT", "Left"),
+            "ghostty" | "wezterm" => ("CTRL + SHIFT", "Tab"),
+            _ => return None,
+        },
+        "term.font" => match app {
+            "kitty" => ("CTRL + SHIFT", "equal"),
+            "wezterm" => ("CTRL", "equal"),
+            "foot" | "ghostty" | "alacritty" => ("CTRL", "plus"),
+            _ => return None,
+        },
         _ => return None,
     };
     Some(chord(pair.0, pair.1))
@@ -171,5 +216,38 @@ mod tests {
         assert!(chord_for("browser.zen_ws", "zen", "desk-zen", &two).is_none());
         assert!(chord_for("browser.zen_ws", "zen", "live", &two).is_none());
         assert!(chord_for("browser.zen_ws", "firefox", "desk-browsers", &two).is_none());
+    }
+
+    #[test]
+    fn term_chords_are_known_defaults_only() {
+        let n = builtin("term.new_window", "foot").unwrap();
+        assert_eq!(n.mods, "CTRL + SHIFT");
+        assert_eq!(n.key, "N");
+        assert_eq!(builtin("term.new_window", "kitty").unwrap().key, "N");
+        assert_eq!(builtin("term.new_window", "ghostty").unwrap().key, "N");
+        assert_eq!(builtin("term.new_window", "wezterm").unwrap().key, "N");
+        assert!(builtin("term.new_window", "alacritty").is_none());
+        assert!(builtin("term.new_tab", "foot").is_none());
+        assert!(builtin("term.close", "foot").is_none());
+        assert!(builtin("term.next", "foot").is_none());
+        assert!(builtin("term.prev", "alacritty").is_none());
+        assert_eq!(builtin("term.new_tab", "kitty").unwrap().key, "T");
+        assert_eq!(builtin("term.close", "wezterm").unwrap().key, "W");
+        assert_eq!(builtin("term.next", "kitty").unwrap().key, "Right");
+        assert_eq!(builtin("term.prev", "kitty").unwrap().key, "Left");
+        let gnext = builtin("term.next", "ghostty").unwrap();
+        assert_eq!(gnext.mods, "CTRL");
+        assert_eq!(gnext.key, "Tab");
+        assert_eq!(
+            builtin("term.prev", "wezterm").unwrap().mods,
+            "CTRL + SHIFT"
+        );
+        assert_eq!(builtin("term.font", "foot").unwrap().key, "plus");
+        assert_eq!(builtin("term.font", "alacritty").unwrap().mods, "CTRL");
+        assert_eq!(builtin("term.font", "kitty").unwrap().key, "equal");
+        assert_eq!(builtin("term.font", "kitty").unwrap().mods, "CTRL + SHIFT");
+        assert_eq!(builtin("term.font", "wezterm").unwrap().key, "equal");
+        assert!(builtin("term.font", "firefox").is_none());
+        assert!(chord_for("term.new_tab", "foot", "desk-zen", &BTreeMap::new()).is_none());
     }
 }

@@ -343,5 +343,77 @@
     "utterance": "please collapse tab group",
     "expectPage": null,
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-focus",
+    "snap": "desk-zen",
+    "utterance": "bring the foot terminal forward",
+    "expectPage": "term.focus",
+    "expectSlots": {
+      "app": "foot"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-new-window",
+    "snap": "desk-zen",
+    "utterance": "open another foot window",
+    "expectPage": "term.new_window",
+    "expectSlots": {
+      "app": "foot"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-new-tab",
+    "snap": "desk",
+    "utterance": "give kitty another tab",
+    "expectPage": "term.new_tab",
+    "expectSlots": {
+      "app": "kitty"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-close",
+    "snap": "desk",
+    "utterance": "shut the kitty terminal",
+    "expectPage": "term.close",
+    "expectSlots": {
+      "app": "kitty"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-next",
+    "snap": "desk",
+    "utterance": "cycle the kitty terminals",
+    "expectPage": "term.next",
+    "expectSlots": {
+      "app": "kitty"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-prev",
+    "snap": "desk",
+    "utterance": "go to the previous kitty terminal",
+    "expectPage": "term.prev",
+    "expectSlots": {
+      "app": "kitty"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-term-font",
+    "snap": "desk-zen",
+    "utterance": "make the foot font bigger",
+    "expectPage": "term.font",
+    "expectSlots": {
+      "app": "foot",
+      "direction": "up",
+      "amount": "little"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]

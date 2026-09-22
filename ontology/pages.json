@@ -4477,5 +4477,452 @@
     ],
     "refuse": [],
     "walk": "reserved"
+  },
+  {
+    "id": "term.focus",
+    "module": "term",
+    "kind": "act",
+    "title": "Focus a terminal",
+    "summary": "Focus a mapped terminal, or exec_cmd its binary when allowlisted, unmapped, and bins contains it.",
+    "aliases": [
+      "focus the foot terminal",
+      "focus the kitty terminal",
+      "focus the ghostty terminal",
+      "focus the alacritty terminal",
+      "focus the wezterm terminal"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      }
+    ],
+    "when": "A terminal client matches app, or the app is allowlisted and bins contains its binary.",
+    "policy": "household",
+    "examples": [
+      "focus the foot terminal"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus or hl.dsp.exec_cmd"
+  },
+  {
+    "id": "term.new_window",
+    "module": "term",
+    "kind": "act",
+    "title": "New terminal window",
+    "summary": "Send the app's new-window chord. Dead until that terminal is mapped. Never exec.",
+    "aliases": [
+      "new terminal window",
+      "new foot window",
+      "new kitty window",
+      "new ghostty window",
+      "new alacritty window",
+      "new wezterm window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      }
+    ],
+    "when": "That terminal is already mapped and its new-window chord is known.",
+    "policy": "household",
+    "examples": [
+      "new foot window"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "term.new_tab",
+    "module": "term",
+    "kind": "act",
+    "title": "New terminal tab",
+    "summary": "New tab chord where the terminal has one. Foot and Alacritty stay reserved.",
+    "aliases": [
+      "new terminal tab",
+      "kitty terminal tab",
+      "new foot tab",
+      "new kitty tab",
+      "new ghostty tab",
+      "new alacritty tab",
+      "new wezterm tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      }
+    ],
+    "when": "A matching terminal is mapped and a new-tab chord is known.",
+    "policy": "household",
+    "examples": [
+      "new kitty tab"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "term.close",
+    "module": "term",
+    "kind": "act",
+    "title": "Close terminal",
+    "summary": "Close chord for the mapped terminal. Foot has none.",
+    "aliases": [
+      "close the terminal",
+      "close the foot terminal",
+      "close the kitty terminal",
+      "close the ghostty terminal",
+      "close the alacritty terminal",
+      "close the wezterm terminal"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      }
+    ],
+    "when": "A matching terminal is mapped and a close chord is known.",
+    "policy": "confirm",
+    "examples": [
+      "close the kitty terminal"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "term.next",
+    "module": "term",
+    "kind": "act",
+    "title": "Next terminal",
+    "summary": "Cycle to the next terminal tab. Not next tab — that is the browser.",
+    "aliases": [
+      "next terminal",
+      "next foot terminal",
+      "next kitty terminal",
+      "next ghostty terminal",
+      "next alacritty terminal",
+      "next wezterm terminal"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      }
+    ],
+    "when": "A matching terminal is mapped and a next chord is known.",
+    "policy": "household",
+    "examples": [
+      "next terminal",
+      "next kitty terminal"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "term.prev",
+    "module": "term",
+    "kind": "act",
+    "title": "Previous terminal",
+    "summary": "Cycle to the previous terminal tab. Not go back.",
+    "aliases": [
+      "previous terminal",
+      "previous foot terminal",
+      "previous kitty terminal",
+      "previous ghostty terminal",
+      "previous alacritty terminal",
+      "previous wezterm terminal"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      }
+    ],
+    "when": "A matching terminal is mapped and a previous chord is known.",
+    "policy": "household",
+    "examples": [
+      "previous terminal",
+      "previous kitty terminal"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "term.font",
+    "module": "term",
+    "kind": "act",
+    "title": "Terminal font notch",
+    "summary": "Bigger or smaller font by a notch. Little is one chord, lot is three. Unnamed amount is little.",
+    "aliases": [
+      "bigger font",
+      "smaller font",
+      "bigger font a lot",
+      "smaller font a lot",
+      "bigger foot font",
+      "smaller foot font",
+      "bigger foot font a lot",
+      "smaller foot font a lot",
+      "bigger kitty font",
+      "smaller kitty font"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "terminal",
+        "required": true,
+        "values": [
+          {
+            "id": "foot",
+            "label": "Foot",
+            "aliases": ["foot"]
+          },
+          {
+            "id": "kitty",
+            "label": "Kitty",
+            "aliases": ["kitty"]
+          },
+          {
+            "id": "ghostty",
+            "label": "Ghostty",
+            "aliases": ["ghostty"]
+          },
+          {
+            "id": "alacritty",
+            "label": "Alacritty",
+            "aliases": ["alacritty"]
+          },
+          {
+            "id": "wezterm",
+            "label": "WezTerm",
+            "aliases": ["wezterm"]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "bigger",
+            "aliases": ["bigger", "larger"]
+          },
+          {
+            "id": "down",
+            "label": "smaller",
+            "aliases": ["smaller"]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": ["a bit", "a little", "slightly"]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": ["a lot", "way", "much"]
+          }
+        ]
+      }
+    ],
+    "when": "A terminal client matches and a font chord is known.",
+    "policy": "household",
+    "examples": [
+      "bigger foot font",
+      "bigger foot font a lot"
+    ],
+    "refuse": [
+      "run this command"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
   }
 ]

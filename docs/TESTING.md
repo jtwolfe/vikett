@@ -90,6 +90,7 @@ Add a snap when a prune rule cannot be hit by the four above. Do not grow a nove
 - “read me the whole thread”
 - “open a random website”
 - “run this curl”
+- “run this command”
 
 If a new page would make one of these walk, the page is wrong.
 

@@ -126,5 +126,13 @@
     "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap; exec_cmd only for unmapped focus",
     "snap": "clients, allowlist, bins, lists.bookmark_folder, downloads",
     "priority": 48
+  },
+  {
+    "id": "term",
+    "title": "Terminal",
+    "summary": "Foot, Kitty, Ghostty, Alacritty, and WezTerm. Focus may exec. New window never does.",
+    "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap; exec_cmd only for unmapped focus",
+    "snap": "clients, allowlist, bins",
+    "priority": 46
   }
 ]

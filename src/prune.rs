@@ -65,7 +65,7 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
     }
 
     if crate::drivers::is_family(&page.module) {
-        let (ok, why) = crate::drivers::browser::is_live(page, snap, slots);
+        let (ok, why) = crate::drivers::family_live(page, snap, slots);
         return Liveness { ok, why };
     }
 
