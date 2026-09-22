@@ -923,6 +923,73 @@
     "refuse": []
   },
   {
+    "id": "mail.next_unread",
+    "module": "mail",
+    "kind": "ask",
+    "title": "Next unread mail",
+    "summary": "Who has the next unread mail, and how many. Not a body.",
+    "aliases": [
+      "next unread mail",
+      "next unread email"
+    ],
+    "slots": [],
+    "when": "Mail online, private session. Hidden for a guest or an empty who.",
+    "policy": "private",
+    "askShape": "{ who, count }",
+    "examples": [
+      "next unread mail"
+    ],
+    "refuse": [
+      "send a reply",
+      "forward the mail"
+    ]
+  },
+  {
+    "id": "mail.archive",
+    "module": "mail",
+    "kind": "act",
+    "title": "Archive mail",
+    "summary": "Archive the current mail. Confirm. Does not send, reply, or forward.",
+    "aliases": [
+      "archive the mail",
+      "archive that mail"
+    ],
+    "slots": [],
+    "when": "Mail online. Hidden for a guest. Confirm stays on.",
+    "policy": "private",
+    "confirm": true,
+    "walk": "notmuch tag +archived -inbox",
+    "examples": [
+      "archive the mail"
+    ],
+    "refuse": [
+      "send a reply",
+      "forward the mail"
+    ]
+  },
+  {
+    "id": "mail.mark_read",
+    "module": "mail",
+    "kind": "act",
+    "title": "Mark mail read",
+    "summary": "Mark the current mail read. Does not send, reply, or forward.",
+    "aliases": [
+      "mark the mail read",
+      "mark mail read"
+    ],
+    "slots": [],
+    "when": "Mail online, private session.",
+    "policy": "private",
+    "walk": "notmuch tag -unread",
+    "examples": [
+      "mark the mail read"
+    ],
+    "refuse": [
+      "send a reply",
+      "forward the mail"
+    ]
+  },
+  {
     "id": "media.play_pause",
     "module": "media",
     "kind": "act",
@@ -1600,7 +1667,7 @@
     "module": "calendar",
     "kind": "ask",
     "title": "Today's count",
-    "summary": "How many remaining events today. Not a readout of every title.",
+    "summary": "How many remaining events today, plus a busy bucket. Not a second page.",
     "aliases": [
       "how busy am i",
       "anything else today",
@@ -1609,7 +1676,7 @@
     "slots": [],
     "when": "Calendar online, private session.",
     "policy": "private",
-    "askShape": "{ remaining }",
+    "askShape": "{ remaining, bucket }",
     "examples": [
       "how busy am I today"
     ],
@@ -6154,5 +6221,185 @@
       "page 4"
     ],
     "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "chat.focus",
+    "module": "chat",
+    "kind": "act",
+    "title": "Focus chat",
+    "summary": "Focus a mapped Signal, Element, or Vesktop window. Discord's class is Vesktop. Does not exec.",
+    "aliases": [
+      "focus signal",
+      "focus element",
+      "focus vesktop",
+      "focus discord",
+      "signal window",
+      "element window",
+      "vesktop window",
+      "discord window",
+      "focus the chat"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "chat",
+        "required": true,
+        "values": [
+          {
+            "id": "signal",
+            "label": "Signal",
+            "aliases": ["signal"]
+          },
+          {
+            "id": "element",
+            "label": "Element",
+            "aliases": ["element"]
+          },
+          {
+            "id": "vesktop",
+            "label": "Vesktop",
+            "aliases": ["vesktop", "discord"]
+          }
+        ]
+      }
+    ],
+    "when": "That chat class is mapped.",
+    "policy": "household",
+    "examples": ["focus signal"],
+    "refuse": ["send a message", "tell them that"],
+    "walk": "hl.dsp.focus"
+  },
+  {
+    "id": "chat.mute_app",
+    "module": "chat",
+    "kind": "act",
+    "title": "Mute chat app",
+    "summary": "Mute that chat app. Not the default sink. Reserved: no modifier chord.",
+    "aliases": [
+      "mute signal",
+      "mute element",
+      "mute vesktop",
+      "mute discord",
+      "mute the chat"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "chat",
+        "required": true,
+        "values": [
+          {
+            "id": "signal",
+            "label": "Signal",
+            "aliases": ["signal"]
+          },
+          {
+            "id": "element",
+            "label": "Element",
+            "aliases": ["element"]
+          },
+          {
+            "id": "vesktop",
+            "label": "Vesktop",
+            "aliases": ["vesktop", "discord"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Discord Ctrl+Shift+M is the microphone, not this door.",
+    "policy": "household",
+    "examples": ["mute signal"],
+    "refuse": ["send a message"],
+    "walk": "reserved"
+  },
+  {
+    "id": "chat.mark_read",
+    "module": "chat",
+    "kind": "act",
+    "title": "Mark chat read",
+    "summary": "Mark that chat app read. Reserved: no modifier chord. Not mail.",
+    "aliases": [
+      "mark signal read",
+      "mark element read",
+      "mark vesktop read",
+      "mark discord read",
+      "mark the chat read"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "chat",
+        "required": true,
+        "values": [
+          {
+            "id": "signal",
+            "label": "Signal",
+            "aliases": ["signal"]
+          },
+          {
+            "id": "element",
+            "label": "Element",
+            "aliases": ["element"]
+          },
+          {
+            "id": "vesktop",
+            "label": "Vesktop",
+            "aliases": ["vesktop", "discord"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved until a modifier chord exists.",
+    "policy": "household",
+    "examples": ["mark signal read"],
+    "refuse": ["send a message", "tell them that"],
+    "walk": "reserved"
+  },
+  {
+    "id": "chat.ask_unread",
+    "module": "chat",
+    "kind": "ask",
+    "title": "Chat unread",
+    "summary": "Unread bucket for one chat app. Private. Missing snap key is dead, not zero.",
+    "aliases": [
+      "unread on signal",
+      "unread on element",
+      "unread on vesktop",
+      "unread on discord",
+      "signal unread",
+      "element unread",
+      "vesktop unread",
+      "discord unread",
+      "chat unread"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "chat",
+        "required": true,
+        "values": [
+          {
+            "id": "signal",
+            "label": "Signal",
+            "aliases": ["signal"]
+          },
+          {
+            "id": "element",
+            "label": "Element",
+            "aliases": ["element"]
+          },
+          {
+            "id": "vesktop",
+            "label": "Vesktop",
+            "aliases": ["vesktop", "discord"]
+          }
+        ]
+      }
+    ],
+    "when": "chatUnread has that app id. Hidden for a guest.",
+    "policy": "private",
+    "askShape": "{ app, bucket }",
+    "examples": ["unread on signal"],
+    "refuse": ["send a message", "tell them that", "message that I'm late"]
   }
 ]

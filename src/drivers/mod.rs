@@ -7,6 +7,7 @@ use serde_json::Value;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub mod browser;
+pub mod chat;
 pub mod files;
 pub(crate) mod hl;
 pub mod notes;
@@ -14,7 +15,10 @@ pub mod read;
 pub mod term;
 
 pub fn is_family(module: &str) -> bool {
-    matches!(module, "browser" | "term" | "files" | "notes" | "read")
+    matches!(
+        module,
+        "browser" | "term" | "files" | "notes" | "read" | "chat"
+    )
 }
 
 pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
@@ -24,6 +28,7 @@ pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -
         "files" => files::is_live(page, snap, slots),
         "notes" => notes::is_live(page, snap, slots),
         "read" => read::is_live(page, snap, slots),
+        "chat" => chat::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -35,6 +40,7 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
         "files" => files::fill_walk(page, slots, snap),
         "notes" => notes::fill_walk(page, slots, snap),
         "read" => read::fill_walk(page, slots, snap),
+        "chat" => chat::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),
@@ -45,6 +51,7 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
 pub fn family_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> Value {
     match page.module.as_str() {
         "browser" => browser::fill_ask(page, slots, snap),
+        "chat" => chat::fill_ask(page, slots, snap),
         // No term page is an ask. A later ask should get its own fill_ask.
         _ => serde_json::json!({ "unarmed": page.id }),
     }

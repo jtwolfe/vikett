@@ -158,5 +158,13 @@
     "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap",
     "snap": "clients",
     "priority": 40
+  },
+  {
+    "id": "chat",
+    "title": "Chat",
+    "summary": "Signal, Element, and Vesktop. Focus when mapped. Mute and mark-read stay reserved. Unread is a private bucket. No send.",
+    "driver": "hl.dsp.focus when mapped; send_shortcut only if a chord exists",
+    "snap": "clients, chatUnread",
+    "priority": 38
   }
 ]

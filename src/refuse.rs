@@ -8,6 +8,8 @@ static REFUSE_RE: LazyLock<Regex> = LazyLock::new(|| {
         r"(?x)
         \b(email|mail|message)\b.*\b(that|to\ say|saying)\b
         | \bsend\b
+        | \btell\b
+        | \breply\b
         | \bbuy\b
         | \bclick\b
         | \bpurchase\b
@@ -118,6 +120,11 @@ mod tests {
         assert!(refused("open www.example.com").is_some());
         assert!(refused("run this command").is_some());
         assert!(refused("page 12").is_some());
+        assert!(refused("tell signal I'll be late").is_some());
+        assert!(refused("reply to that mail").is_some());
+        assert!(refused("message that I'm on my way").is_some());
+        assert!(refused("browser forward").is_none());
+        assert!(refused("forward the mail").is_none());
         assert!(refused("jump to 4").is_some());
         assert!(refused("go to page 3").is_some());
         assert!(refused("write a paragraph").is_some());

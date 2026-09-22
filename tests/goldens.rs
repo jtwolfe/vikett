@@ -65,6 +65,20 @@ fn l0_guest_hides_mail_and_calendar() {
         !live.iter().any(|l| l.page_id == "browser.downloads"),
         "guest saw browser.downloads"
     );
+    let (_, dead) = live_and_dead(&cat.pages, snap, None);
+    for id in [
+        "mail.next_unread",
+        "mail.archive",
+        "mail.mark_read",
+        "chat.ask_unread",
+        "calendar.ask_today",
+    ] {
+        let row = dead
+            .iter()
+            .find(|d| d.page_id == id)
+            .unwrap_or_else(|| panic!("{id} missing from dead"));
+        assert!(row.why.contains("guest flag"), "{id} {}", row.why);
+    }
 }
 
 #[test]
@@ -122,6 +136,18 @@ fn l0_blank_or_unknown_who_hides_mail_and_private() {
                 .any(|d| d.page_id.starts_with("mail.") && d.why.contains(because)),
             "who={who:?} mail why missing {because}: {dead:?}"
         );
+        for id in [
+            "mail.next_unread",
+            "mail.archive",
+            "mail.mark_read",
+            "chat.ask_unread",
+        ] {
+            assert!(
+                dead.iter()
+                    .any(|d| d.page_id == id && d.why.contains(because)),
+                "who={who:?} {id} why missing {because}"
+            );
+        }
         assert!(
             dead.iter()
                 .any(|d| d.page_id == "scene.lock_private" && d.why.contains(because)),
@@ -531,4 +557,48 @@ fn desk_zen_next_tab_stays_browser() {
     let snap = cat.snap("desk-zen").unwrap();
     let r = decide(&cat, "next tab", snap, RefereeKind::Lexical);
     assert_eq!(r.take.page_id.as_deref(), Some("browser.tab_next"));
+}
+
+#[test]
+fn how_busy_stays_ask_today_with_bucket() {
+    let cat = cat();
+    assert!(cat.page("calendar.ask_busy").is_none());
+    let snap = cat.snap("desk").unwrap();
+    let r = decide(&cat, "how busy am I today", snap, RefereeKind::Lexical);
+    assert_eq!(r.take.page_id.as_deref(), Some("calendar.ask_today"));
+    let answer = r.answer.unwrap();
+    assert_eq!(answer["remaining"], 1);
+    assert_eq!(answer["bucket"], "light");
+    assert!(answer.get("title").is_none(), "{answer}");
+}
+
+#[test]
+fn mail_archive_confirms_and_does_not_exec() {
+    let cat = cat();
+    let snap = cat.snap("desk").unwrap();
+    let r = decide(&cat, "archive the mail", snap, RefereeKind::Lexical);
+    assert_eq!(r.take.page_id.as_deref(), Some("mail.archive"));
+    assert!(r.confirm);
+    let walk = r.walk.unwrap().command;
+    assert!(walk.contains("notmuch"), "{walk}");
+    assert!(!walk.contains("dispatch exec"), "{walk}");
+    assert!(!walk.contains("send"), "{walk}");
+}
+
+#[test]
+fn chat_unread_answer_is_a_bucket() {
+    let cat = cat();
+    let snap = cat.snap("desk-chat").unwrap();
+    let r = decide(&cat, "unread on signal", snap, RefereeKind::Lexical);
+    assert_eq!(r.take.page_id.as_deref(), Some("chat.ask_unread"));
+    let answer = r.answer.unwrap();
+    assert_eq!(answer["app"], "signal");
+    assert_eq!(answer["bucket"], "few");
+    assert_ne!(answer, serde_json::json!({ "ok": true }));
+    let guest = cat.snap("guest-living").unwrap();
+    assert_eq!(guest.who, "jim");
+    let hidden = decide(&cat, "unread on signal", guest, RefereeKind::Lexical);
+    assert!(hidden.take.page_id.is_none(), "{:?}", hidden.take);
+    assert!(hidden.answer.is_none());
+    assert!(hidden.walk.is_none());
 }

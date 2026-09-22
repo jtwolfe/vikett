@@ -657,5 +657,57 @@
       ]
     },
     "monitors": 1
+  },
+  {
+    "id": "desk-chat",
+    "title": "Desk — Signal and Vesktop",
+    "who": "jim",
+    "where": "desk",
+    "occupants": ["jim"],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xsig",
+        "class": "signal",
+        "title": "Signal",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xdisc",
+        "class": "discord",
+        "title": "friends",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": ["1"],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": ["signal", "element", "vesktop"],
+    "running": ["signal", "vesktop"],
+    "mailOnline": true,
+    "contacts": ["dave"],
+    "unreadFrom": {
+      "dave": { "count": 1, "subjects": ["note"] }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": { "title": "standup", "inMin": 40 },
+    "weather": "showers",
+    "chatUnread": { "signal": 2, "vesktop": 0 },
+    "monitors": 1
   }
 ]

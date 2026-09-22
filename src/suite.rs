@@ -119,6 +119,7 @@ fn authored() -> Vec<Case> {
     v.extend(browser());
     v.extend(term());
     v.extend(desk_files());
+    v.extend(inbox());
     v
 }
 
@@ -2974,6 +2975,311 @@ fn desk_files() -> Vec<Case> {
     ]
 }
 
+fn inbox() -> Vec<Case> {
+    vec![
+        c(
+            "chat-focus-signal",
+            "desk-chat",
+            "focus signal",
+            Some("chat.focus"),
+            &[("app", "signal")],
+            Some("address:0xsig"),
+            &["chat", "exact"],
+            "Mapped. Not exec.",
+        ),
+        c(
+            "chat-focus-default",
+            "desk-chat",
+            "focus the chat",
+            Some("chat.focus"),
+            &[("app", "signal")],
+            Some("hl.dsp.focus"),
+            &["chat", "exact"],
+            "Focused class supplies app.",
+        ),
+        c(
+            "chat-focus-discord",
+            "desk-chat",
+            "focus discord",
+            Some("chat.focus"),
+            &[("app", "vesktop")],
+            Some("address:0xdisc"),
+            &["chat", "exact"],
+            "Discord class is Vesktop.",
+        ),
+        c(
+            "chat-focus-unmapped",
+            "desk-chat",
+            "focus element",
+            None,
+            &[],
+            None,
+            &["chat", "dead"],
+            "Unmapped focus does not exec.",
+        ),
+        c(
+            "chat-focus-desk",
+            "desk",
+            "focus signal",
+            None,
+            &[],
+            None,
+            &["chat", "dead"],
+            "Does not take wm.focus.",
+        ),
+        c(
+            "chat-mute-dead",
+            "desk-chat",
+            "mute signal",
+            None,
+            &[],
+            None,
+            &["chat", "reserved"],
+            "No chord. Does not take audio.mute.",
+        ),
+        c(
+            "chat-mute-sink",
+            "desk-chat",
+            "mute",
+            Some("audio.mute"),
+            &[],
+            Some("set-mute"),
+            &["chat", "audio"],
+            "Bare mute stays the sink.",
+        ),
+        c(
+            "chat-mark-dead",
+            "desk-chat",
+            "mark signal read",
+            None,
+            &[],
+            None,
+            &["chat", "reserved"],
+            "No chord. Does not mark mail.",
+        ),
+        c(
+            "chat-unread",
+            "desk-chat",
+            "unread on signal",
+            Some("chat.ask_unread"),
+            &[("app", "signal")],
+            None,
+            &["chat", "ask", "private"],
+            "Bucket from the snap. Not a body.",
+        ),
+        c(
+            "chat-unread-default",
+            "desk-chat",
+            "chat unread",
+            Some("chat.ask_unread"),
+            &[("app", "signal")],
+            None,
+            &["chat", "ask", "private"],
+            "Focused Signal.",
+        ),
+        c(
+            "chat-unread-discord",
+            "desk-chat",
+            "unread on discord",
+            Some("chat.ask_unread"),
+            &[("app", "vesktop")],
+            None,
+            &["chat", "ask", "private"],
+            "Zero is the none bucket, not dead.",
+        ),
+        c(
+            "chat-unread-missing",
+            "desk-chat",
+            "unread on element",
+            None,
+            &[],
+            None,
+            &["chat", "dead", "private"],
+            "Missing key is dead, not zero.",
+        ),
+        c(
+            "chat-unread-desk",
+            "desk",
+            "unread on signal",
+            None,
+            &[],
+            None,
+            &["chat", "dead"],
+            "Does not take mail.unread.",
+        ),
+        c(
+            "chat-unread-guest",
+            "guest-living",
+            "unread on signal",
+            None,
+            &[],
+            None,
+            &["chat", "dead", "private"],
+            "Private chat stays hidden.",
+        ),
+        c(
+            "chat-send",
+            "desk-chat",
+            "send a message on signal",
+            None,
+            &[],
+            None,
+            &["chat", "refuse"],
+            "send regex. No compose page.",
+        ),
+        c(
+            "chat-tell",
+            "desk-chat",
+            "tell signal I'll be late",
+            None,
+            &[],
+            None,
+            &["chat", "refuse"],
+            "tell regex.",
+        ),
+        c(
+            "chat-message-that",
+            "desk-chat",
+            "message that I'm on my way",
+            None,
+            &[],
+            None,
+            &["chat", "refuse"],
+            "message-that regex.",
+        ),
+        c(
+            "chat-close-this",
+            "desk-chat",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["chat", "wm"],
+            "Does not steal close this.",
+        ),
+        c(
+            "chat-next-tab",
+            "desk-chat",
+            "next tab",
+            None,
+            &[],
+            None,
+            &["chat", "dead"],
+            "Does not steal next tab.",
+        ),
+        c(
+            "chat-go-back",
+            "desk-chat",
+            "go back",
+            None,
+            &[],
+            None,
+            &["chat", "dead"],
+            "Does not steal go back.",
+        ),
+        c(
+            "chat-pause",
+            "desk-chat",
+            "pause",
+            None,
+            &[],
+            None,
+            &["chat", "dead"],
+            "No player, and chat does not own pause.",
+        ),
+        c(
+            "mail-next-unread",
+            "desk",
+            "next unread mail",
+            Some("mail.next_unread"),
+            &[],
+            None,
+            &["mail", "ask", "private"],
+            "Who and count. Not a body.",
+        ),
+        c(
+            "mail-next-unread-player",
+            "desk-jellyfin",
+            "next unread mail",
+            Some("mail.next_unread"),
+            &[],
+            None,
+            &["mail", "ask"],
+            "Does not take media.next.",
+        ),
+        c(
+            "mail-archive",
+            "desk",
+            "archive the mail",
+            Some("mail.archive"),
+            &[],
+            Some("notmuch tag +archived"),
+            &["mail", "confirm", "private"],
+            "Confirm. Not a send.",
+        ),
+        c(
+            "mail-mark-read",
+            "desk",
+            "mark the mail read",
+            Some("mail.mark_read"),
+            &[],
+            Some("notmuch tag -unread"),
+            &["mail", "private"],
+            "Not a chat mark and not a reply.",
+        ),
+        c(
+            "mail-next-guest",
+            "guest-living",
+            "next unread mail",
+            None,
+            &[],
+            None,
+            &["mail", "policy", "guest"],
+            "Guest hides mail.",
+        ),
+        c(
+            "mail-archive-guest",
+            "guest-living",
+            "archive the mail",
+            None,
+            &[],
+            None,
+            &["mail", "policy", "guest"],
+            "Guest hides archive.",
+        ),
+        c(
+            "mail-reply",
+            "desk",
+            "reply to that mail",
+            None,
+            &[],
+            None,
+            &["mail", "refuse"],
+            "No reply page.",
+        ),
+        c(
+            "mail-forward",
+            "desk",
+            "forward the mail",
+            None,
+            &[],
+            None,
+            &["mail", "dead"],
+            "No forward page.",
+        ),
+        c(
+            "cal-today-still",
+            "desk",
+            "how busy am I today",
+            Some("calendar.ask_today"),
+            &[],
+            None,
+            &["calendar", "ask", "private"],
+            "Same page. Bucket is not a second door.",
+        ),
+    ]
+}
+
 pub fn run_case(cat: &Catalog, case: &Case, referee: RefereeKind) -> CaseResult {
     let Some(snap) = cat.snap(&case.snap) else {
         return CaseResult {
@@ -3247,7 +3553,7 @@ mod tests {
         for page in cat.pages.iter().filter(|p| {
             matches!(
                 p.module.as_str(),
-                "browser" | "term" | "files" | "notes" | "read"
+                "browser" | "term" | "files" | "notes" | "read" | "chat"
             )
         }) {
             for alias in &page.aliases {
@@ -3255,10 +3561,13 @@ mod tests {
                 if page.module == "browser" && n == "browser" {
                     errs.push(format!("{} alias is the bare word browser", page.id));
                 }
-                if matches!(page.module.as_str(), "term" | "files" | "notes" | "read")
-                    && (crate::text::contains_phrase(alias, "next tab")
-                        || crate::text::contains_phrase(alias, "go back")
-                        || crate::text::contains_phrase(alias, "close this"))
+                if matches!(
+                    page.module.as_str(),
+                    "term" | "files" | "notes" | "read" | "chat"
+                ) && (crate::text::contains_phrase(alias, "next tab")
+                    || crate::text::contains_phrase(alias, "go back")
+                    || crate::text::contains_phrase(alias, "close this")
+                    || crate::text::contains_phrase(alias, "pause"))
                 {
                     errs.push(format!(
                         "{} alias {alias:?} steals next tab or go back",

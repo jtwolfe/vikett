@@ -135,7 +135,9 @@ pub fn decide_with_model(
     let nfirst = norm(first);
     for (re, module) in [
         (r"\b(calendar|appointment|meetings?)\b", "calendar"),
-        (r"\b(email|emails|inbox)\b", "mail"),
+        // `mail` is in the hint so a dead inbox does not slide onto media.next
+        // via the bare alias `next` ("next unread mail").
+        (r"\b(email|emails|inbox|mail)\b", "mail"),
     ] {
         if regex::Regex::new(re)
             .map(|r| r.is_match(&nfirst))
