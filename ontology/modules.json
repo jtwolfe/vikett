@@ -190,5 +190,29 @@
     "driver": "hl.dsp.send_shortcut. Focus may hl.dsp.exec_cmd",
     "snap": "clients, allowlist, bins",
     "priority": 33
+  },
+  {
+    "id": "edit",
+    "title": "Editor",
+    "summary": "Neovim, Helix, Code, VSCodium, Zed, and Emacs. Focus an allowlisted project. Save, close, next editor tab, split, and format when a chord exists. Commit, push, and rewrite stay refused.",
+    "driver": "hl.dsp.focus or hl.dsp.exec_cmd for focus; hl.dsp.send_shortcut otherwise",
+    "snap": "clients, allowlist, bins, lists.project",
+    "priority": 31
+  },
+  {
+    "id": "office",
+    "title": "Office",
+    "summary": "LibreOffice save and next sheet. Zoom stays reserved. Editing a cell is refused.",
+    "driver": "hl.dsp.send_shortcut when a chord exists",
+    "snap": "clients",
+    "priority": 29
+  },
+  {
+    "id": "draw",
+    "title": "Drawing",
+    "summary": "GIMP, Krita, Inkscape, and darktable. Save, undo, zoom notch, and export png confirm. No layer and no shape.",
+    "driver": "hl.dsp.send_shortcut when a chord exists",
+    "snap": "clients",
+    "priority": 27
   }
 ]

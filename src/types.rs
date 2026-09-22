@@ -169,7 +169,7 @@ pub struct Snap {
     /// Binaries an unmapped family focus may `exec_cmd`.
     #[serde(default)]
     pub bins: Vec<String>,
-    /// Closed name lists. `bookmark_folder` is discovered on the live snap.
+    /// Closed name lists. `bookmark_folder` and `project` are discovered on the live snap.
     #[serde(default)]
     pub lists: BTreeMap<String, Vec<String>>,
     /// `browser.downloads` bucket. `None` keeps that ask dead (not `{ok:true}`).

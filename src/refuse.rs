@@ -80,6 +80,15 @@ const ADVERSARIAL: &[&str] = &[
     "play this episode",
     "play this title",
     "put on the album",
+    "commit",
+    "push",
+    "rewrite",
+    "edit the cell",
+    "edit cell",
+    "select a layer",
+    "select the layer",
+    "draw a shape",
+    "draw the shape",
 ];
 
 pub fn refused(utterance: &str) -> Option<&'static str> {
@@ -180,5 +189,18 @@ mod tests {
         assert!(refused("suspend the computer").is_none());
         assert!(refused("shut down").is_none());
         assert!(refused("hdmi brighter").is_none());
+        assert!(refused("commit this").is_some());
+        assert!(refused("git commit").is_some());
+        assert!(refused("push to origin").is_some());
+        assert!(refused("rewrite the file").is_some());
+        assert!(refused("edit the cell").is_some());
+        assert!(refused("edit cell b2").is_some());
+        assert!(refused("select a layer").is_some());
+        assert!(refused("select the layer").is_some());
+        assert!(refused("draw a shape").is_some());
+        assert!(refused("next editor tab").is_none());
+        assert!(refused("save in code").is_none());
+        assert!(refused("next libreoffice sheet").is_none());
+        assert!(refused("undo in gimp").is_none());
     }
 }

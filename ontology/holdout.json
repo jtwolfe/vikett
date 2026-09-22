@@ -769,5 +769,135 @@
     "utterance": "throw this photo away",
     "expectPage": null,
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-edit-focus",
+    "snap": "desk-edit",
+    "utterance": "bring the vikett project up in nvim",
+    "expectPage": "edit.focus",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "nvim",
+      "project": "vikett"
+    }
+  },
+  {
+    "id": "h-edit-save",
+    "snap": "desk-edit",
+    "utterance": "write the code buffer out",
+    "expectPage": "edit.save",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "code"
+    }
+  },
+  {
+    "id": "h-edit-close-tab",
+    "snap": "desk-edit",
+    "utterance": "shut the editor tab",
+    "expectPage": "edit.close_tab",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "code"
+    }
+  },
+  {
+    "id": "h-edit-next-tab",
+    "snap": "desk-edit",
+    "utterance": "the following editor tab",
+    "expectPage": "edit.next_tab",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "code"
+    }
+  },
+  {
+    "id": "h-edit-split",
+    "snap": "desk-edit",
+    "utterance": "divide the code editor",
+    "expectPage": "edit.split",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "code"
+    }
+  },
+  {
+    "id": "h-edit-format",
+    "snap": "desk-edit",
+    "utterance": "tidy the code buffer",
+    "expectPage": "edit.format",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "code"
+    }
+  },
+  {
+    "id": "h-office-save",
+    "snap": "desk-edit",
+    "utterance": "write the spreadsheet",
+    "expectPage": "office.save",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "libreoffice"
+    }
+  },
+  {
+    "id": "h-office-zoom",
+    "snap": "desk-edit",
+    "utterance": "make the spreadsheet bigger",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-office-next-sheet",
+    "snap": "desk-edit",
+    "utterance": "move to the following sheet",
+    "expectPage": "office.next_sheet",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "libreoffice"
+    }
+  },
+  {
+    "id": "h-draw-save",
+    "snap": "desk-edit",
+    "utterance": "write the gimp picture",
+    "expectPage": "draw.save",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "gimp"
+    }
+  },
+  {
+    "id": "h-draw-undo",
+    "snap": "desk-edit",
+    "utterance": "take back the gimp stroke",
+    "expectPage": "draw.undo",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "gimp"
+    }
+  },
+  {
+    "id": "h-draw-zoom",
+    "snap": "desk-edit",
+    "utterance": "make the krita canvas bigger",
+    "expectPage": "draw.zoom",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "krita",
+      "direction": "up",
+      "amount": "little"
+    }
+  },
+  {
+    "id": "h-draw-export",
+    "snap": "desk-edit",
+    "utterance": "write a png out of inkscape",
+    "expectPage": "draw.export_png",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "app": "inkscape"
+    }
   }
 ]
