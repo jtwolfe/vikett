@@ -7,16 +7,23 @@ use serde_json::Value;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub mod browser;
+pub mod files;
+pub(crate) mod hl;
+pub mod notes;
+pub mod read;
 pub mod term;
 
 pub fn is_family(module: &str) -> bool {
-    matches!(module, "browser" | "term")
+    matches!(module, "browser" | "term" | "files" | "notes" | "read")
 }
 
 pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
     match page.module.as_str() {
         "browser" => browser::is_live(page, snap, slots),
         "term" => term::is_live(page, snap, slots),
+        "files" => files::is_live(page, snap, slots),
+        "notes" => notes::is_live(page, snap, slots),
+        "read" => read::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -25,6 +32,9 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
     match page.module.as_str() {
         "browser" => browser::fill_walk(page, slots, snap),
         "term" => term::fill_walk(page, slots, snap),
+        "files" => files::fill_walk(page, slots, snap),
+        "notes" => notes::fill_walk(page, slots, snap),
+        "read" => read::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),

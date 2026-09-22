@@ -11,6 +11,18 @@ const ARMS: &[(&str, &[&str])] = &[
     ("ghostty", &["com.mitchellh.ghostty", "ghostty"]),
     ("alacritty", &["alacritty"]),
     ("wezterm", &["org.wezfurlong.wezterm", "wezterm"]),
+    ("nautilus", &["org.gnome.nautilus", "nautilus"]),
+    ("nemo", &["nemo"]),
+    ("thunar", &["thunar"]),
+    ("dolphin", &["org.kde.dolphin", "dolphin"]),
+    ("yazi", &["yazi"]),
+    ("obsidian", &["obsidian"]),
+    ("logseq", &["logseq"]),
+    ("joplin", &["joplin"]),
+    ("zathura", &["org.pwmt.zathura", "zathura"]),
+    ("evince", &["org.gnome.evince", "evince"]),
+    ("papers", &["org.gnome.papers", "papers"]),
+    ("foliate", &["foliate"]),
     ("jellyfin", &["jellyfin"]),
     ("code", &["codium", "code"]),
     ("thunderbird", &["thunderbird"]),
@@ -55,6 +67,18 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "ghostty" => Some("ghostty"),
         "alacritty" => Some("alacritty"),
         "wezterm" => Some("wezterm"),
+        "nautilus" => Some("nautilus"),
+        "nemo" => Some("nemo"),
+        "thunar" => Some("thunar"),
+        "dolphin" => Some("dolphin"),
+        "yazi" => Some("yazi"),
+        "obsidian" => Some("obsidian"),
+        "logseq" => Some("logseq"),
+        "joplin" => Some("joplin"),
+        "zathura" => Some("zathura"),
+        "evince" => Some("evince"),
+        "papers" => Some("papers"),
+        "foliate" => Some("foliate"),
         _ => None,
     }
 }
@@ -103,7 +127,21 @@ mod tests {
         assert_eq!(class_to_app("com.mitchellh.ghostty"), "ghostty");
         assert_eq!(class_to_app("Alacritty"), "alacritty");
         assert_eq!(class_to_app("org.wezfurlong.wezterm"), "wezterm");
+        assert_eq!(class_to_app("org.gnome.Nautilus"), "nautilus");
+        assert_eq!(class_to_app("nemo"), "nemo");
+        assert_eq!(class_to_app("thunar"), "thunar");
+        assert_eq!(class_to_app("org.kde.dolphin"), "dolphin");
+        assert_eq!(class_to_app("yazi"), "yazi");
+        assert_eq!(class_to_app("obsidian"), "obsidian");
+        assert_eq!(class_to_app("Logseq"), "logseq");
+        assert_eq!(class_to_app("Joplin"), "joplin");
+        assert_eq!(class_to_app("org.pwmt.zathura"), "zathura");
+        assert_eq!(class_to_app("evince"), "evince");
+        assert_eq!(class_to_app("org.gnome.Papers"), "papers");
+        assert_eq!(class_to_app("com.github.johnfactotum.Foliate"), "foliate");
         assert_eq!(class_to_app("NotMapped"), "notmapped");
+        assert_eq!(bin_for_app("nautilus"), Some("nautilus"));
+        assert_eq!(bin_for_app("zathura"), Some("zathura"));
         assert_eq!(bin_for_app("foot"), Some("foot"));
         assert_eq!(bin_for_app("wezterm"), Some("wezterm"));
     }

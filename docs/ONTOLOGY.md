@@ -2,7 +2,7 @@
 
 Humans author pages. The referee only chooses among doors that are live.
 
-Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*` and `term.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
+Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*`, `term.*`, `files.*`, `notes.*`, and `read.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
 
 Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 
@@ -27,6 +27,9 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | weather | HA weather / LAN cache | short condition or null |
 | browser | `hl.dsp.focus` / `hl.dsp.send_shortcut` / `hl.dsp.exec_cmd` | clients, allowlist, `bins`, `lists.bookmark_folder`, `downloads` |
 | term | `hl.dsp.focus` / `hl.dsp.send_shortcut`; `exec_cmd` only for unmapped focus | clients, allowlist, `bins` |
+| files | `hl.dsp.focus` / `hl.dsp.send_shortcut`; `exec_cmd` for an authored folder | clients, allowlist, `bins`, `lists.dir` |
+| notes | `hl.dsp.focus` / `hl.dsp.send_shortcut` | clients |
+| read | `hl.dsp.focus` / `hl.dsp.send_shortcut` | clients |
 
 ## Page kinds
 
@@ -46,6 +49,12 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 `timer.start` mins is `5|10|15|20`. “Wake me at seven” is a refuse.
 
 `term` app is `foot|kitty|ghostty|alacritty|wezterm`. Font amount is `little|lot` (unnamed is little). There is no shell slot and no free command.
+
+`files.open` dir is `home|downloads|pictures|documents`, and the id must also be in `lists.dir`. The driver maps that id to a path. There is no free path and no `..`.
+
+`notes` app is `obsidian|logseq|joplin`. Vault is `work|personal`. Daily and vault are private. There is no text slot.
+
+`read` app is `zathura|evince|papers|foliate`. Zoom amount is `little|lot`. There is no page number.
 
 ## When-clauses (prune)
 
@@ -76,6 +85,18 @@ A page that cannot happen is not offered:
 | term.focus | no matching client, and not (allowlisted and `bins` contains the binary) |
 | term.new_window and other term acts | no matching client, or no chord for that app. New window never execs |
 | term.next / term.prev | aliases are `next terminal` / `previous terminal`, not `next tab` |
+| files.focus | that class is not mapped. Focus does not exec |
+| files.open | dir missing, not authored, or not in `lists.dir`; or the app is neither mapped nor (allowlisted and in `bins`) |
+| files.back / up / hidden | no matching client, or no chord for that app. Yazi has none. Dolphin hidden has none |
+| files.sort / files.trash | no chord. Trash is still `confirm: true` |
+| notes.focus | that class is not mapped |
+| notes.daily / notes.vault | guest, or no chord. Daily is Logseq Alt+J only |
+| notes.sidebar | no chord |
+| read.focus | that class is not mapped |
+| read.next_page / prev_page | not Evince or Papers, or no client |
+| read.zoom | not Evince, Papers, or Foliate |
+| read.dark | not Zathura |
+| read.chapter_next / chapter_prev | no chord |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 

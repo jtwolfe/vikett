@@ -14,6 +14,10 @@ static REFUSE_RE: LazyLock<Regex> = LazyLock::new(|| {
         | \bschedule\b
         | \binvite\b
         | \b\d+(\.\d+)?\s*(percent|%|degrees|celsius|kelvin)\b
+        | \bpage\s+\d+\b
+        | \bjump\s+to\s+(?:page\s+)?\d+\b
+        | \bgo\s+to\s+page\s+\d+\b
+        | \b\d+\s+copies\b
         ",
     )
     .expect("refuse regex")
@@ -49,9 +53,19 @@ const ADVERSARIAL: &[&str] = &[
     "reveal the password",
     "show my password",
     "copy the password",
+    "write a paragraph",
+    "write me a paragraph",
+    "delete the file",
+    "delete this file",
+    "delete these files",
+    "permanently delete",
+    "remove the file",
 ];
 
 pub fn refused(utterance: &str) -> Option<&'static str> {
+    if free_path(utterance) {
+        return Some("refused — no free path");
+    }
     let n = norm(utterance);
     // `%` is stripped by norm(); catch "40%" on the raw string.
     let has_percent = utterance.contains('%') && utterance.chars().any(|c| c.is_ascii_digit());
@@ -71,6 +85,21 @@ pub fn refused(utterance: &str) -> Option<&'static str> {
     None
 }
 
+/// `..`, `~/`, a backslash, or an absolute path. Enum dirs never look like this.
+fn free_path(utterance: &str) -> bool {
+    if utterance.contains("..") || utterance.contains("~/") || utterance.contains('\\') {
+        return true;
+    }
+    let mut prev_space = true;
+    for ch in utterance.chars() {
+        if prev_space && ch == '/' {
+            return true;
+        }
+        prev_space = ch.is_whitespace();
+    }
+    false
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -88,5 +117,16 @@ mod tests {
         assert!(refused("see https://example.com").is_some());
         assert!(refused("open www.example.com").is_some());
         assert!(refused("run this command").is_some());
+        assert!(refused("page 12").is_some());
+        assert!(refused("jump to 4").is_some());
+        assert!(refused("go to page 3").is_some());
+        assert!(refused("write a paragraph").is_some());
+        assert!(refused("delete the file").is_some());
+        assert!(refused("open ../secrets").is_some());
+        assert!(refused("open /etc/passwd").is_some());
+        assert!(refused("open ~/notes").is_some());
+        assert!(refused("next page").is_none());
+        assert!(refused("back in files").is_none());
+        assert!(refused("open the downloads folder").is_none());
     }
 }

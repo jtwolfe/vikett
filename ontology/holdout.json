@@ -415,5 +415,149 @@
       "amount": "little"
     },
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-focus",
+    "snap": "desk-files",
+    "utterance": "bring nautilus forward",
+    "expectPage": "files.focus",
+    "expectSlots": { "app": "nautilus" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-open",
+    "snap": "desk-files",
+    "utterance": "show me the downloads folder",
+    "expectPage": "files.open",
+    "expectSlots": { "app": "nautilus", "dir": "downloads" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-back",
+    "snap": "desk-files",
+    "utterance": "step back in files",
+    "expectPage": "files.back",
+    "expectSlots": { "app": "nautilus" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-up",
+    "snap": "desk-files",
+    "utterance": "go to the parent folder",
+    "expectPage": "files.up",
+    "expectSlots": { "app": "nautilus" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-hidden",
+    "snap": "desk-files",
+    "utterance": "show the hidden files",
+    "expectPage": "files.hidden",
+    "expectSlots": { "app": "nautilus" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-sort",
+    "snap": "desk-files",
+    "utterance": "order the files by name",
+    "expectPage": "files.sort",
+    "expectSlots": { "app": "nautilus", "by": "name" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-files-trash",
+    "snap": "desk-files",
+    "utterance": "put that in the trash",
+    "expectPage": "files.trash",
+    "expectSlots": { "app": "nautilus" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-notes-focus",
+    "snap": "desk-files",
+    "utterance": "bring obsidian forward",
+    "expectPage": "notes.focus",
+    "expectSlots": { "app": "obsidian" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-notes-vault",
+    "snap": "desk-files",
+    "utterance": "the work vault please",
+    "expectPage": "notes.vault",
+    "expectSlots": { "app": "obsidian", "vault": "work" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-notes-daily",
+    "snap": "desk-files",
+    "utterance": "open today's logseq note",
+    "expectPage": "notes.daily",
+    "expectSlots": { "app": "logseq" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-notes-sidebar",
+    "snap": "desk-files",
+    "utterance": "the notes sidebar please",
+    "expectPage": "notes.sidebar",
+    "expectSlots": { "app": "obsidian" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-focus",
+    "snap": "desk-files",
+    "utterance": "bring zathura forward",
+    "expectPage": "read.focus",
+    "expectSlots": { "app": "zathura" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-next",
+    "snap": "desk-files",
+    "utterance": "turn the evince page",
+    "expectPage": "read.next_page",
+    "expectSlots": { "app": "evince" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-prev",
+    "snap": "desk-files",
+    "utterance": "evince page before this",
+    "expectPage": "read.prev_page",
+    "expectSlots": { "app": "evince" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-chapter-next",
+    "snap": "desk-files",
+    "utterance": "the following chapter",
+    "expectPage": "read.chapter_next",
+    "expectSlots": { "app": "foliate" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-chapter-prev",
+    "snap": "desk-files",
+    "utterance": "the chapter before",
+    "expectPage": "read.chapter_prev",
+    "expectSlots": { "app": "foliate" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-zoom",
+    "snap": "desk-files",
+    "utterance": "make the evince document larger",
+    "expectPage": "read.zoom",
+    "expectSlots": { "app": "evince", "direction": "up", "amount": "little" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-read-dark",
+    "snap": "desk-files",
+    "utterance": "dark mode for zathura",
+    "expectPage": "read.dark",
+    "expectSlots": { "app": "zathura" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]
