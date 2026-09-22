@@ -26,6 +26,9 @@ static REFUSE_RE: LazyLock<Regex> = LazyLock::new(|| {
         | \bjump\s+to\s+(?:page\s+)?\d+\b
         | \bgo\s+to\s+page\s+\d+\b
         | \b\d+\s+copies\b
+        | \b(?:two|three|four|five|six|seven|eight|nine|ten)\s+copies\b
+        | \b(?:run|start|launch)\b.*\bimage\b
+        | \b(?:podman|docker|distrobox|toolbox)\s+run\b
         | \b\d{3,4}x\d{3,4}\b
         | \b\d+\s*hz\b
         | \bjoin\b.*\b(?:wifi|ssid)\b
@@ -108,6 +111,19 @@ const ADVERSARIAL: &[&str] = &[
     "show my password",
     "copy the password",
     "copy a password",
+    "copy my password",
+    "copy password",
+    "what's my password",
+    "whats my password",
+    "what is my password",
+    "what's the password",
+    "what is the password",
+    "reveal my password",
+    "reveal password",
+    "show the password",
+    "run an arbitrary image",
+    "run the image",
+    "run this image",
     "start streaming",
     "start streaming the screen",
     "write a paragraph",
@@ -321,5 +337,28 @@ mod tests {
         assert!(refused("screenshot").is_none());
         assert!(refused("lock the screen").is_none());
         assert!(refused("screens off").is_none());
+        assert!(refused("what's my password").is_some());
+        assert!(refused("whats my password").is_some());
+        assert!(refused("what is my password").is_some());
+        assert!(refused("reveal my password").is_some());
+        assert!(refused("reveal the password").is_some());
+        assert!(refused("copy password").is_some());
+        assert!(refused("copy my password").is_some());
+        assert!(refused("show the password").is_some());
+        assert!(refused("is the vault unlocked").is_none());
+        assert!(refused("run the ubuntu image").is_some());
+        assert!(refused("run an arbitrary image").is_some());
+        assert!(refused("podman run ubuntu").is_some());
+        assert!(refused("docker run ubuntu").is_some());
+        assert!(refused("print 3 copies").is_some());
+        assert!(refused("scan 2 copies").is_some());
+        assert!(refused("print two copies").is_some());
+        assert!(refused("buy celeste").is_some());
+        assert!(refused("start the arch box").is_none());
+        assert!(refused("play celeste").is_none());
+        assert!(refused("start obs recording").is_none());
+        assert!(refused("start streaming").is_some());
+        assert!(refused("mouse battery").is_none());
+        assert!(refused("upgrade the system").is_none());
     }
 }

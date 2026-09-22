@@ -57,6 +57,11 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
         if slot.id == "vpn" {
             hit = list_hit(snap, "vpn", utterance);
         }
+        // Game titles come from the snap list. A name that is not in the list
+        // does not fill, including a page-enum value. Box and scene stay enums.
+        if slot.id == "title" && page.id == "games.play" {
+            hit = list_hit(snap, "game", utterance);
+        }
         if let Some(id) = hit {
             slots.insert(slot.id.clone(), id);
         } else if slot.id == "app" && crate::drivers::is_family(&page.module) {

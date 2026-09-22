@@ -7,6 +7,7 @@ use serde_json::Value;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub mod bluetooth;
+pub mod boxes;
 pub mod browser;
 pub mod capture;
 pub mod chat;
@@ -16,17 +17,23 @@ pub mod draw;
 pub mod edit;
 pub mod files;
 pub mod fx;
+pub mod games;
 pub(crate) mod hl;
 pub mod image;
+pub mod input;
 pub mod look;
 pub mod music;
 pub mod network;
 pub mod notes;
+pub mod obs;
 pub mod office;
 pub mod power;
+pub mod print;
 pub mod read;
+pub mod secrets;
 pub mod session;
 pub mod shelf;
+pub mod sync;
 pub mod term;
 pub mod updates;
 pub mod video;
@@ -56,6 +63,13 @@ pub fn is_family(module: &str) -> bool {
             | "power"
             | "disk"
             | "updates"
+            | "secrets"
+            | "sync"
+            | "boxes"
+            | "games"
+            | "obs"
+            | "print"
+            | "input"
     )
 }
 
@@ -83,6 +97,13 @@ pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -
         "power" => power::is_live(page, snap, slots),
         "disk" => disk::is_live(page, snap, slots),
         "updates" => updates::is_live(page, snap, slots),
+        "secrets" => secrets::is_live(page, snap, slots),
+        "sync" => sync::is_live(page, snap, slots),
+        "boxes" => boxes::is_live(page, snap, slots),
+        "games" => games::is_live(page, snap, slots),
+        "obs" => obs::is_live(page, snap, slots),
+        "print" => print::is_live(page, snap, slots),
+        "input" => input::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -111,6 +132,13 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
         "power" => power::fill_walk(page, slots, snap),
         "disk" => disk::fill_walk(page, slots, snap),
         "updates" => updates::fill_walk(page, slots, snap),
+        "secrets" => secrets::fill_walk(page, slots, snap),
+        "sync" => sync::fill_walk(page, slots, snap),
+        "boxes" => boxes::fill_walk(page, slots, snap),
+        "games" => games::fill_walk(page, slots, snap),
+        "obs" => obs::fill_walk(page, slots, snap),
+        "print" => print::fill_walk(page, slots, snap),
+        "input" => input::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),
@@ -129,6 +157,8 @@ pub fn family_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) ->
         "power" => power::fill_ask(page, slots, snap),
         "disk" => disk::fill_ask(page, slots, snap),
         "updates" => updates::fill_ask(page, slots, snap),
+        "secrets" => secrets::fill_ask(page, slots, snap),
+        "input" => input::fill_ask(page, slots, snap),
         // No term page is an ask. A later ask should get its own fill_ask.
         _ => serde_json::json!({ "unarmed": page.id }),
     }

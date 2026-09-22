@@ -169,7 +169,7 @@ pub struct Snap {
     /// Binaries an unmapped family focus may `exec_cmd`.
     #[serde(default)]
     pub bins: Vec<String>,
-    /// Closed name lists. `bookmark_folder`, `project`, and `vpn` are discovered on the live snap.
+    /// Closed name lists. `bookmark_folder`, `project`, `vpn`, and `game` are discovered on the live snap.
     #[serde(default)]
     pub lists: BTreeMap<String, Vec<String>>,
     /// `browser.downloads` bucket. `None` keeps that ask dead (not `{ok:true}`).
@@ -199,6 +199,12 @@ pub struct Snap {
     /// Pending package count. `None` keeps `updates.ask` dead.
     #[serde(default)]
     pub updates_pending: Option<u32>,
+    /// Vault unlocked flag. `None` keeps `secrets.ask_unlocked` dead. Never a secret.
+    #[serde(default)]
+    pub secrets_unlocked: Option<bool>,
+    /// Solaar device battery, fraction 0.0..=1.0. `None` keeps that ask dead.
+    #[serde(default)]
+    pub solaar_battery: Option<f32>,
 }
 
 fn default_owner() -> String {

@@ -1109,12 +1109,17 @@
     "lists": {
       "vpn": ["home"],
       "bt_device": ["headphones"],
-      "power_profile": ["power-saver", "balanced", "performance"]
+      "power_profile": ["power-saver", "balanced", "performance"],
+      "box": ["arch", "fedora"],
+      "game": ["celeste"],
+      "obs_scene": ["desk", "cam"]
     },
     "battery": 0.42,
     "onAc": false,
     "diskFree": 0.55,
     "updatesPending": 2,
+    "secretsUnlocked": true,
+    "solaarBattery": 0.72,
     "monitors": 1
   }
 ]

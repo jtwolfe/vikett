@@ -75,6 +75,9 @@ fn l0_guest_hides_mail_and_calendar() {
         "session.suspend",
         "session.reboot",
         "session.poweroff",
+        "secrets.ask_unlocked",
+        "secrets.lock",
+        "secrets.autotype",
     ] {
         let row = dead
             .iter()
@@ -147,6 +150,9 @@ fn l0_blank_or_unknown_who_hides_mail_and_private() {
             "session.suspend",
             "session.reboot",
             "session.poweroff",
+            "secrets.ask_unlocked",
+            "secrets.lock",
+            "secrets.autotype",
         ] {
             assert!(
                 dead.iter()
