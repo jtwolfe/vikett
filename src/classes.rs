@@ -115,11 +115,6 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "codium" => Some("codium"),
         "zed" => Some("zed"),
         "emacs" => Some("emacs"),
-        "libreoffice" => Some("libreoffice"),
-        "gimp" => Some("gimp"),
-        "krita" => Some("krita"),
-        "inkscape" => Some("inkscape"),
-        "darktable" => Some("darktable"),
         _ => None,
     }
 }
@@ -223,11 +218,11 @@ mod tests {
         assert_eq!(bin_for_app("codium"), Some("codium"));
         assert_eq!(bin_for_app("zed"), Some("zed"));
         assert_eq!(bin_for_app("emacs"), Some("emacs"));
-        assert_eq!(bin_for_app("libreoffice"), Some("libreoffice"));
-        assert_eq!(bin_for_app("gimp"), Some("gimp"));
-        assert_eq!(bin_for_app("krita"), Some("krita"));
-        assert_eq!(bin_for_app("inkscape"), Some("inkscape"));
-        assert_eq!(bin_for_app("darktable"), Some("darktable"));
+        assert_eq!(bin_for_app("libreoffice"), None);
+        assert_eq!(bin_for_app("gimp"), None);
+        assert_eq!(bin_for_app("krita"), None);
+        assert_eq!(bin_for_app("inkscape"), None);
+        assert_eq!(bin_for_app("darktable"), None);
         assert_eq!(bin_for_app("signal"), None);
         assert_eq!(bin_for_app("vesktop"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));

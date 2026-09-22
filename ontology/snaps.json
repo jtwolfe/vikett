@@ -966,17 +966,58 @@
       "hx",
       "code",
       "codium",
-      "zed",
-      "libreoffice",
-      "gimp",
-      "krita",
-      "inkscape",
-      "darktable"
+      "zed"
     ],
     "lists": {
       "project": [
         "vikett"
       ]
+    },
+    "monitors": 1
+  },
+  {
+    "id": "desk-codium",
+    "title": "Desk — VSCodium only",
+    "who": "jim",
+    "where": "desk",
+    "occupants": ["jim"],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xvscodium",
+        "class": "VSCodium",
+        "title": "vikett",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": ["1"],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": ["codium", "code"],
+    "running": ["codium"],
+    "mailOnline": true,
+    "contacts": ["dave"],
+    "unreadFrom": {
+      "dave": { "count": 1, "subjects": ["note"] }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": { "title": "standup", "inMin": 40 },
+    "weather": "showers",
+    "bins": ["codium", "code"],
+    "lists": {
+      "project": ["vikett"]
     },
     "monitors": 1
   }

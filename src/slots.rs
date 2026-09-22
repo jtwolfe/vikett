@@ -56,7 +56,7 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
             slots.insert(slot.id.clone(), id);
         } else if slot.id == "app" && crate::drivers::is_family(&page.module) {
             // Focused class only. `launch.app` is not a family and must not default.
-            if let Some(app) = focused_app(snap) {
+            if let Some(app) = focused_app(page, snap) {
                 if slot.values.iter().any(|v| v.id == app) {
                     slots.insert(slot.id.clone(), app.to_string());
                     defaulted.insert(slot.id.clone());
@@ -82,8 +82,12 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
     }
 }
 
-fn focused_app(snap: &Snap) -> Option<&'static str> {
+fn focused_app(page: &Page, snap: &Snap) -> Option<&'static str> {
     let class = snap.clients.iter().find(|c| c.focused)?.class.as_str();
+    // `class_to_app("VSCodium")` stays `code`. The edit slot is the binary.
+    if page.module == "edit" && class.to_lowercase().contains("codium") {
+        return Some("codium");
+    }
     app_for_class(class)
 }
 

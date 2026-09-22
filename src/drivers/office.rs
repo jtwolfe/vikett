@@ -30,21 +30,7 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
     let Some(chord) = keymap::chord_for(&page.id, app, &snap.id, slots) else {
         return reserved();
     };
-    let chord = shaped(&page.id, slots, chord);
-    let reps = if page.id == "office.zoom" && slots.get("amount").map(String::as_str) == Some("lot")
-    {
-        3
-    } else {
-        1
-    };
-    repeat(&c.address, &chord, reps)
-}
-
-fn shaped(page_id: &str, slots: &BTreeMap<String, String>, mut chord: Chord) -> Chord {
-    if page_id == "office.zoom" && slots.get("direction").map(String::as_str) == Some("down") {
-        chord.key = "minus".into();
-    }
-    chord
+    repeat(&c.address, &chord)
 }
 
 fn chord_live(
@@ -62,13 +48,13 @@ fn chord_live(
     (true, format!("client {}", c.class))
 }
 
-fn repeat(address: &str, chord: &Chord, reps: usize) -> WalkPlan {
-    let mut parts = vec![hl::focus_cmd(address)];
-    for _ in 0..reps {
-        parts.push(hl::shortcut_cmd(chord, address));
-    }
+fn repeat(address: &str, chord: &Chord) -> WalkPlan {
     WalkPlan {
-        command: parts.join(" && "),
+        command: format!(
+            "{} && {}",
+            hl::focus_cmd(address),
+            hl::shortcut_cmd(chord, address)
+        ),
         driver: "office".into(),
     }
 }
