@@ -3,6 +3,12 @@ use std::sync::LazyLock;
 
 use crate::text::norm;
 
+/// `play 'kind of blue'`. `norm` turns the quotes into spaces, so this sees the raw string.
+/// A contraction (`what's`, `Dave's`) is not a quoted span.
+static QUOTED_TITLE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)\b(play|watch)\b[^'‘’]*['‘][^'‘’]+['’]").expect("quoted title")
+});
+
 static REFUSE_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"(?x)
@@ -66,8 +72,11 @@ const ADVERSARIAL: &[&str] = &[
     "permanently delete",
     "remove the file",
     "play the movie",
+    "play the film",
+    "play the album",
     "watch the film",
     "watch the movie",
+    "watch the episode",
     "play this episode",
     "play this title",
     "put on the album",
@@ -85,8 +94,12 @@ pub fn refused(utterance: &str) -> Option<&'static str> {
     if pasted {
         return Some("refused — no page for a pasted url");
     }
-    // A quoted title is free text. Apostrophes are not quotes.
-    if utterance.contains('"') || utterance.contains('“') || utterance.contains('”') {
+    // A quoted title is free text. Contractions stay. `norm` has already dropped `'`.
+    if utterance.contains('"')
+        || utterance.contains('“')
+        || utterance.contains('”')
+        || QUOTED_TITLE.is_match(utterance)
+    {
         return Some("refused — no free title");
     }
     if has_percent || REFUSE_RE.is_match(&n) {
@@ -127,9 +140,16 @@ mod tests {
         assert!(refused("buy the thing in that tab").is_some());
         assert!(refused("mute").is_none());
         assert!(refused("play the movie").is_some());
+        assert!(refused("play the film").is_some());
+        assert!(refused("play the album").is_some());
+        assert!(refused("watch the episode").is_some());
         assert!(refused("play \"kind of blue\"").is_some());
+        assert!(refused("play 'kind of blue'").is_some());
+        assert!(refused("watch 'the bear'").is_some());
+        assert!(refused("what's playing").is_none());
         assert!(refused("pause the show").is_none());
         assert!(refused("play the jazz playlist").is_none());
+        assert!(refused("living room watch").is_none());
         assert!(refused("close everything").is_some());
         assert!(refused("put it on the TV").is_some());
         assert!(refused("open this link").is_some());
