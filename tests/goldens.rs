@@ -72,6 +72,9 @@ fn l0_guest_hides_mail_and_calendar() {
         "mail.mark_read",
         "chat.ask_unread",
         "calendar.ask_today",
+        "session.suspend",
+        "session.reboot",
+        "session.poweroff",
     ] {
         let row = dead
             .iter()
@@ -141,6 +144,9 @@ fn l0_blank_or_unknown_who_hides_mail_and_private() {
             "mail.archive",
             "mail.mark_read",
             "chat.ask_unread",
+            "session.suspend",
+            "session.reboot",
+            "session.poweroff",
         ] {
             assert!(
                 dead.iter()

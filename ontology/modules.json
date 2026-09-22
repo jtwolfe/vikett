@@ -2,7 +2,7 @@
   {
     "id": "wm",
     "title": "Window manager",
-    "summary": "Focus, fullscreen, workspace, close. Hyprland via hyprctl. Never invents dispatch strings.",
+    "summary": "Focus, fullscreen, workspace, close, split-ratio notch, group next, dwindle or master. special workspace stays a workspace. No pixel click.",
     "driver": "hyprctl -j clients / dispatch focuswindow|fullscreen|workspace|killactive",
     "snap": "hyprctl -j clients, workspaces, activewindow, monitors",
     "priority": 40
@@ -58,7 +58,7 @@
   {
     "id": "notify",
     "title": "Notifications",
-    "summary": "Read last notification, clear. No arbitrary D-Bus.",
+    "summary": "Read last notification (private), dismiss one, dismiss all (confirm). No arbitrary D-Bus.",
     "driver": "mako / dunst history",
     "snap": "last notification id + app",
     "priority": 15
@@ -90,8 +90,8 @@
   {
     "id": "display",
     "title": "Display",
-    "summary": "Panel brightness in notches. Separate from room lights.",
-    "driver": "brightnessctl / ddcutil",
+    "summary": "Panel brightness and a per-output notch for authored hdmi or edp. No free resolution or refresh. Layout presets stay reserved.",
+    "driver": "brightnessctl. Layout apply is reserved.",
     "snap": "current panel brightness 0–1",
     "priority": 32
   },

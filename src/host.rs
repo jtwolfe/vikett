@@ -169,6 +169,19 @@ pub fn live_snap() -> Result<Snap> {
     .with_active_workspace())
 }
 
+/// Authored output class. The slot is never the raw connector.
+/// `HDMI-A-1` is `hdmi`. `eDP-1` is `edp`. A DisplayPort name is neither.
+pub fn output_class(name: &str) -> Option<&'static str> {
+    let n = name.to_ascii_lowercase();
+    if n.contains("edp") {
+        Some("edp")
+    } else if n.contains("hdmi") {
+        Some("hdmi")
+    } else {
+        None
+    }
+}
+
 /// Bookmark folder titles only. The other three discovered lists land with their families.
 pub fn discover_lists() -> BTreeMap<String, Vec<String>> {
     let mut lists = BTreeMap::new();
@@ -410,5 +423,13 @@ mod tests {
         let lists = discover_lists();
         assert_eq!(lists.len(), 1);
         assert!(lists.contains_key("bookmark_folder"));
+    }
+
+    #[test]
+    fn output_class_is_hdmi_or_edp_only() {
+        assert_eq!(output_class("HDMI-A-1"), Some("hdmi"));
+        assert_eq!(output_class("eDP-1"), Some("edp"));
+        assert_eq!(output_class("DP-1"), None);
+        assert_eq!(output_class("VGA-1"), None);
     }
 }

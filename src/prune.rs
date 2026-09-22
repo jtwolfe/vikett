@@ -140,6 +140,10 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
             ok: true,
             why: "allowlisted split".into(),
         },
+        "wm.split_ratio" | "wm.group_next" | "wm.layout" => Liveness {
+            ok: true,
+            why: "compositor layout door".into(),
+        },
         "audio.bump" => {
             if slots.get("direction").map(String::as_str) == Some("up") && snap.volume >= 0.99 {
                 Liveness {
@@ -280,10 +284,7 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
                 .map(|e| e.title.clone())
                 .unwrap_or_else(|| "calendar empty".into()),
         },
-        "display.bump" | "display.night" => Liveness {
-            ok: true,
-            why: format!("panel {}", snap.brightness),
-        },
+
         "climate.bump" | "climate.off" => match snap.climate {
             Some(c) => Liveness {
                 ok: true,
@@ -308,19 +309,7 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
                 why: "weather offline".into(),
             },
         },
-        "session.lock" => Liveness {
-            ok: snap.lock_available,
-            why: if snap.lock_available {
-                "hyprlock".into()
-            } else {
-                "lock binary not present".into()
-            },
-        },
-        "session.dpms" => Liveness {
-            ok: true,
-            why: "compositor dpms".into(),
-        },
-        "notify.read_last" | "notify.dismiss" => match &snap.notification {
+        "notify.read_last" | "notify.dismiss" | "notify.dismiss_all" => match &snap.notification {
             Some(n) => Liveness {
                 ok: true,
                 why: n.clone(),

@@ -361,7 +361,7 @@ pub fn pages() -> Vec<Page> {
             Policy::Household,
             Some("hyprctl dispatch dpms off|on"),
             &["screens off", "screens on"],
-            &["suspend the computer", "shut down"],
+            &[],
         ),
         page(
             "capture.region",
@@ -425,9 +425,9 @@ pub fn modules() -> Vec<ModuleDef> {
         ModuleDef {
             id: "session".into(),
             title: "Session".into(),
-            summary: "Lock and DPMS. hyprlock / hyprctl dispatch dpms. Not suspend/poweroff."
+            summary: "Lock and DPMS stay. Suspend, reboot, and poweroff are owner plus confirm. Idle is reserved because force_idle is not an inhibitor."
                 .into(),
-            driver: "hyprlock ; hyprctl dispatch dpms".into(),
+            driver: "hyprlock ; hyprctl dispatch dpms ; systemctl suspend|reboot|poweroff".into(),
             snap: "lock binary present + dpms status".into(),
             priority: 22,
         },

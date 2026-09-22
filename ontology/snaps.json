@@ -93,7 +93,15 @@
     "weather": "showers",
     "bins": [
       "foot"
-    ]
+    ],
+    "lists": {
+      "output": [
+        "hdmi"
+      ],
+      "layout": [
+        "single"
+      ]
+    }
   },
   {
     "id": "desk-jellyfin",
