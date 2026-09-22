@@ -3615,5 +3615,867 @@
     "refuse": [],
     "walk": "hl.dsp.focus then hl.dsp.send_shortcut",
     "confirm": true
+  },
+  {
+    "id": "browser.container",
+    "module": "browser",
+    "kind": "act",
+    "title": "Firefox container",
+    "summary": "Switch the Firefox multi-account container. No builtin chord.",
+    "aliases": [
+      "firefox container",
+      "switch container"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "container",
+        "label": "container",
+        "required": true,
+        "values": [
+          {
+            "id": "personal",
+            "label": "personal",
+            "aliases": [
+              "personal"
+            ]
+          },
+          {
+            "id": "work",
+            "label": "work",
+            "aliases": [
+              "work"
+            ]
+          },
+          {
+            "id": "banking",
+            "label": "banking",
+            "aliases": [
+              "banking"
+            ]
+          },
+          {
+            "id": "shopping",
+            "label": "shopping",
+            "aliases": [
+              "shopping"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Dead unless class is firefox. No builtin chord.",
+    "policy": "household",
+    "examples": [
+      "firefox container work"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.container_tab",
+    "module": "browser",
+    "kind": "act",
+    "title": "Container tab",
+    "summary": "Open a tab in a Firefox container. No builtin chord. Not send-tab.",
+    "aliases": [
+      "new container tab",
+      "container new tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "container",
+        "label": "container",
+        "required": true,
+        "values": [
+          {
+            "id": "personal",
+            "label": "personal",
+            "aliases": [
+              "personal"
+            ]
+          },
+          {
+            "id": "work",
+            "label": "work",
+            "aliases": [
+              "work"
+            ]
+          },
+          {
+            "id": "banking",
+            "label": "banking",
+            "aliases": [
+              "banking"
+            ]
+          },
+          {
+            "id": "shopping",
+            "label": "shopping",
+            "aliases": [
+              "shopping"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Dead unless class is firefox. No builtin chord.",
+    "policy": "household",
+    "examples": [
+      "new container tab"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.profile",
+    "module": "browser",
+    "kind": "act",
+    "title": "Chrome profile",
+    "summary": "Switch a Chrome or Chromium profile. Reserved until a chord exists.",
+    "aliases": [
+      "chrome profile",
+      "switch profile"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "profile",
+        "label": "profile",
+        "required": true,
+        "values": [
+          {
+            "id": "default",
+            "label": "default",
+            "aliases": [
+              "default"
+            ]
+          },
+          {
+            "id": "work",
+            "label": "work",
+            "aliases": [
+              "work"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Dead unless class is chrome or chromium.",
+    "policy": "household",
+    "examples": [
+      "chrome profile work"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.profile_window",
+    "module": "browser",
+    "kind": "act",
+    "title": "Chrome profile window",
+    "summary": "Open a window for a Chrome or Chromium profile. Reserved.",
+    "aliases": [
+      "chrome profile window",
+      "profile window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "profile",
+        "label": "profile",
+        "required": true,
+        "values": [
+          {
+            "id": "default",
+            "label": "default",
+            "aliases": [
+              "default"
+            ]
+          },
+          {
+            "id": "work",
+            "label": "work",
+            "aliases": [
+              "work"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Dead unless class is chrome or chromium.",
+    "policy": "household",
+    "examples": [
+      "chrome profile window"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.tab_group_collapse",
+    "module": "browser",
+    "kind": "act",
+    "title": "Collapse tab group",
+    "summary": "Collapse the current Chrome or Chromium tab group. Reserved.",
+    "aliases": [
+      "collapse tab group"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Dead unless class is chrome or chromium.",
+    "policy": "household",
+    "examples": [
+      "collapse tab group"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.zen_ws_next",
+    "module": "browser",
+    "kind": "act",
+    "title": "Next Zen workspace",
+    "summary": "Forward Zen workspace. Alt+Ctrl+E from the Zen shortcuts table.",
+    "aliases": [
+      "next workspace",
+      "forward workspace"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Class zen. Alt+Ctrl+E is armed.",
+    "policy": "household",
+    "examples": [
+      "next workspace"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.zen_ws_prev",
+    "module": "browser",
+    "kind": "act",
+    "title": "Previous Zen workspace",
+    "summary": "Backward Zen workspace. Alt+Ctrl+Q from the Zen shortcuts table.",
+    "aliases": [
+      "previous workspace",
+      "backward workspace"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Class zen. Alt+Ctrl+Q is armed.",
+    "policy": "household",
+    "examples": [
+      "previous workspace"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.zen_ws",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zen workspace index",
+    "summary": "Switch to Zen workspace 1-5. Not set by default, so reserved.",
+    "aliases": [
+      "zen workspace"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ws",
+        "label": "workspace",
+        "required": true,
+        "values": [
+          {
+            "id": "1",
+            "label": "one",
+            "aliases": [
+              "one",
+              "1"
+            ]
+          },
+          {
+            "id": "2",
+            "label": "two",
+            "aliases": [
+              "two",
+              "2"
+            ]
+          },
+          {
+            "id": "3",
+            "label": "three",
+            "aliases": [
+              "three",
+              "3"
+            ]
+          },
+          {
+            "id": "4",
+            "label": "four",
+            "aliases": [
+              "four",
+              "4"
+            ]
+          },
+          {
+            "id": "5",
+            "label": "five",
+            "aliases": [
+              "five",
+              "5"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Zen does not bind workspace index by default.",
+    "policy": "household",
+    "examples": [
+      "zen workspace two"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.zen_ws_new",
+    "module": "browser",
+    "kind": "act",
+    "title": "New Zen workspace",
+    "summary": "New Zen workspace. Reserved. Confirm if a chord is later copied in.",
+    "aliases": [
+      "new workspace",
+      "new zen workspace"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default chord. Confirm when a chord is copied in.",
+    "policy": "household",
+    "examples": [
+      "new workspace"
+    ],
+    "refuse": [],
+    "walk": "reserved",
+    "confirm": true
+  },
+  {
+    "id": "browser.compact",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zen compact mode",
+    "summary": "Reserved. The shortcuts table and the compact-mode page disagree.",
+    "aliases": [
+      "compact mode",
+      "zen compact"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Do not guess Alt+Ctrl+C or Ctrl+S.",
+    "policy": "household",
+    "examples": [
+      "compact mode"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.sidebar",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zen sidebar",
+    "summary": "Toggle the floating sidebar. Alt+Ctrl+S from the Zen shortcuts table.",
+    "aliases": [
+      "toggle sidebar",
+      "zen sidebar"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Class zen. Alt+Ctrl+S is armed.",
+    "policy": "household",
+    "examples": [
+      "toggle sidebar"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.split",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zen split view",
+    "summary": "Split the selected tabs. Horizontal H, vertical V, grid G.",
+    "aliases": [
+      "split horizontal",
+      "split vertical",
+      "split grid"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "layout",
+        "label": "layout",
+        "required": true,
+        "values": [
+          {
+            "id": "h",
+            "label": "horizontal",
+            "aliases": [
+              "horizontal"
+            ]
+          },
+          {
+            "id": "v",
+            "label": "vertical",
+            "aliases": [
+              "vertical"
+            ]
+          },
+          {
+            "id": "grid",
+            "label": "grid",
+            "aliases": [
+              "grid"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Class zen. Alt+Ctrl+H, V, or G from the layout slot.",
+    "policy": "household",
+    "examples": [
+      "split horizontal"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.unsplit",
+    "module": "browser",
+    "kind": "act",
+    "title": "Unsplit Zen tabs",
+    "summary": "Close split view. Alt+Ctrl+U from the Zen shortcuts table.",
+    "aliases": [
+      "unsplit tabs",
+      "remove the split"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Class zen. Alt+Ctrl+U is armed.",
+    "policy": "household",
+    "examples": [
+      "unsplit tabs"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.glance_open",
+    "module": "browser",
+    "kind": "act",
+    "title": "Open glance",
+    "summary": "Reserved. Glance has no default key. Escape is not a glance chord.",
+    "aliases": [
+      "open glance",
+      "glance open"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default key.",
+    "policy": "household",
+    "examples": [
+      "open glance"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.glance_close",
+    "module": "browser",
+    "kind": "act",
+    "title": "Close glance",
+    "summary": "Reserved. Escape is not a glance chord.",
+    "aliases": [
+      "close glance",
+      "glance close"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No dedicated key.",
+    "policy": "household",
+    "examples": [
+      "close glance"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.web_panel",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zen web panel",
+    "summary": "Open a named web panel. No per-panel default chord.",
+    "aliases": [
+      "web panel"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "label": "panel",
+        "required": true,
+        "values": [
+          {
+            "id": "chat",
+            "label": "chat",
+            "aliases": [
+              "chat"
+            ]
+          },
+          {
+            "id": "mail",
+            "label": "mail",
+            "aliases": [
+              "mail"
+            ]
+          },
+          {
+            "id": "music",
+            "label": "music",
+            "aliases": [
+              "music"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Alt+Ctrl+X is the AI sidebar, a different door.",
+    "policy": "household",
+    "examples": [
+      "web panel chat"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.essential",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zen essentials",
+    "summary": "Reserved. Essentials have no default chord.",
+    "aliases": [
+      "essential tabs",
+      "zen essentials"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default chord.",
+    "policy": "household",
+    "examples": [
+      "essential tabs"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.tab_move_ws",
+    "module": "browser",
+    "kind": "act",
+    "title": "Move tab to Zen workspace",
+    "summary": "Reserved. No default chord for moving a tab between Zen workspaces.",
+    "aliases": [
+      "move tab to workspace"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default chord.",
+    "policy": "household",
+    "examples": [
+      "move tab to workspace"
+    ],
+    "refuse": [],
+    "walk": "reserved"
   }
 ]

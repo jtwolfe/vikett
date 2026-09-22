@@ -341,3 +341,110 @@ fn browser_reserved_and_chrome_private_stay_dead() {
         "{why}"
     );
 }
+
+#[test]
+fn vendor_doors_follow_class_and_zen_index_stays_reserved() {
+    let cat = cat();
+    let zen = cat.snap("desk-zen").unwrap();
+    let desk = cat.snap("desk").unwrap();
+    let browsers = cat.snap("desk-browsers").unwrap();
+    let kitchen = cat.snap("kitchen").unwrap();
+
+    let dead_why = |snap: &vikett::Snap, utt: &str, id: &str| -> String {
+        let (live, dead) = live_and_dead(&cat.pages, snap, Some(utt));
+        assert!(!live.iter().any(|l| l.page_id == id), "{id} live on {utt}");
+        dead.iter()
+            .find(|d| d.page_id == id)
+            .unwrap_or_else(|| panic!("{id} missing from dead on {utt}"))
+            .why
+            .clone()
+    };
+
+    let why = dead_why(desk, "firefox container work", "browser.container");
+    assert!(
+        why.contains("no chord") || why.contains("reserved"),
+        "{why}"
+    );
+    let why = dead_why(zen, "firefox container work", "browser.container");
+    assert!(why.contains("no matching client"), "{why}");
+    let why = dead_why(browsers, "chrome profile work", "browser.profile");
+    assert!(
+        why.contains("no chord") || why.contains("reserved"),
+        "{why}"
+    );
+    let why = dead_why(kitchen, "collapse tab group", "browser.tab_group_collapse");
+    assert!(
+        why.contains("no chord") || why.contains("reserved"),
+        "{why}"
+    );
+    for id in [
+        "browser.zen_ws",
+        "browser.compact",
+        "browser.glance_open",
+        "browser.glance_close",
+        "browser.zen_ws_new",
+        "browser.web_panel",
+        "browser.essential",
+        "browser.tab_move_ws",
+    ] {
+        let (live, dead) = live_and_dead(&cat.pages, zen, Some("zen workspace two"));
+        assert!(!live.iter().any(|l| l.page_id == id), "{id}");
+        let why = &dead.iter().find(|d| d.page_id == id).unwrap().why;
+        assert!(
+            why.contains("no chord") || why.contains("reserved") || why.contains("app missing"),
+            "{id} {why}"
+        );
+    }
+
+    let silenced = decide(&cat, "zen workspace two", zen, RefereeKind::Lexical);
+    assert!(silenced.take.page_id.is_none(), "{:?}", silenced.take);
+    assert!(silenced.walk.is_none());
+
+    let hypr = decide(&cat, "workspace two zen", zen, RefereeKind::Lexical);
+    assert_eq!(hypr.take.page_id.as_deref(), Some("wm.workspace"));
+    assert_eq!(hypr.take.slots.get("ws").map(String::as_str), Some("2"));
+
+    let walked = decide(&cat, "next workspace", zen, RefereeKind::Lexical);
+    assert_eq!(walked.take.page_id.as_deref(), Some("browser.zen_ws_next"));
+    let walk = walked.walk.unwrap().command;
+    assert!(walk.contains("hl.dsp.send_shortcut"), "{walk}");
+    assert!(walk.contains("address:0xzen"), "{walk}");
+    assert!(
+        walk.contains("mods = \"ALT + CTRL\", key = \"E\""),
+        "{walk}"
+    );
+    assert!(!walk.contains("focuswindow"), "{walk}");
+
+    let index = decide(&cat, "zen workspace two", browsers, RefereeKind::Lexical);
+    assert_eq!(index.take.page_id.as_deref(), Some("browser.zen_ws"));
+    assert_eq!(index.take.slots.get("ws").map(String::as_str), Some("2"));
+    let walk = index.walk.unwrap().command;
+    assert!(walk.contains("hl.dsp.send_shortcut"), "{walk}");
+    assert!(walk.contains("address:"), "{walk}");
+    assert!(walk.contains("key = \"2\""), "{walk}");
+    assert!(!walk.contains("key = \"1\""), "{walk}");
+
+    let page = cat.page("browser.container").unwrap();
+    let mut slots = std::collections::BTreeMap::new();
+    slots.insert("app".into(), "zen".into());
+    let (ok, why) = vikett::drivers::browser::is_live(page, zen, &slots);
+    assert!(!ok);
+    assert!(why.contains("wrong browser"), "{why}");
+
+    let banking = vikett::slots::fill(page, "firefox container banking", desk);
+    assert_eq!(
+        banking.slots.get("container").map(String::as_str),
+        Some("banking")
+    );
+    assert_eq!(
+        banking.slots.get("app").map(String::as_str),
+        Some("firefox")
+    );
+    let profile = cat.page("browser.profile").unwrap();
+    let filled = vikett::slots::fill(profile, "chrome profile work", browsers);
+    assert_eq!(
+        filled.slots.get("profile").map(String::as_str),
+        Some("work")
+    );
+    assert_eq!(filled.slots.get("app").map(String::as_str), Some("chrome"));
+}

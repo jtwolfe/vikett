@@ -122,7 +122,7 @@
   {
     "id": "browser",
     "title": "Browser",
-    "summary": "Shared focus, tabs, zoom, find, and fullscreen for Zen, Firefox, Chrome, Chromium, and Brave.",
+    "summary": "Shared doors plus Firefox containers, Chrome profiles, and Zen workspace, sidebar, and split chords.",
     "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap; exec_cmd only for unmapped focus",
     "snap": "clients, allowlist, bins, lists.bookmark_folder, downloads",
     "priority": 48
