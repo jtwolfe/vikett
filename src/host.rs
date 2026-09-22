@@ -227,10 +227,12 @@ pub fn vpn_id_ok(id: &str) -> bool {
 }
 
 /// `nmcli -t -f NAME,TYPE connection show`. Type `vpn` or `wireguard` only.
+/// The last colon separates name and type. Escaped names fail `vpn_id_ok`.
 pub fn vpn_names_from_nmcli(text: &str) -> Vec<String> {
     let mut out = Vec::new();
     for line in text.lines() {
-        let Some((name, kind)) = split_nmcli_name_type(line) else {
+        let line = line.trim().trim_end_matches('\r');
+        let Some((name, kind)) = line.rsplit_once(':') else {
             continue;
         };
         if !matches!(
@@ -239,9 +241,7 @@ pub fn vpn_names_from_nmcli(text: &str) -> Vec<String> {
         ) {
             continue;
         }
-        // Keep a name only when lowercasing does not change the token norm
-        // would walk. `my:vpn` and `-evil` are dropped, not rewritten.
-        let Some(id) = vpn_store_name(&name) else {
+        let Some(id) = vpn_store_name(name) else {
             continue;
         };
         if out.iter().any(|e| e == &id) {
@@ -266,36 +266,6 @@ fn vpn_names() -> Vec<String> {
     vpn_names_from_nmcli(&String::from_utf8_lossy(&out.stdout))
 }
 
-fn split_nmcli_name_type(line: &str) -> Option<(String, String)> {
-    let line = line.trim().trim_end_matches('\r');
-    if line.is_empty() {
-        return None;
-    }
-    let b = line.as_bytes();
-    let mut i = b.len();
-    while i > 0 {
-        i -= 1;
-        if b[i] != b':' {
-            continue;
-        }
-        let mut slashes = 0usize;
-        let mut j = i;
-        while j > 0 && b[j - 1] == b'\\' {
-            slashes += 1;
-            j -= 1;
-        }
-        if slashes.is_multiple_of(2) {
-            let name = unescape_nmcli(&line[..i]);
-            let kind = line[i + 1..].to_string();
-            if kind.is_empty() {
-                return None;
-            }
-            return Some((name, kind));
-        }
-    }
-    None
-}
-
 fn vpn_store_name(raw: &str) -> Option<String> {
     let raw = raw.trim();
     if raw.is_empty()
@@ -317,21 +287,6 @@ fn vpn_store_name(raw: &str) -> Option<String> {
         return None;
     }
     Some(id)
-}
-
-fn unescape_nmcli(s: &str) -> String {
-    let mut out = String::new();
-    let mut chars = s.chars().peekable();
-    while let Some(c) = chars.next() {
-        if c == '\\' {
-            if let Some(n) = chars.next() {
-                out.push(n);
-            }
-        } else {
-            out.push(c);
-        }
-    }
-    out
 }
 
 /// Immediate child directory names of `~/storage` and `~/src`. No recursion.

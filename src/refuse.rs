@@ -168,31 +168,30 @@ pub fn refused(utterance: &str) -> Option<&'static str> {
     None
 }
 
-/// `upgrade firefox` / `install vim` / `update firefox`. Not `upgrade the system`.
+/// A full upgrade may only use these words. Any other token is a package name,
+/// including one that follows "the system" or "everything".
+const UPGRADE_WORDS: &[&str] = &[
+    "upgrade",
+    "update",
+    "install",
+    "the",
+    "system",
+    "everything",
+    "all",
+    "now",
+    "status",
+    "full",
+];
+
 fn named_package(n: &str) -> bool {
     let words: Vec<&str> = n.split_whitespace().collect();
-    for (i, w) in words.iter().enumerate() {
-        if !matches!(*w, "upgrade" | "install" | "update") {
-            continue;
-        }
-        let Some(next) = words.get(i + 1) else {
-            continue;
-        };
-        if matches!(
-            *next,
-            "the" | "everything" | "all" | "system" | "now" | "status"
-        ) {
-            continue;
-        }
-        if next
-            .chars()
-            .next()
-            .is_some_and(|c| c.is_ascii_alphanumeric())
-        {
-            return true;
-        }
+    if !words
+        .iter()
+        .any(|w| matches!(*w, "upgrade" | "install" | "update"))
+    {
+        return false;
     }
-    false
+    words.iter().any(|w| !UPGRADE_WORDS.contains(w))
 }
 
 /// `..`, `~/`, a backslash, or an absolute path. Enum dirs never look like this.
@@ -305,6 +304,12 @@ mod tests {
         assert!(refused("upgrade the system").is_none());
         assert!(refused("update the system").is_none());
         assert!(refused("update status").is_none());
+        assert!(refused("full system upgrade").is_none());
+        assert!(refused("upgrade the system firefox").is_some());
+        assert!(refused("update the system vim").is_some());
+        assert!(refused("upgrade everything firefox").is_some());
+        assert!(refused("partial system upgrade").is_some());
+        assert!(refused("upgrade the firefox package").is_some());
         assert!(refused("how's the battery").is_none());
         assert!(refused("connect the home vpn").is_none());
         assert!(refused("connect the headphones").is_none());
