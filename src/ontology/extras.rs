@@ -434,17 +434,19 @@ pub fn modules() -> Vec<ModuleDef> {
         ModuleDef {
             id: "network".into(),
             title: "Network".into(),
-            summary: "Ask-only status from nmcli. No free SSID, no disconnect.".into(),
-            driver: "nmcli -t".into(),
-            snap: "active connection type + name".into(),
+            summary: "Ask stays the connection field. VPN connect is confirm and a lists.vpn name. No SSID, DNS, or nmcli down."
+                .into(),
+            driver: "nmcli connection show ; nmcli connection up <vpn>".into(),
+            snap: "active connection type + name, lists.vpn".into(),
             priority: 11,
         },
         ModuleDef {
             id: "bluetooth".into(),
             title: "Bluetooth".into(),
-            summary: "Ask-only adapter power. Pairing is not a door.".into(),
-            driver: "bluetoothctl show".into(),
-            snap: "adapter Powered yes/no".into(),
+            summary: "Ask is adapter power. Connect and disconnect an allowlisted device. Pair is not a door."
+                .into(),
+            driver: "bluetoothctl show ; bluetoothctl connect|disconnect <device>".into(),
+            snap: "adapter Powered yes/no, lists.bt_device".into(),
             priority: 10,
         },
     ]

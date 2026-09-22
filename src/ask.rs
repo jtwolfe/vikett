@@ -80,8 +80,6 @@ pub fn fill_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> V
             }),
         },
         "weather.ask" => json!({ "condition": snap.weather }),
-        "network.ask" => json!({ "connection": snap.network }),
-        "bluetooth.ask" => json!({ "powered": snap.bluetooth_on }),
         "notify.read_last" => json!({ "summary": snap.notification }),
         "wm.ask_where" => {
             let target = slots.get("target").map(String::as_str).unwrap_or("");

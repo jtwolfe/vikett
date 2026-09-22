@@ -52,6 +52,11 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
         if hit.is_none() && slot.id == "project" {
             hit = list_hit(snap, "project", utterance);
         }
+        // VPN names come from the snap list, not the page enum. A discovered
+        // name must not lose to the fixture value `home`.
+        if slot.id == "vpn" {
+            hit = list_hit(snap, "vpn", utterance);
+        }
         if let Some(id) = hit {
             slots.insert(slot.id.clone(), id);
         } else if slot.id == "app" && crate::drivers::is_family(&page.module) {

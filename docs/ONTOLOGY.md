@@ -31,6 +31,11 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | notes | `hl.dsp.focus` / `hl.dsp.send_shortcut` | clients |
 | read | `hl.dsp.focus` / `hl.dsp.send_shortcut` | clients |
 | chat | `hl.dsp.focus` when mapped. Mute and mark-read reserved | clients, `chatUnread` |
+| network | ask stays `{ connection }`. VPN is `nmcli connection up` for `lists.vpn` | `network`, `lists.vpn`, `bins` |
+| bluetooth | ask stays `{ powered }`. Connect and disconnect one `lists.bt_device` id | `bluetoothOn`, `lists.bt_device`, `bins` |
+| power | `powerprofilesctl set` of power-saver, balanced, or performance. Battery is a bucket | `lists.power_profile`, `battery`, `onAc`, `bins` |
+| disk | free-space bucket. Timeshift create is owner and confirm | `diskFree`, `bins` |
+| updates | pending bucket. Full upgrade is owner and confirm | `updatesPending`, `bins` |
 
 ## Page kinds
 
@@ -113,6 +118,16 @@ A page that cannot happen is not offered:
 | display.layout | reserved. A layout preset needs a mode; no brightnessctl or hl.dsp walk |
 | notify.dismiss_all | no notification history. `notify.read_last` stays private |
 | wm.split_ratio / group_next / layout | always legal. `special workspace` stays `wm.workspace` |
+| network.ask | `network` is null. The ask does not connect or disconnect |
+| network.vpn | name missing from `lists.vpn`, or `nmcli` is not in `bins`. Confirm. Not an SSID |
+| bluetooth.ask | adapter is off |
+| bluetooth.connect / disconnect | adapter off, device not in `lists.bt_device`, or `bluetoothctl` not in `bins`. Pair stays refused |
+| power.profile | profile not in `lists.power_profile`, or `powerprofilesctl` not in `bins` |
+| power.ask_battery | `battery` is null or outside 0..=1. On AC the bucket is `ac` |
+| disk.ask | `diskFree` is null or outside 0..=1 |
+| disk.timeshift | guest, empty or unknown who, who is not the owner, or `timeshift` is not in `bins`. Confirm. Not format or delete |
+| updates.ask | `updatesPending` is null |
+| updates.upgrade | guest, empty or unknown who, who is not the owner, or no full-upgrade binary is in `bins`. Confirm. Not a package name |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 
@@ -124,7 +139,7 @@ Kitchen: scene kitchen-cook, timer, climate notch, lights, weather.
 
 Living + guest: media, volume, guest mode / lock private. Mail and calendar gone.
 
-House-scale later (not v0 pages): vacuum, locks, cameras, printer, VPN, bluetooth pair. Each needs a snap + allowlisted driver before it is a door. Do not add a page whose walk is “the LLM will figure it out.”
+House-scale later (not v0 pages): vacuum, locks, cameras, printer. VPN connect is a named confirm. Bluetooth pair, wifi off, DNS, format, and a free package upgrade stay refused. Do not add a page whose walk is “the LLM will figure it out.”
 
 ## Adding a page
 

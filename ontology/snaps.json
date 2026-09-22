@@ -1071,5 +1071,50 @@
     "clipboardCount": 2,
     "pickedHex": "#336699",
     "monitors": 1
+  },
+  {
+    "id": "desk-rig",
+    "title": "Desk — vpn, bluetooth device, power, disk, updates",
+    "who": "jim",
+    "where": "desk",
+    "occupants": ["jim"],
+    "guest": false,
+    "clients": [],
+    "workspaces": ["1"],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [],
+    "running": [],
+    "mailOnline": true,
+    "contacts": ["dave"],
+    "unreadFrom": {
+      "dave": { "count": 1, "subjects": ["note"] }
+    },
+    "mediaPlaying": true,
+    "nowPlaying": "show",
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": { "title": "standup", "inMin": 40 },
+    "weather": "showers",
+    "lockAvailable": true,
+    "bluetoothOn": true,
+    "network": "ethernet",
+    "bins": ["nmcli", "bluetoothctl", "powerprofilesctl", "timeshift", "pacman"],
+    "lists": {
+      "vpn": ["home"],
+      "bt_device": ["headphones"],
+      "power_profile": ["power-saver", "balanced", "performance"]
+    },
+    "battery": 0.42,
+    "onAc": false,
+    "diskFree": 0.55,
+    "updatesPending": 2,
+    "monitors": 1
   }
 ]

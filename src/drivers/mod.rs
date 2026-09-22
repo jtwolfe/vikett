@@ -6,9 +6,11 @@ use serde_json::Value;
 
 use crate::types::{Page, Snap, WalkPlan};
 
+pub mod bluetooth;
 pub mod browser;
 pub mod capture;
 pub mod chat;
+pub mod disk;
 pub mod display;
 pub mod draw;
 pub mod edit;
@@ -18,12 +20,15 @@ pub(crate) mod hl;
 pub mod image;
 pub mod look;
 pub mod music;
+pub mod network;
 pub mod notes;
 pub mod office;
+pub mod power;
 pub mod read;
 pub mod session;
 pub mod shelf;
 pub mod term;
+pub mod updates;
 pub mod video;
 
 pub fn is_family(module: &str) -> bool {
@@ -46,6 +51,11 @@ pub fn is_family(module: &str) -> bool {
             | "shelf"
             | "look"
             | "fx"
+            | "network"
+            | "bluetooth"
+            | "power"
+            | "disk"
+            | "updates"
     )
 }
 
@@ -68,6 +78,11 @@ pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -
         "shelf" => shelf::is_live(page, snap, slots),
         "look" => look::is_live(page, snap, slots),
         "fx" => fx::is_live(page, snap, slots),
+        "network" => network::is_live(page, snap, slots),
+        "bluetooth" => bluetooth::is_live(page, snap, slots),
+        "power" => power::is_live(page, snap, slots),
+        "disk" => disk::is_live(page, snap, slots),
+        "updates" => updates::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -91,6 +106,11 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
         "shelf" => shelf::fill_walk(page, slots, snap),
         "look" => look::fill_walk(page, slots, snap),
         "fx" => fx::fill_walk(page, slots, snap),
+        "network" => network::fill_walk(page, slots, snap),
+        "bluetooth" => bluetooth::fill_walk(page, slots, snap),
+        "power" => power::fill_walk(page, slots, snap),
+        "disk" => disk::fill_walk(page, slots, snap),
+        "updates" => updates::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),
@@ -104,6 +124,11 @@ pub fn family_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) ->
         "chat" => chat::fill_ask(page, slots, snap),
         "shelf" => shelf::fill_ask(page, slots, snap),
         "look" => look::fill_ask(page, slots, snap),
+        "network" => network::fill_ask(page, slots, snap),
+        "bluetooth" => bluetooth::fill_ask(page, slots, snap),
+        "power" => power::fill_ask(page, slots, snap),
+        "disk" => disk::fill_ask(page, slots, snap),
+        "updates" => updates::fill_ask(page, slots, snap),
         // No term page is an ask. A later ask should get its own fill_ask.
         _ => serde_json::json!({ "unarmed": page.id }),
     }
