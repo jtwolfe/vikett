@@ -223,7 +223,8 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
                 }
             }
         }
-        "mail.from" | "mail.unread" | "mail.flag" | "mail.open_last" => {
+        "mail.from" | "mail.unread" | "mail.flag" | "mail.open_last" | "mail.next_unread"
+        | "mail.archive" | "mail.mark_read" => {
             if !snap.mail_online {
                 Liveness {
                     ok: false,

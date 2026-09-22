@@ -164,6 +164,7 @@ pub fn live_snap() -> Result<Snap> {
         bins: present_bins(),
         lists: discover_lists(),
         downloads: None,
+        chat_unread: BTreeMap::new(),
     }
     .with_active_workspace())
 }

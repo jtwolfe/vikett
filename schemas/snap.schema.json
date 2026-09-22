@@ -40,6 +40,7 @@
     "weather": { "type": ["string", "null"] },
     "bins": { "type": "array", "items": { "type": "string" } },
     "lists": { "type": "object" },
-    "downloads": { "type": ["number", "null"] }
+    "downloads": { "type": ["number", "null"] },
+    "chatUnread": { "type": "object" }
   }
 }

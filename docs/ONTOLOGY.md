@@ -2,7 +2,7 @@
 
 Humans author pages. The referee only chooses among doors that are live.
 
-Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*`, `term.*`, `files.*`, `notes.*`, and `read.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
+Dump: [`ontology/pages.json`](../ontology/pages.json) (shared catalogue, including `browser.*`, `term.*`, `files.*`, `notes.*`, `read.*`, and `chat.*`), [`ontology/modules.json`](../ontology/modules.json). Research extras still add host patches on top. `ontology/holdout.json` is unread until the train/holdout loader lands.
 
 Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 
@@ -30,6 +30,7 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | files | `hl.dsp.focus` / `hl.dsp.send_shortcut`; `exec_cmd` for an authored folder | clients, allowlist, `bins`, `lists.dir` |
 | notes | `hl.dsp.focus` / `hl.dsp.send_shortcut` | clients |
 | read | `hl.dsp.focus` / `hl.dsp.send_shortcut` | clients |
+| chat | `hl.dsp.focus` when mapped. Mute and mark-read reserved | clients, `chatUnread` |
 
 ## Page kinds
 
@@ -55,6 +56,10 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 `notes` app is `obsidian|logseq|joplin`. Vault is `work|personal`. Daily and vault are private. There is no text slot.
 
 `read` app is `zathura|evince|papers|foliate`. Zoom amount is `little|lot`. There is no page number.
+
+`chat` app is `signal|element|vesktop`. Class `discord` is Vesktop. Focus does not exec. There is no send slot.
+
+`calendar.ask_today` is `{ remaining, bucket }`. `how busy am i` stays that page. There is no `calendar.ask_busy`.
 
 ## When-clauses (prune)
 
@@ -97,6 +102,10 @@ A page that cannot happen is not offered:
 | read.zoom | not Evince, Papers, or Foliate |
 | read.dark | not Zathura |
 | read.chapter_next / chapter_prev | no chord |
+| chat.focus | that class is not mapped. Focus does not exec |
+| chat.mute_app / chat.mark_read | no modifier chord |
+| chat.ask_unread | guest, or `chatUnread` has no key for that app |
+| mail.next_unread / archive / mark_read | guest, empty who, or mail offline. Archive confirms. No send, reply, or forward |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 

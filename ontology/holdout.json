@@ -559,5 +559,42 @@
     "expectPage": "read.dark",
     "expectSlots": { "app": "zathura" },
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-chat-focus",
+    "snap": "desk-chat",
+    "utterance": "bring signal forward",
+    "expectPage": "chat.focus",
+    "expectSlots": { "app": "signal" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-chat-unread",
+    "snap": "desk-chat",
+    "utterance": "anything unread on signal",
+    "expectPage": "chat.ask_unread",
+    "expectSlots": { "app": "signal" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-mail-next",
+    "snap": "desk",
+    "utterance": "the next unread email",
+    "expectPage": "mail.next_unread",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-mail-archive",
+    "snap": "desk",
+    "utterance": "archive that message",
+    "expectPage": "mail.archive",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-cal-busy",
+    "snap": "desk",
+    "utterance": "am I busy today",
+    "expectPage": "calendar.ask_today",
+    "notes": "holdout paraphrase; not loaded by Catalog. Not a second page."
   }
 ]

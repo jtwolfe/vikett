@@ -23,6 +23,10 @@ const ARMS: &[(&str, &[&str])] = &[
     ("evince", &["org.gnome.evince", "evince"]),
     ("papers", &["org.gnome.papers", "papers"]),
     ("foliate", &["foliate"]),
+    ("signal", &["signal"]),
+    ("element", &["element"]),
+    // Vesktop's class is `vesktop`. The Discord class is the same app id.
+    ("vesktop", &["vesktop", "discord"]),
     ("jellyfin", &["jellyfin"]),
     ("code", &["codium", "code"]),
     ("thunderbird", &["thunderbird"]),
@@ -132,11 +136,18 @@ mod tests {
         assert_eq!(class_to_app("evince"), "evince");
         assert_eq!(class_to_app("org.gnome.Papers"), "papers");
         assert_eq!(class_to_app("com.github.johnfactotum.Foliate"), "foliate");
+        assert_eq!(class_to_app("signal"), "signal");
+        assert_eq!(class_to_app("org.signal.Signal"), "signal");
+        assert_eq!(class_to_app("Element"), "element");
+        assert_eq!(class_to_app("vesktop"), "vesktop");
+        assert_eq!(class_to_app("discord"), "vesktop");
         assert_eq!(class_to_app("NotMapped"), "notmapped");
         assert_eq!(bin_for_app("nautilus"), Some("nautilus"));
         assert_eq!(bin_for_app("yazi"), Some("yazi"));
         assert_eq!(bin_for_app("zathura"), None);
         assert_eq!(bin_for_app("obsidian"), None);
+        assert_eq!(bin_for_app("signal"), None);
+        assert_eq!(bin_for_app("vesktop"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));
         assert_eq!(bin_for_app("wezterm"), Some("wezterm"));
     }

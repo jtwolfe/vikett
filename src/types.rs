@@ -175,6 +175,9 @@ pub struct Snap {
     /// `browser.downloads` bucket. `None` keeps that ask dead (not `{ok:true}`).
     #[serde(default)]
     pub downloads: Option<u32>,
+    /// Per-app unread counts. A missing key keeps `chat.ask_unread` dead, not zero.
+    #[serde(default)]
+    pub chat_unread: BTreeMap<String, u32>,
 }
 
 fn default_owner() -> String {
