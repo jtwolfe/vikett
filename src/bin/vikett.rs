@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand, ValueEnum};
 use vikett::types::RefereeKind;
@@ -66,6 +68,22 @@ enum Cmd {
     },
     /// Rewrite ontology/*.json from the loaded catalogue + extras
     Dump,
+    /// Print the production criteria probe. Does not POST.
+    Criteria {
+        #[arg(short, long)]
+        utterance: String,
+        #[arg(short, long, default_value = "desk")]
+        snap: String,
+    },
+    /// Write a train file and a holdout file. Does not train a model.
+    TrainSet {
+        /// Train rows: paraphrases, goldens, and exact cases.
+        #[arg(long)]
+        train: PathBuf,
+        /// Holdout rows. The trainer does not read this path.
+        #[arg(long)]
+        holdout: PathBuf,
+    },
 }
 
 #[derive(Clone, Copy, ValueEnum)]
@@ -136,6 +154,20 @@ fn main() -> Result<()> {
         Cmd::Dump => {
             dump_ontology(&CATALOG)?;
             println!("wrote ontology/*.json");
+            Ok(())
+        }
+        Cmd::Criteria { utterance, snap } => {
+            vikett::trainset::refuse_live(&snap)?;
+            let snap_ref = CATALOG.snap(&snap).context("unknown snap")?;
+            let (live, _) =
+                vikett::prune::live_and_dead(&CATALOG.pages, snap_ref, Some(&utterance));
+            let probe = vikett::model::criteria_for(&utterance, snap_ref, &live, &CATALOG.pages);
+            println!("{}", serde_json::to_string_pretty(&probe)?);
+            Ok(())
+        }
+        Cmd::TrainSet { train, holdout } => {
+            vikett::trainset::write_split(&CATALOG, &train, &holdout)?;
+            println!("wrote {} and {}", train.display(), holdout.display());
             Ok(())
         }
     }

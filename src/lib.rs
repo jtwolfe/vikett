@@ -17,6 +17,7 @@ pub mod slots;
 pub mod suite;
 pub mod text;
 pub mod trace;
+pub mod trainset;
 pub mod types;
 pub mod walk;
 

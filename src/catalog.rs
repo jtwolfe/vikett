@@ -1,11 +1,13 @@
 use crate::ontology::extras;
-use crate::types::{Golden, ModuleDef, Page, Phrase, SlotValue, Snap};
+use crate::types::{Golden, Holdout, ModuleDef, Page, Phrase, SlotValue, Snap};
 
 pub struct Catalog {
     pub pages: Vec<Page>,
     pub modules: Vec<ModuleDef>,
     pub snaps: Vec<Snap>,
     pub goldens: Vec<Golden>,
+    /// Loaded beside goldens. Never appended onto `goldens`.
+    pub holdouts: Vec<Holdout>,
     pub phrases: Vec<Phrase>,
 }
 
@@ -19,6 +21,8 @@ impl Catalog {
             serde_json::from_str(include_str!("../ontology/snaps.json")).expect("snaps.json");
         let mut goldens: Vec<Golden> =
             serde_json::from_str(include_str!("../ontology/goldens.json")).expect("goldens.json");
+        let holdouts: Vec<Holdout> =
+            serde_json::from_str(include_str!("../ontology/holdout.json")).expect("holdout.json");
         let phrases: Vec<Phrase> =
             serde_json::from_str(include_str!("../ontology/phrases.json")).unwrap_or_default();
 
@@ -34,6 +38,7 @@ impl Catalog {
             modules,
             snaps,
             goldens,
+            holdouts,
             phrases,
         }
     }
@@ -70,5 +75,13 @@ mod tests {
         assert!(cat.page("wm.focus").is_some());
         assert!(cat.snap("desk").is_some());
         assert!(cat.goldens.iter().any(|g| g.id == "vol-little"));
+        assert!(!cat.holdouts.is_empty());
+        for h in &cat.holdouts {
+            assert!(
+                cat.goldens.iter().all(|g| g.id != h.id),
+                "holdout {} was pushed onto goldens",
+                h.id
+            );
+        }
     }
 }

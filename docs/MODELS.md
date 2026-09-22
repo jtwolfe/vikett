@@ -113,6 +113,10 @@ Target: a `laya-typed-decisions`-family head specialised to Vikett.
 5. Train `choice` over live ids; `noul` for compound and done.
 6. Export ONNX → EdgeJev INT8 → L2 gate.
 
+The split is files, not a tag on `Golden`. `ontology/train.json` holds the public paraphrases (the old `phrases.json` strings). `ontology/holdout.json` is a `Holdout` list. `Catalog` stores it beside `goldens` and does not append it. `from_golden` still tags `golden` only. `all_cases` adds tag `holdout` without calling `from_golden`. The untagged suite is the must-pass run and skips those rows. `suite --tag holdout` sees them. A tag that matches nothing still fails.
+
+`vikett train-set --train <path> --holdout <path>` writes both files. The train file is paraphrases plus goldens plus exact suite cases. It does not contain holdout ids. `scripts/build_laya_set.py` reads that train file (and goldens, and exact cases), runs `vikett criteria`, and emits JSONL `{state, questions, answer}`. It does not open the holdout file, and it does not train. Snap id `live` is refused. Holdout eval stays `vikett suite --referee laya --tag holdout`.
+
 Do not fine-tune so hard that lexical aliases regress — run L1 after every export.
 
 ## Recommended Omarchy box

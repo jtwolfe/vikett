@@ -1,0 +1,72 @@
+[
+  {
+    "id": "vol-little-p1",
+    "snap": "desk",
+    "utterance": "turn it up a little",
+    "expectPage": "audio.bump",
+    "notes": "Public paraphrase of vol-little. Train, not holdout."
+  },
+  {
+    "id": "vol-little-p2",
+    "snap": "desk",
+    "utterance": "a bit louder please",
+    "expectPage": "audio.bump",
+    "notes": "Public paraphrase of vol-little. Train, not holdout."
+  },
+  {
+    "id": "mute-p1",
+    "snap": "desk",
+    "utterance": "silence the speakers",
+    "expectPage": "audio.mute",
+    "notes": "Public paraphrase of mute. Train, not holdout."
+  },
+  {
+    "id": "open-grokbot-p1",
+    "snap": "desk",
+    "utterance": "launch the bot",
+    "expectPage": "launch.app",
+    "notes": "Public paraphrase of open-grokbot. Train, not holdout."
+  },
+  {
+    "id": "mail-dave-p1",
+    "snap": "desk",
+    "utterance": "anything from Dave in my inbox",
+    "expectPage": "mail.from",
+    "notes": "Public paraphrase of mail-dave. Train, not holdout."
+  },
+  {
+    "id": "pause-p1",
+    "snap": "guest-living",
+    "utterance": "pause the show",
+    "expectPage": "media.play_pause",
+    "notes": "Public paraphrase of pause. Train, not holdout."
+  },
+  {
+    "id": "dim-p1",
+    "snap": "desk",
+    "utterance": "make the screen a bit darker",
+    "expectPage": "display.bump",
+    "notes": "Public paraphrase of dim-screen. Train, not holdout."
+  },
+  {
+    "id": "lock-p1",
+    "snap": "desk",
+    "utterance": "lock the box",
+    "expectPage": "session.lock",
+    "notes": "Public paraphrase of lock-screen. Train, not holdout."
+  },
+  {
+    "id": "refuse-send-p1",
+    "snap": "desk",
+    "utterance": "send Dave a message that I'm running late",
+    "expectPage": null,
+    "notes": "Public paraphrase of refuse-send. Train, not holdout."
+  },
+  {
+    "id": "refuse-percent-p1",
+    "snap": "desk",
+    "utterance": "set the volume to 40%",
+    "expectPage": null,
+    "notes": "Public paraphrase of refuse-percent. Train, not holdout."
+  }
+]

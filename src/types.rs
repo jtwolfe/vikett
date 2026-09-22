@@ -335,6 +335,20 @@ pub struct Golden {
     pub notes: String,
 }
 
+/// L2 eval row. Not a [`Golden`] — no tag field, not a must-pass case.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Holdout {
+    pub id: String,
+    pub snap: String,
+    pub utterance: String,
+    pub expect_page: Option<String>,
+    #[serde(default)]
+    pub expect_slots: Option<BTreeMap<String, String>>,
+    #[serde(default)]
+    pub notes: String,
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Phrase {
