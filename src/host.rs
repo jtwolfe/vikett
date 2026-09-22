@@ -165,6 +165,9 @@ pub fn live_snap() -> Result<Snap> {
         lists: discover_lists(),
         downloads: None,
         chat_unread: BTreeMap::new(),
+        clipboard_kind: None,
+        clipboard_count: None,
+        picked_hex: None,
     }
     .with_active_workspace())
 }
@@ -224,6 +227,7 @@ fn project_names() -> Vec<String> {
     out
 }
 
+/// `which` of known names for the live snap. Not `nvidia-smi` and not a monitor list.
 fn present_bins() -> Vec<String> {
     [
         "zen-browser",
@@ -231,6 +235,13 @@ fn present_bins() -> Vec<String> {
         "google-chrome",
         "chromium",
         "brave",
+        "fuzzel",
+        "walker",
+        "wf-recorder",
+        "gpu-screen-recorder",
+        "wl-copy",
+        "cliphist",
+        "swww",
     ]
     .into_iter()
     .filter(|bin| which(bin))

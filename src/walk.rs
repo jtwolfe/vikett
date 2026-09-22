@@ -97,6 +97,8 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             format!("grim -o {out} ~/Pictures/vikett.png")
         }
         "capture.region" => "grim -g \"$(slurp)\" ~/Pictures/vikett.png".into(),
+        "capture.record_start" => crate::drivers::capture::command(snap, false),
+        "capture.record_stop" => crate::drivers::capture::command(snap, true),
         "notify.dismiss" => "makoctl dismiss".into(),
         "notify.dismiss_all" => "makoctl dismiss -a".into(),
         "media.play_pause" => "playerctl play-pause".into(),

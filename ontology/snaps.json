@@ -1020,5 +1020,56 @@
       "project": ["vikett"]
     },
     "monitors": 1
+  },
+  {
+    "id": "desk-shelf",
+    "title": "Desk — launcher, clipboard, wallpaper, recorder, effects",
+    "who": "jim",
+    "where": "desk",
+    "occupants": ["jim"],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xfx",
+        "class": "easyeffects",
+        "title": "EasyEffects",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": ["1"],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": ["easyeffects"],
+    "running": ["easyeffects"],
+    "mailOnline": true,
+    "contacts": ["dave"],
+    "unreadFrom": {
+      "dave": { "count": 1, "subjects": ["note"] }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": { "title": "standup", "inMin": 40 },
+    "weather": "showers",
+    "bins": ["fuzzel", "walker", "wf-recorder", "wl-copy", "swww"],
+    "lists": {
+      "wallpaper": ["dark", "photo"],
+      "fx_preset": ["default", "voice"],
+      "source": ["mic", "line"]
+    },
+    "clipboardKind": "text",
+    "clipboardCount": 2,
+    "pickedHex": "#336699",
+    "monitors": 1
   }
 ]

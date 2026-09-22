@@ -341,7 +341,10 @@ fn lexical_take(
         if top.score - second.score < AMBIGUITY_MARGIN {
             let top_mod = module_of(cat, &top.page_id);
             let second_mod = module_of(cat, &second.page_id);
-            if top_mod != second_mod {
+            // Equal scores silence inside one module too. A one- or two-point
+            // gap still takes the leader, so start recording is not stop.
+            let tied = top.score == second.score;
+            if top_mod != second_mod || tied {
                 let why = format!("ambiguous {} vs {}", top.page_id, second.page_id);
                 trace.push(TraceNode::new(
                     "ambiguity",

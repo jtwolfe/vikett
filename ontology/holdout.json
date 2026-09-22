@@ -899,5 +899,71 @@
     "expectSlots": {
       "app": "inkscape"
     }
+  },
+  {
+    "id": "h-shelf-fuzzel",
+    "snap": "desk-shelf",
+    "utterance": "bring up the app launcher",
+    "expectPage": "shelf.fuzzel",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-clip-ask",
+    "snap": "desk-shelf",
+    "utterance": "which kind of clipboard is it",
+    "expectPage": "clip.ask",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-clip-clear",
+    "snap": "desk-shelf",
+    "utterance": "wipe clipboard history",
+    "expectPage": "clip.clear",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-look-wallpaper",
+    "snap": "desk-shelf",
+    "utterance": "use the dark background",
+    "expectPage": "look.wallpaper",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": {
+      "wallpaper": "dark"
+    }
+  },
+  {
+    "id": "h-look-pick",
+    "snap": "desk-shelf",
+    "utterance": "which hex got picked",
+    "expectPage": "look.pick",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-fx-preset",
+    "snap": "desk-shelf",
+    "utterance": "load the voice effect",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-fx-source",
+    "snap": "desk-shelf",
+    "utterance": "use the mic effect input",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-capture-record-start",
+    "snap": "desk-shelf",
+    "utterance": "begin capturing the screen",
+    "expectPage": "capture.record_start",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-capture-record-stop",
+    "snap": "desk-shelf",
+    "utterance": "finish the screen recording",
+    "expectPage": "capture.record_stop",
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]

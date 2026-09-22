@@ -299,6 +299,10 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
             ok: true,
             why: "focused output".into(),
         },
+        "capture.record_start" | "capture.record_stop" => {
+            let (ok, why) = crate::drivers::capture::is_live(snap);
+            Liveness { ok, why }
+        }
         "weather.ask" => match &snap.weather {
             Some(w) => Liveness {
                 ok: true,

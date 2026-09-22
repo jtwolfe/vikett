@@ -106,9 +106,9 @@
   {
     "id": "capture",
     "title": "Capture",
-    "summary": "Screenshot the focused output. Clipboard paste is not a page.",
-    "driver": "grim / hyprshot to Pictures",
-    "snap": "active output name",
+    "summary": "Screenshot and region stay grim. Record start and stop confirm, using wf-recorder or gpu-screen-recorder from bins. No GPU probe.",
+    "driver": "grim for screenshots. wf-recorder, else gpu-screen-recorder, for record.",
+    "snap": "active output name, bins",
     "priority": 25
   },
   {
@@ -214,5 +214,29 @@
     "driver": "hl.dsp.send_shortcut when a chord exists",
     "snap": "clients",
     "priority": 27
+  },
+  {
+    "id": "shelf",
+    "title": "Shelf",
+    "summary": "Show fuzzel or walker with no query. Clipboard ask is a kind bucket. Clear confirms. Copying a password is refused.",
+    "driver": "fuzzel or walker binary. wl-copy -c or cliphist wipe. No hyprctl dispatch exec.",
+    "snap": "bins, clipboardKind, clipboardCount",
+    "priority": 24
+  },
+  {
+    "id": "look",
+    "title": "Look",
+    "summary": "Wallpaper enum from lists.wallpaper. Color ask reads pickedHex and does not run hyprpicker.",
+    "driver": "swww img <id>. look.pick is an ask.",
+    "snap": "lists.wallpaper, bins, pickedHex",
+    "priority": 23
+  },
+  {
+    "id": "fx",
+    "title": "Effects",
+    "summary": "EasyEffects preset and source enums. Reserved until a chord exists. No routing graph.",
+    "driver": "reserved — no chord",
+    "snap": "clients, lists.fx_preset, lists.source",
+    "priority": 22
   }
 ]
