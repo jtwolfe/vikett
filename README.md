@@ -37,22 +37,22 @@ Vikett authors every legal move as a **page**. A snapshot of the world **prunes*
 
 | Module | Typical doors | Hard refuse |
 | --- | --- | --- |
-| `wm` | focus, fullscreen, workspace, close, float, other monitor | click-by-pixel, “the red one” |
+| `wm` | focus, fullscreen, workspace, close, split-ratio notch, group next, dwindle or master | click-by-pixel, “the red one”. `special workspace` stays a workspace |
 | `audio` | bump ±5%, mute, headphones, speakers | “set volume to 37%” |
 | `launch` | open allowlisted app, or focus if running | random URL, curl |
 | `mail` | from Dave / unread (ask); open last (confirm) | send, compose, “email Dave that…” |
 | `media` | play/pause, skip, now playing | pick a title from a screenshot |
 | `bucky` | hide buddy, listen, mic mute, who is here | enroll a stranger |
 | `scene` | kitchen-cook, living-watch, guest mode, lock private | “make it cozy” |
-| `notify` | last ping | arbitrary D-Bus |
+| `notify` | last ping (private), dismiss, dismiss all (confirm) | arbitrary D-Bus |
 | `lights` | notch brightness, room off | free hue / entity id |
 | `timer` | 5/10/15/20 min, add five, how long | “wake me at seven” |
 | `calendar` | what’s next, how busy (private) | schedule / invite |
-| `display` | dim the screen, night light | free kelvin / percent |
+| `display` | dim the screen, night light, per-output brightness notch (`hdmi` / `edp`) | free kelvin / percent / resolution / refresh. Layout presets stay reserved |
 | `climate` | warmer/colder one degree, air off | “set to 22.7” |
 | `capture` | screenshot, region (grim+slurp) | email the PNG |
 | `weather` | condition string | packing advice |
-| `session` | lock (hyprlock), screens off (dpms) | suspend / shutdown |
+| `session` | lock (hyprlock), screens off (dpms), owner+confirm suspend / reboot / poweroff | idle inhibit (`force_idle` is not an inhibitor). Guests are not the owner |
 | `network` | am I online | turn off wifi, free SSID |
 | `bluetooth` | is bluetooth on | pair / connect |
 

@@ -120,6 +120,7 @@ fn authored() -> Vec<Case> {
     v.extend(term());
     v.extend(desk_files());
     v.extend(inbox());
+    v.extend(session_power());
     v
 }
 
@@ -1208,6 +1209,325 @@ fn session_net() -> Vec<Case> {
     ]
 }
 
+fn session_power() -> Vec<Case> {
+    vec![
+        c(
+            "session-suspend",
+            "desk",
+            "suspend the computer",
+            Some("session.suspend"),
+            &[],
+            Some("systemctl suspend"),
+            &["session", "exact", "owner"],
+            "Owner plus confirm. Not a hard refuse.",
+        ),
+        c(
+            "session-reboot",
+            "desk",
+            "reboot the computer",
+            Some("session.reboot"),
+            &[],
+            Some("systemctl reboot"),
+            &["session", "exact", "owner"],
+            "",
+        ),
+        c(
+            "session-poweroff",
+            "desk",
+            "shut down",
+            Some("session.poweroff"),
+            &[],
+            Some("systemctl poweroff"),
+            &["session", "exact", "owner"],
+            "",
+        ),
+        c(
+            "session-poweroff-phrase",
+            "desk",
+            "power off the computer",
+            Some("session.poweroff"),
+            &[],
+            Some("systemctl poweroff"),
+            &["session", "exact", "owner"],
+            "",
+        ),
+        c(
+            "session-idle",
+            "desk",
+            "keep the screen awake",
+            None,
+            &[],
+            None,
+            &["session", "reserved"],
+            "force_idle is not an inhibitor.",
+        ),
+        c(
+            "session-reboot-guest",
+            "guest-living",
+            "reboot the computer",
+            None,
+            &[],
+            None,
+            &["session", "guest", "owner"],
+            "who stays jim.",
+        ),
+        c(
+            "display-hdmi",
+            "desk",
+            "hdmi brighter",
+            Some("display.output"),
+            &[
+                ("output", "hdmi"),
+                ("direction", "up"),
+                ("amount", "little"),
+            ],
+            Some("brightnessctl --device=hdmi set 5%+"),
+            &["display", "exact"],
+            "Authored class. Not the raw connector.",
+        ),
+        c(
+            "display-hdmi-lot",
+            "desk",
+            "dim the hdmi a lot",
+            Some("display.output"),
+            &[("output", "hdmi"), ("direction", "down"), ("amount", "lot")],
+            Some("brightnessctl --device=hdmi set 10%-"),
+            &["display", "exact"],
+            "",
+        ),
+        c(
+            "display-edp-absent",
+            "desk",
+            "edp brighter",
+            None,
+            &[],
+            None,
+            &["display", "dead"],
+            "edp is not on this desk.",
+        ),
+        c(
+            "display-hdmi-absent",
+            "kitchen",
+            "hdmi brighter",
+            None,
+            &[],
+            None,
+            &["display", "dead"],
+            "No authored output. Not the panel notch.",
+        ),
+        c(
+            "display-layout-reserved",
+            "desk",
+            "single display layout",
+            None,
+            &[],
+            None,
+            &["display", "reserved"],
+            "No mode string.",
+        ),
+        c(
+            "display-layout-absent",
+            "desk",
+            "hdmi on the right",
+            None,
+            &[],
+            None,
+            &["display", "dead"],
+            "hdmi-right is not listed.",
+        ),
+        c(
+            "display-resolution",
+            "desk",
+            "set the resolution",
+            None,
+            &[],
+            None,
+            &["display", "refuse"],
+            "No free resolution.",
+        ),
+        c(
+            "display-refresh",
+            "desk",
+            "change the refresh rate",
+            None,
+            &[],
+            None,
+            &["display", "refuse"],
+            "No free refresh.",
+        ),
+        c(
+            "display-mode",
+            "desk",
+            "set it to 1920x1080",
+            None,
+            &[],
+            None,
+            &["display", "refuse"],
+            "",
+        ),
+        c(
+            "notify-dismiss-all",
+            "desk",
+            "dismiss all notifications",
+            Some("notify.dismiss_all"),
+            &[],
+            Some("makoctl dismiss -a"),
+            &["notify", "confirm"],
+            "Confirm. Not read_last.",
+        ),
+        c(
+            "notify-dismiss-one",
+            "desk",
+            "dismiss that",
+            Some("notify.dismiss"),
+            &[],
+            Some("makoctl dismiss"),
+            &["notify", "exact"],
+            "One dismiss stays.",
+        ),
+        c(
+            "wm-split-wider",
+            "desk",
+            "wider split",
+            Some("wm.split_ratio"),
+            &[("direction", "up"), ("amount", "little")],
+            Some("hl.dsp.layout(\"splitratio +0.1\")"),
+            &["wm", "exact"],
+            "Not dispatch splitratio.",
+        ),
+        c(
+            "wm-split-narrow-lot",
+            "desk",
+            "narrower split a lot",
+            Some("wm.split_ratio"),
+            &[("direction", "down"), ("amount", "lot")],
+            Some("splitratio -0.25"),
+            &["wm", "exact"],
+            "",
+        ),
+        c(
+            "wm-split-nudge",
+            "desk",
+            "nudge the split",
+            Some("wm.split_ratio"),
+            &[("amount", "little")],
+            Some("splitratio +0.1"),
+            &["wm", "exact"],
+            "Unnamed direction is wider.",
+        ),
+        c(
+            "wm-group-next",
+            "desk",
+            "next in the group",
+            Some("wm.group_next"),
+            &[],
+            Some("hl.dsp.group.next()"),
+            &["wm", "exact"],
+            "Not media next.",
+        ),
+        c(
+            "wm-layout-dwindle",
+            "desk",
+            "dwindle layout",
+            Some("wm.layout"),
+            &[("layout", "dwindle")],
+            Some("hl.dsp.layout(\"dwindle\")"),
+            &["wm", "exact"],
+            "",
+        ),
+        c(
+            "wm-layout-master",
+            "desk",
+            "use master",
+            Some("wm.layout"),
+            &[("layout", "master")],
+            Some("hl.dsp.layout(\"master\")"),
+            &["wm", "exact"],
+            "",
+        ),
+        c(
+            "wm-pixel-click",
+            "desk",
+            "pixel click",
+            None,
+            &[],
+            None,
+            &["wm", "refuse"],
+            "No pixel door.",
+        ),
+        c(
+            "wm-scratch-unset",
+            "desk",
+            "toggle the scratchpad",
+            None,
+            &[],
+            None,
+            &["wm", "dead"],
+            "No second special-workspace door.",
+        ),
+        c(
+            "keep-mute",
+            "desk",
+            "mute",
+            Some("audio.mute"),
+            &[],
+            Some("set-mute"),
+            &["audio", "exact"],
+            "Not stolen.",
+        ),
+        c(
+            "keep-next",
+            "guest-living",
+            "next",
+            Some("media.next"),
+            &[],
+            Some("playerctl next"),
+            &["media", "exact"],
+            "Not stolen.",
+        ),
+        c(
+            "keep-fullscreen",
+            "desk",
+            "fullscreen",
+            Some("wm.fullscreen"),
+            &[],
+            Some("fullscreen"),
+            &["wm", "exact"],
+            "Not stolen.",
+        ),
+        c(
+            "keep-close",
+            "desk",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["wm", "confirm"],
+            "Not stolen.",
+        ),
+        c(
+            "keep-back",
+            "guest-living",
+            "go back",
+            Some("media.prev"),
+            &[],
+            Some("previous"),
+            &["media", "exact"],
+            "Not stolen.",
+        ),
+        c(
+            "keep-next-tab",
+            "desk",
+            "next tab",
+            Some("browser.tab_next"),
+            &[("app", "firefox")],
+            Some("send_shortcut"),
+            &["browser", "exact"],
+            "Not group next.",
+        ),
+    ]
+}
+
 fn refuses() -> Vec<Case> {
     let desk_none = |id, utt, notes| {
         c(
@@ -1249,8 +1569,26 @@ fn refuses() -> Vec<Case> {
         desk_none("refuse-wifi", "turn off wifi", ""),
         desk_none("refuse-dns", "change dns", ""),
         desk_none("refuse-pair-bt", "pair the headphones", ""),
-        desk_none("refuse-suspend", "suspend the computer", ""),
-        desk_none("refuse-shutdown", "shut down", ""),
+        c(
+            "refuse-suspend",
+            "guest-living",
+            "suspend the computer",
+            None,
+            &[],
+            None,
+            &["session", "guest", "owner"],
+            "Guest who is jim is not the owner.",
+        ),
+        c(
+            "refuse-shutdown",
+            "guest-living",
+            "shut down",
+            None,
+            &[],
+            None,
+            &["session", "guest", "owner"],
+            "Dead alias. Not dpms or lock.",
+        ),
         desk_none("refuse-red-one", "the red one", ""),
         desk_none(
             "refuse-left-of-red",
@@ -3585,6 +3923,81 @@ mod tests {
                 if at.is_empty() {
                     continue;
                 }
+                for case in &cases {
+                    if !case.lexical_must() {
+                        continue;
+                    }
+                    let Some(expect) = case.expect_page.as_deref() else {
+                        continue;
+                    };
+                    if expect == page.id {
+                        continue;
+                    }
+                    let ut = crate::text::tokens(&case.utterance);
+                    if at.iter().all(|t| ut.iter().any(|u| u == t)) {
+                        errs.push(format!(
+                            "{} alias {alias:?} token-subsets {} {:?}",
+                            page.id, case.id, case.utterance
+                        ));
+                    }
+                }
+            }
+        }
+        assert!(errs.is_empty(), "{}", errs.join("\n"));
+    }
+
+    #[test]
+    fn session_pages_do_not_steal() {
+        let cat = Catalog::load();
+        let cases = all_cases(&cat);
+        let ids = [
+            "session.suspend",
+            "session.reboot",
+            "session.poweroff",
+            "session.idle",
+            "display.output",
+            "display.layout",
+            "notify.dismiss_all",
+            "wm.split_ratio",
+            "wm.group_next",
+            "wm.layout",
+        ];
+        let banned = [
+            "next",
+            "close",
+            "zoom",
+            "save",
+            "back",
+            "open",
+            "focus",
+            "mute",
+            "play",
+            "pause",
+            "workspace",
+            "fullscreen",
+        ];
+        let mut errs = Vec::new();
+        for page in cat.pages.iter().filter(|p| ids.contains(&p.id.as_str())) {
+            for alias in &page.aliases {
+                let n = crate::text::norm(alias);
+                if n == "special workspace"
+                    || n == "next tab"
+                    || n == "go back"
+                    || n == "close this"
+                {
+                    errs.push(format!(
+                        "{} alias {alias:?} retargets a v0 utterance",
+                        page.id
+                    ));
+                }
+                let raw: Vec<&str> = n.split_whitespace().collect();
+                if raw.len() == 1 && banned.contains(&raw[0]) {
+                    errs.push(format!("{} banned single-token alias {alias}", page.id));
+                }
+                if raw.len() < 2 {
+                    continue;
+                }
+                let at = crate::text::tokens(alias);
                 for case in &cases {
                     if !case.lexical_must() {
                         continue;

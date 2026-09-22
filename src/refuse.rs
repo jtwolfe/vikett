@@ -20,6 +20,8 @@ static REFUSE_RE: LazyLock<Regex> = LazyLock::new(|| {
         | \bjump\s+to\s+(?:page\s+)?\d+\b
         | \bgo\s+to\s+page\s+\d+\b
         | \b\d+\s+copies\b
+        | \b\d{3,4}x\d{3,4}\b
+        | \b\d+\s*hz\b
         ",
     )
     .expect("refuse regex")
@@ -41,9 +43,10 @@ const ADVERSARIAL: &[&str] = &[
     "turn off wifi",
     "change dns",
     "pair the headphones",
-    "suspend the computer",
-    "shut down",
     "close everything",
+    "set the resolution",
+    "change the refresh rate",
+    "refresh rate",
     "put it on the tv",
     "put this on the tv",
     "put it on the living room",
@@ -135,5 +138,13 @@ mod tests {
         assert!(refused("next page").is_none());
         assert!(refused("back in files").is_none());
         assert!(refused("open the downloads folder").is_none());
+        assert!(refused("pixel click").is_some());
+        assert!(refused("click at 40 12").is_some());
+        assert!(refused("set the resolution").is_some());
+        assert!(refused("1920x1080").is_some());
+        assert!(refused("set 144hz").is_some());
+        assert!(refused("suspend the computer").is_none());
+        assert!(refused("shut down").is_none());
+        assert!(refused("hdmi brighter").is_none());
     }
 }

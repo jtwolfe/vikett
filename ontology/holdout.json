@@ -596,5 +596,62 @@
     "utterance": "am I busy today",
     "expectPage": "calendar.ask_today",
     "notes": "holdout paraphrase; not loaded by Catalog. Not a second page."
+  },
+  {
+    "id": "h-session-suspend",
+    "snap": "desk",
+    "utterance": "please suspend the machine",
+    "expectPage": "session.suspend",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-session-reboot",
+    "snap": "desk",
+    "utterance": "reboot this box",
+    "expectPage": "session.reboot",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-session-poweroff",
+    "snap": "desk",
+    "utterance": "power the computer off",
+    "expectPage": "session.poweroff",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-session-idle",
+    "snap": "desk",
+    "utterance": "hold the display awake",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog. force_idle is not an inhibitor."
+  },
+  {
+    "id": "h-session-suspend-guest",
+    "snap": "guest-living",
+    "utterance": "suspend the machine please",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog. who stays jim."
+  },
+  {
+    "id": "h-display-hdmi",
+    "snap": "desk",
+    "utterance": "make the hdmi a bit brighter",
+    "expectPage": "display.output",
+    "expectSlots": { "output": "hdmi", "direction": "up", "amount": "little" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-notify-dismiss-all",
+    "snap": "desk",
+    "utterance": "clear every notification",
+    "expectPage": "notify.dismiss_all",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-wm-group",
+    "snap": "desk",
+    "utterance": "the next window in the group",
+    "expectPage": "wm.group_next",
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]

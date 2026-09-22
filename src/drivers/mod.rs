@@ -8,16 +8,18 @@ use crate::types::{Page, Snap, WalkPlan};
 
 pub mod browser;
 pub mod chat;
+pub mod display;
 pub mod files;
 pub(crate) mod hl;
 pub mod notes;
 pub mod read;
+pub mod session;
 pub mod term;
 
 pub fn is_family(module: &str) -> bool {
     matches!(
         module,
-        "browser" | "term" | "files" | "notes" | "read" | "chat"
+        "browser" | "term" | "files" | "notes" | "read" | "chat" | "session" | "display"
     )
 }
 
@@ -29,6 +31,8 @@ pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -
         "notes" => notes::is_live(page, snap, slots),
         "read" => read::is_live(page, snap, slots),
         "chat" => chat::is_live(page, snap, slots),
+        "session" => session::is_live(page, snap, slots),
+        "display" => display::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -41,6 +45,8 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
         "notes" => notes::fill_walk(page, slots, snap),
         "read" => read::fill_walk(page, slots, snap),
         "chat" => chat::fill_walk(page, slots, snap),
+        "session" => session::fill_walk(page, slots, snap),
+        "display" => display::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),

@@ -61,6 +61,16 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
         }
         "wm.pin" => "hyprctl dispatch pin".into(),
         "wm.center" => "hyprctl dispatch centerwindow".into(),
+        "wm.split_ratio" => {
+            let wider = slots.get("direction").map(String::as_str) != Some("down");
+            let lot = slots.get("amount").map(String::as_str) == Some("lot");
+            crate::drivers::hl::split_ratio_msg(wider, lot)
+        }
+        "wm.group_next" => crate::drivers::hl::group_next_cmd(),
+        "wm.layout" => match slots.get("layout").map(String::as_str) {
+            Some(msg @ ("dwindle" | "master")) => crate::drivers::hl::layout_msg(msg),
+            _ => "reserved".into(),
+        },
         "launch.app" => {
             let app = slots.get("app").map(String::as_str).unwrap_or("");
             if snap.running.iter().any(|r| r == app) {
@@ -73,20 +83,6 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
                 format!("hyprctl dispatch exec {app}")
             }
         }
-        "display.bump" => {
-            let dir = if slots.get("direction").map(String::as_str) == Some("down") {
-                "-"
-            } else {
-                "+"
-            };
-            let step = if slots.get("amount").map(String::as_str) == Some("lot") {
-                "10%"
-            } else {
-                "5%"
-            };
-            format!("brightnessctl set {step}{dir}")
-        }
-        "display.night" => "hyprctl hyprsunset temperature 3500".into(),
         "climate.bump" => {
             let step = if slots.get("direction").map(String::as_str) == Some("down") {
                 -1
@@ -101,15 +97,8 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             format!("grim -o {out} ~/Pictures/vikett.png")
         }
         "capture.region" => "grim -g \"$(slurp)\" ~/Pictures/vikett.png".into(),
-        "session.lock" => "hyprlock".into(),
-        "session.dpms" => {
-            if slots.get("action").map(String::as_str) == Some("on") {
-                "hyprctl dispatch dpms on".into()
-            } else {
-                "hyprctl dispatch dpms off".into()
-            }
-        }
         "notify.dismiss" => "makoctl dismiss".into(),
+        "notify.dismiss_all" => "makoctl dismiss -a".into(),
         "media.play_pause" => "playerctl play-pause".into(),
         "media.next" => "playerctl next".into(),
         "media.prev" => "playerctl previous".into(),

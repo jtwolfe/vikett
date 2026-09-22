@@ -6401,5 +6401,229 @@
     "askShape": "{ app, bucket }",
     "examples": ["unread on signal"],
     "refuse": ["send a message", "tell them that", "message that I'm late"]
+  },
+  {
+    "id": "session.suspend",
+    "module": "session",
+    "kind": "act",
+    "title": "Suspend",
+    "summary": "Suspend the machine. Owner, and confirm is a separate flag. Not DPMS.",
+    "aliases": ["suspend the computer", "suspend the box", "sleep the computer"],
+    "slots": [],
+    "when": "Caller is the owner. A guest flag, an empty who, or unknown fails even when who is jim.",
+    "policy": "owner",
+    "confirm": true,
+    "walk": "systemctl suspend",
+    "examples": ["suspend the computer"],
+    "refuse": ["pixel click"]
+  },
+  {
+    "id": "session.reboot",
+    "module": "session",
+    "kind": "act",
+    "title": "Reboot",
+    "summary": "Reboot the machine. Owner plus confirm. Dry-run only.",
+    "aliases": ["reboot the computer", "reboot the box"],
+    "slots": [],
+    "when": "Caller is the owner. Guest is not the owner.",
+    "policy": "owner",
+    "confirm": true,
+    "walk": "systemctl reboot",
+    "examples": ["reboot the computer"],
+    "refuse": ["pixel click"]
+  },
+  {
+    "id": "session.poweroff",
+    "module": "session",
+    "kind": "act",
+    "title": "Power off",
+    "summary": "Power the machine off. Owner plus confirm. Not screens off.",
+    "aliases": ["shut down", "power off the computer", "poweroff the computer", "turn the computer off"],
+    "slots": [],
+    "when": "Caller is the owner. Guest is not the owner.",
+    "policy": "owner",
+    "confirm": true,
+    "walk": "systemctl poweroff",
+    "examples": ["shut down"],
+    "refuse": ["pixel click"]
+  },
+  {
+    "id": "session.idle",
+    "module": "session",
+    "kind": "act",
+    "title": "Idle inhibit",
+    "summary": "Reserved. hl.dsp.force_idle forces idle and ignores inhibitors. It is not a latch, and there is no systemd-inhibit door.",
+    "aliases": ["keep the screen awake", "idle inhibit", "inhibit idle", "stay awake"],
+    "slots": [],
+    "when": "Reserved until a daemon can hold an inhibitor. Not force_idle.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["keep the screen awake"],
+    "refuse": ["pixel click"]
+  },
+  {
+    "id": "display.output",
+    "module": "display",
+    "kind": "act",
+    "title": "Output brightness",
+    "summary": "Brightness notch for an authored output class. hdmi or edp. Dead when that output is absent. No resolution or refresh.",
+    "aliases": [
+      "hdmi brighter",
+      "hdmi dimmer",
+      "edp brighter",
+      "edp dimmer",
+      "brighter on hdmi",
+      "dimmer on hdmi",
+      "brighter on edp",
+      "dimmer on edp",
+      "dim the hdmi",
+      "dim the edp",
+      "brighten the hdmi",
+      "brighten the edp"
+    ],
+    "slots": [
+      {
+        "id": "output",
+        "label": "output",
+        "required": true,
+        "values": [
+          {"id": "hdmi", "label": "HDMI", "aliases": ["hdmi", "the hdmi"]},
+          {"id": "edp", "label": "eDP", "aliases": ["edp", "the edp"]}
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {"id": "up", "label": "up", "aliases": ["brighter", "brighten", "higher"]},
+          {"id": "down", "label": "down", "aliases": ["dimmer", "dim", "darker"]}
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {"id": "little", "label": "a bit", "aliases": ["a bit", "a little", "slightly", "notch"]},
+          {"id": "lot", "label": "a lot", "aliases": ["a lot", "way", "much"]}
+        ]
+      }
+    ],
+    "when": "The output class is in lists.output or is the classified focused output.",
+    "policy": "household",
+    "walk": "brightnessctl --device=<hdmi|edp> set 5%+ | 5%-",
+    "examples": ["hdmi brighter"],
+    "refuse": ["set the resolution", "change the refresh rate", "set brightness to 37 percent"]
+  },
+  {
+    "id": "display.layout",
+    "module": "display",
+    "kind": "act",
+    "title": "Display layout",
+    "summary": "Authored layout id only. Reserved: applying it needs a mode, and neither brightnessctl nor hl.dsp can do that without a resolution.",
+    "aliases": ["single display layout", "hdmi on the right", "layout hdmi right"],
+    "slots": [
+      {
+        "id": "layout",
+        "label": "layout",
+        "required": true,
+        "values": [
+          {"id": "single", "label": "single", "aliases": ["single", "single display"]},
+          {"id": "hdmi-right", "label": "hdmi right", "aliases": ["hdmi on the right", "hdmi right"]}
+        ]
+      }
+    ],
+    "when": "Reserved even when lists.layout contains the id. Absent when it does not.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["single display layout"],
+    "refuse": ["set the resolution", "1920x1080", "change the refresh rate"]
+  },
+  {
+    "id": "notify.dismiss_all",
+    "module": "notify",
+    "kind": "act",
+    "title": "Dismiss all",
+    "summary": "Dismiss every notification. Confirm. read_last stays private.",
+    "aliases": ["dismiss all notifications", "clear all notifications", "dismiss every notification"],
+    "slots": [],
+    "when": "Notification history is non-empty.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "makoctl dismiss -a",
+    "examples": ["dismiss all notifications"],
+    "refuse": []
+  },
+  {
+    "id": "wm.split_ratio",
+    "module": "wm",
+    "kind": "act",
+    "title": "Split ratio",
+    "summary": "Dwindle splitratio notch. Little is 0.1, lot is 0.25. Not a typed ratio.",
+    "aliases": ["nudge the split", "wider split", "narrower split", "split ratio"],
+    "slots": [
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": false,
+        "values": [
+          {"id": "up", "label": "wider", "aliases": ["wider", "right"]},
+          {"id": "down", "label": "narrower", "aliases": ["narrower", "left"]}
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {"id": "little", "label": "a bit", "aliases": ["a bit", "a little", "slightly", "notch"]},
+          {"id": "lot", "label": "a lot", "aliases": ["a lot", "way", "much"]}
+        ]
+      }
+    ],
+    "when": "Compositor is up. The ratio is a driver constant.",
+    "policy": "household",
+    "walk": "hl.dsp.layout splitratio",
+    "examples": ["wider split"],
+    "refuse": ["pixel click"]
+  },
+  {
+    "id": "wm.group_next",
+    "module": "wm",
+    "kind": "act",
+    "title": "Next in group",
+    "summary": "Next window in the group. Not media next and not next tab.",
+    "aliases": ["next in the group", "next group window", "group next"],
+    "slots": [],
+    "when": "Compositor is up.",
+    "policy": "household",
+    "walk": "hl.dsp.group.next",
+    "examples": ["next in the group"],
+    "refuse": ["pixel click"]
+  },
+  {
+    "id": "wm.layout",
+    "module": "wm",
+    "kind": "act",
+    "title": "Layout",
+    "summary": "Switch the authored layout message to dwindle or master. Not a resolution.",
+    "aliases": ["dwindle layout", "master layout", "use dwindle", "use master"],
+    "slots": [
+      {
+        "id": "layout",
+        "label": "layout",
+        "required": true,
+        "values": [
+          {"id": "dwindle", "label": "dwindle", "aliases": ["dwindle"]},
+          {"id": "master", "label": "master", "aliases": ["master"]}
+        ]
+      }
+    ],
+    "when": "The layout slot is dwindle or master.",
+    "policy": "household",
+    "walk": "hl.dsp.layout",
+    "examples": ["dwindle layout"],
+    "refuse": ["pixel click", "set the resolution"]
   }
 ]

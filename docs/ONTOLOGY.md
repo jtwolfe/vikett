@@ -17,11 +17,11 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | media | playerctl | now playing |
 | bucky | buckyboi.sock | listening, chip, gate |
 | scene | GlassSpear Surface API | scene library + active |
-| notify | mako / dunst history | last notification |
+| notify | mako / dunst history | last notification (private), dismiss all confirms |
 | lights | HA light group | room brightness 0–1 |
 | timer | local daemon | remaining_sec or null |
 | calendar | khal / CalDAV socket | next event, private |
-| display | brightnessctl / ddcutil | panel 0–1 |
+| display | brightnessctl | panel 0–1, authored `hdmi` / `edp` notch. Layout presets reserved |
 | climate | HA climate group | °C or null |
 | capture | grim / hyprshot | focused output |
 | weather | HA weather / LAN cache | short condition or null |
@@ -106,6 +106,13 @@ A page that cannot happen is not offered:
 | chat.mute_app / chat.mark_read | no modifier chord |
 | chat.ask_unread | guest, or `chatUnread` has no key for that app |
 | mail.next_unread / archive / mark_read | guest, empty who, or mail offline. Archive confirms. No send, reply, or forward |
+| session.suspend / reboot / poweroff | guest, empty who, unknown who, or who is not the owner. `confirm` is separate from policy |
+| session.idle | always. `force_idle` is not an inhibitor |
+| session.lock / session.dpms | unchanged. Lock needs hyprlock. DPMS stays the v0 string |
+| display.output | output class is not in `lists.output` and is not the classified focused output |
+| display.layout | reserved. A layout preset needs a mode; no brightnessctl or hl.dsp walk |
+| notify.dismiss_all | no notification history. `notify.read_last` stays private |
+| wm.split_ratio / group_next / layout | always legal. `special workspace` stays `wm.workspace` |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 
