@@ -26,6 +26,11 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
             candidates.push(v.id.as_str());
             candidates.push(v.label.as_str());
             candidates.extend(v.aliases.iter().map(String::as_str));
+            // The playlist id `focus` is also the wm verb. Only a phrase that
+            // says playlist may fill it, or `focus loupe` binds the wrong slot.
+            if slot.id == "playlist" {
+                candidates.retain(|a| contains_phrase(a, "playlist"));
+            }
             for a in candidates {
                 if !contains_phrase(utterance, a)
                     && !utokens.iter().any(|t| t == &crate::text::norm(a))

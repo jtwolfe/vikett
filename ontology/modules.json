@@ -166,5 +166,29 @@
     "driver": "hl.dsp.focus when mapped; send_shortcut only if a chord exists",
     "snap": "clients, chatUnread",
     "priority": 38
+  },
+  {
+    "id": "music",
+    "title": "Music",
+    "summary": "Spotify, ncspot, Strawberry, Amberol, and MPD. Play, next, seek notch, and an authored playlist. Volume stays audio. Not bare pause or next.",
+    "driver": "playerctl -p <app>. Focus may hl.dsp.exec_cmd",
+    "snap": "clients, allowlist, bins, lists.playlist",
+    "priority": 36
+  },
+  {
+    "id": "video",
+    "title": "Video",
+    "summary": "mpv, VLC, and Jellyfin. Seek notch, VLC chapter and subs. Fullscreen and PiP stay reserved. No free title.",
+    "driver": "playerctl -p <app> or hl.dsp.send_shortcut. Focus may hl.dsp.exec_cmd",
+    "snap": "clients, allowlist, bins",
+    "priority": 34
+  },
+  {
+    "id": "image",
+    "title": "Images",
+    "summary": "Loupe and imv. Zoom notch when a modifier chord exists. Next and trash stay reserved. Trash confirms.",
+    "driver": "hl.dsp.send_shortcut. Focus may hl.dsp.exec_cmd",
+    "snap": "clients, allowlist, bins",
+    "priority": 33
   }
 ]

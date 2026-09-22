@@ -11,15 +11,28 @@ pub mod chat;
 pub mod display;
 pub mod files;
 pub(crate) mod hl;
+pub mod image;
+pub mod music;
 pub mod notes;
 pub mod read;
 pub mod session;
 pub mod term;
+pub mod video;
 
 pub fn is_family(module: &str) -> bool {
     matches!(
         module,
-        "browser" | "term" | "files" | "notes" | "read" | "chat" | "session" | "display"
+        "browser"
+            | "term"
+            | "files"
+            | "notes"
+            | "read"
+            | "chat"
+            | "session"
+            | "display"
+            | "music"
+            | "video"
+            | "image"
     )
 }
 
@@ -33,6 +46,9 @@ pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -
         "chat" => chat::is_live(page, snap, slots),
         "session" => session::is_live(page, snap, slots),
         "display" => display::is_live(page, snap, slots),
+        "music" => music::is_live(page, snap, slots),
+        "video" => video::is_live(page, snap, slots),
+        "image" => image::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -47,6 +63,9 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
         "chat" => chat::fill_walk(page, slots, snap),
         "session" => session::fill_walk(page, slots, snap),
         "display" => display::fill_walk(page, slots, snap),
+        "music" => music::fill_walk(page, slots, snap),
+        "video" => video::fill_walk(page, slots, snap),
+        "image" => image::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),

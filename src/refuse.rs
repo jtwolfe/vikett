@@ -65,6 +65,12 @@ const ADVERSARIAL: &[&str] = &[
     "delete these files",
     "permanently delete",
     "remove the file",
+    "play the movie",
+    "watch the film",
+    "watch the movie",
+    "play this episode",
+    "play this title",
+    "put on the album",
 ];
 
 pub fn refused(utterance: &str) -> Option<&'static str> {
@@ -78,6 +84,10 @@ pub fn refused(utterance: &str) -> Option<&'static str> {
     let pasted = utterance.contains("://") || utterance.to_lowercase().contains("www.");
     if pasted {
         return Some("refused — no page for a pasted url");
+    }
+    // A quoted title is free text. Apostrophes are not quotes.
+    if utterance.contains('"') || utterance.contains('“') || utterance.contains('”') {
+        return Some("refused — no free title");
     }
     if has_percent || REFUSE_RE.is_match(&n) {
         return Some("refused — no page for compose/send/buy/click/free-number");
@@ -116,6 +126,10 @@ mod tests {
         assert!(refused("set the volume to 40%").is_some());
         assert!(refused("buy the thing in that tab").is_some());
         assert!(refused("mute").is_none());
+        assert!(refused("play the movie").is_some());
+        assert!(refused("play \"kind of blue\"").is_some());
+        assert!(refused("pause the show").is_none());
+        assert!(refused("play the jazz playlist").is_none());
         assert!(refused("close everything").is_some());
         assert!(refused("put it on the TV").is_some());
         assert!(refused("open this link").is_some());

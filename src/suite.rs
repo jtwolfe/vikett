@@ -121,6 +121,7 @@ fn authored() -> Vec<Case> {
     v.extend(desk_files());
     v.extend(inbox());
     v.extend(session_power());
+    v.extend(players());
     v
 }
 
@@ -1524,6 +1525,453 @@ fn session_power() -> Vec<Case> {
             Some("send_shortcut"),
             &["browser", "exact"],
             "Not group next.",
+        ),
+    ]
+}
+
+fn players() -> Vec<Case> {
+    vec![
+        c(
+            "media-pause-not-music",
+            "guest-living",
+            "pause",
+            Some("media.play_pause"),
+            &[],
+            Some("play-pause"),
+            &["media", "exact"],
+            "Bare pause stays the playerctl door.",
+        ),
+        c(
+            "media-next-not-song",
+            "guest-living",
+            "next",
+            Some("media.next"),
+            &[],
+            Some("playerctl next"),
+            &["media", "exact"],
+            "Bare next stays media.next.",
+        ),
+        c(
+            "media-back-not-video",
+            "guest-living",
+            "go back",
+            Some("media.prev"),
+            &[],
+            Some("previous"),
+            &["media", "exact"],
+            "Not a seek.",
+        ),
+        c(
+            "audio-mute-not-player",
+            "guest-living",
+            "mute",
+            Some("audio.mute"),
+            &[],
+            Some("set-mute"),
+            &["audio", "exact"],
+            "Volume stays audio.",
+        ),
+        c(
+            "browser-next-tab-not-song",
+            "desk-zen",
+            "next tab",
+            Some("browser.tab_next"),
+            &[("app", "zen")],
+            Some("key = \"Tab\""),
+            &["browser", "exact"],
+            "Not next song.",
+        ),
+        c(
+            "music-pause",
+            "desk-media",
+            "pause the music",
+            Some("music.play_pause"),
+            &[("app", "spotify")],
+            Some("playerctl -p spotify play-pause"),
+            &["music", "exact"],
+            "Longer than pause.",
+        ),
+        c(
+            "music-pause-spotify-dead",
+            "guest-living",
+            "pause spotify",
+            None,
+            &[],
+            None,
+            &["music", "dead"],
+            "Unmapped. Dead alias beats live pause.",
+        ),
+        c(
+            "music-pause-guest",
+            "guest-living",
+            "pause the music",
+            None,
+            &[],
+            None,
+            &["music", "dead"],
+            "No music player. Does not take media.play_pause.",
+        ),
+        c(
+            "music-next",
+            "desk-media",
+            "next song",
+            Some("music.next"),
+            &[("app", "spotify")],
+            Some("playerctl -p spotify next"),
+            &["music", "exact"],
+            "Not media.next.",
+        ),
+        c(
+            "music-next-guest",
+            "guest-living",
+            "next song",
+            None,
+            &[],
+            None,
+            &["music", "dead"],
+            "Longer than next.",
+        ),
+        c(
+            "music-seek-lot",
+            "desk-media",
+            "seek the song forward a lot",
+            Some("music.seek"),
+            &[("app", "spotify"), ("direction", "up"), ("amount", "lot")],
+            Some("playerctl -p spotify position 30+"),
+            &["music", "exact"],
+            "Notch, not a percent.",
+        ),
+        c(
+            "music-seek-back",
+            "desk-media",
+            "rewind the song",
+            Some("music.seek"),
+            &[
+                ("app", "spotify"),
+                ("direction", "down"),
+                ("amount", "little"),
+            ],
+            Some("position 10-"),
+            &["music", "exact"],
+            "",
+        ),
+        c(
+            "music-playlist",
+            "desk-media",
+            "play the jazz playlist",
+            Some("music.playlist"),
+            &[("app", "spotify"), ("playlist", "jazz")],
+            Some("playerctl -p spotify open playlist:jazz"),
+            &["music", "exact"],
+            "Enum id, not a title.",
+        ),
+        c(
+            "music-playlist-missing",
+            "desk-media",
+            "play the metal playlist",
+            None,
+            &[],
+            None,
+            &["music", "dead"],
+            "Not in the playlist enum.",
+        ),
+        c(
+            "music-playlist-empty",
+            "desk",
+            "play the jazz playlist",
+            None,
+            &[],
+            None,
+            &["music", "dead"],
+            "No player and no list.",
+        ),
+        c(
+            "music-focus-mapped",
+            "desk-media",
+            "focus spotify",
+            Some("music.focus"),
+            &[("app", "spotify")],
+            Some("address:0xspot"),
+            &["music", "exact"],
+            "Mapped focus. Not exec.",
+        ),
+        c(
+            "music-focus-exec",
+            "desk-media",
+            "focus ncspot",
+            Some("music.focus"),
+            &[("app", "ncspot")],
+            Some("exec_cmd(\"ncspot\")"),
+            &["music", "exact"],
+            "Allowlisted, unmapped, bins has the binary.",
+        ),
+        c(
+            "music-pause-unmapped",
+            "desk-media",
+            "pause strawberry",
+            None,
+            &[],
+            None,
+            &["music", "dead"],
+            "Transport does not exec.",
+        ),
+        c(
+            "music-volume-stays-audio",
+            "desk-media",
+            "louder",
+            Some("audio.bump"),
+            &[("direction", "up")],
+            Some("wpctl"),
+            &["audio", "exact"],
+            "No per-app volume.",
+        ),
+        c(
+            "music-percent",
+            "desk-media",
+            "set the music to 40%",
+            None,
+            &[],
+            None,
+            &["music", "refuse"],
+            "No free percent.",
+        ),
+        c(
+            "video-seek",
+            "desk-media",
+            "seek the mpv video forward",
+            Some("video.seek"),
+            &[("app", "mpv"), ("direction", "up"), ("amount", "little")],
+            Some("playerctl -p mpv position 10+"),
+            &["video", "exact"],
+            "",
+        ),
+        c(
+            "video-seek-guest",
+            "guest-living",
+            "seek the video forward",
+            Some("video.seek"),
+            &[
+                ("app", "jellyfin"),
+                ("direction", "up"),
+                ("amount", "little"),
+            ],
+            Some("playerctl -p jellyfin position 10+"),
+            &["video", "exact"],
+            "Jellyfin stays a video app.",
+        ),
+        c(
+            "video-seek-back-lot",
+            "desk-media",
+            "seek the vlc video back a lot",
+            Some("video.seek"),
+            &[("app", "vlc"), ("direction", "down"), ("amount", "lot")],
+            Some("playerctl -p vlc position 30-"),
+            &["video", "exact"],
+            "",
+        ),
+        c(
+            "video-chapter",
+            "desk-media",
+            "advance the vlc chapter",
+            Some("video.chapter"),
+            &[("app", "vlc")],
+            Some("mods = \"SHIFT\", key = \"N\""),
+            &["video", "exact"],
+            "Not next chapter.",
+        ),
+        c(
+            "video-chapter-mpv-dead",
+            "desk-media",
+            "advance the mpv chapter",
+            None,
+            &[],
+            None,
+            &["video", "reserved"],
+            "Page Up cannot arm.",
+        ),
+        c(
+            "video-subs",
+            "desk-media",
+            "toggle vlc subtitles",
+            Some("video.subs"),
+            &[("app", "vlc")],
+            Some("mods = \"SHIFT\", key = \"v\""),
+            &["video", "exact"],
+            "",
+        ),
+        c(
+            "video-subs-mpv-dead",
+            "desk-media",
+            "toggle mpv subtitles",
+            None,
+            &[],
+            None,
+            &["video", "reserved"],
+            "Unmodified v.",
+        ),
+        c(
+            "video-fullscreen-dead",
+            "desk-media",
+            "fullscreen the video",
+            None,
+            &[],
+            None,
+            &["video", "reserved"],
+            "Not wm.fullscreen.",
+        ),
+        c(
+            "video-pip-dead",
+            "desk-media",
+            "pip the video",
+            None,
+            &[],
+            None,
+            &["video", "reserved"],
+            "",
+        ),
+        c(
+            "video-title",
+            "guest-living",
+            "play the movie",
+            None,
+            &[],
+            None,
+            &["video", "refuse"],
+            "No free title.",
+        ),
+        c(
+            "video-title-quote",
+            "guest-living",
+            "play \"kind of blue\"",
+            None,
+            &[],
+            None,
+            &["video", "refuse"],
+            "Quoted title.",
+        ),
+        c(
+            "video-focus-mapped",
+            "desk-jellyfin",
+            "focus jellyfin",
+            Some("video.focus"),
+            &[("app", "jellyfin")],
+            Some("address:0x9"),
+            &["video", "exact"],
+            "Mapped. Not a launch.",
+        ),
+        c(
+            "video-switch-stays-wm",
+            "desk-jellyfin",
+            "switch to jellyfin",
+            Some("wm.focus"),
+            &[("target", "jellyfin")],
+            Some("focuswindow"),
+            &["wm", "exact"],
+            "switch to stays wm.focus.",
+        ),
+        c(
+            "video-focus-exec",
+            "desk-media",
+            "focus jellyfin",
+            Some("video.focus"),
+            &[("app", "jellyfin")],
+            Some("exec_cmd(\"jellyfin\")"),
+            &["video", "exact"],
+            "Unmapped, allowlisted, in bins.",
+        ),
+        c(
+            "image-zoom",
+            "desk-media",
+            "larger loupe photo",
+            Some("image.zoom"),
+            &[("app", "loupe"), ("direction", "up"), ("amount", "little")],
+            Some("mods = \"CTRL\", key = \"plus\""),
+            &["image", "exact"],
+            "",
+        ),
+        c(
+            "image-zoom-lot",
+            "desk-media",
+            "larger loupe photo a lot",
+            Some("image.zoom"),
+            &[("app", "loupe"), ("direction", "up"), ("amount", "lot")],
+            Some("key = \"plus\""),
+            &["image", "exact"],
+            "Lot repeats the chord.",
+        ),
+        c(
+            "image-zoom-out",
+            "desk-media",
+            "smaller loupe photo",
+            Some("image.zoom"),
+            &[
+                ("app", "loupe"),
+                ("direction", "down"),
+                ("amount", "little"),
+            ],
+            Some("key = \"minus\""),
+            &["image", "exact"],
+            "",
+        ),
+        c(
+            "image-zoom-imv-dead",
+            "desk-media",
+            "larger imv photo",
+            None,
+            &[],
+            None,
+            &["image", "dead"],
+            "imv is not mapped. Zoom does not exec.",
+        ),
+        c(
+            "image-next-dead",
+            "desk-media",
+            "next loupe image",
+            None,
+            &[],
+            None,
+            &["image", "reserved"],
+            "Arrow keys cannot arm.",
+        ),
+        c(
+            "image-next-guest",
+            "guest-living",
+            "next picture",
+            None,
+            &[],
+            None,
+            &["image", "dead"],
+            "Does not walk media.next.",
+        ),
+        c(
+            "image-trash-dead",
+            "desk-media",
+            "trash the loupe picture",
+            None,
+            &[],
+            None,
+            &["image", "reserved", "confirm"],
+            "Confirm, but Delete cannot arm.",
+        ),
+        c(
+            "image-focus-mapped",
+            "desk-media",
+            "focus loupe",
+            Some("image.focus"),
+            &[("app", "loupe")],
+            Some("address:0xloupe"),
+            &["image", "exact"],
+            "",
+        ),
+        c(
+            "image-focus-exec",
+            "desk-media",
+            "focus imv",
+            Some("image.focus"),
+            &[("app", "imv")],
+            Some("exec_cmd(\"imv\")"),
+            &["image", "exact"],
+            "",
         ),
     ]
 }
@@ -3891,7 +4339,15 @@ mod tests {
         for page in cat.pages.iter().filter(|p| {
             matches!(
                 p.module.as_str(),
-                "browser" | "term" | "files" | "notes" | "read" | "chat"
+                "browser"
+                    | "term"
+                    | "files"
+                    | "notes"
+                    | "read"
+                    | "chat"
+                    | "music"
+                    | "video"
+                    | "image"
             )
         }) {
             for alias in &page.aliases {
@@ -3911,6 +4367,23 @@ mod tests {
                         "{} alias {alias:?} steals next tab or go back",
                         page.id
                     ));
+                }
+                if matches!(page.module.as_str(), "music" | "video" | "image")
+                    && matches!(
+                        n.as_str(),
+                        "pause"
+                            | "play"
+                            | "next"
+                            | "mute"
+                            | "fullscreen"
+                            | "full screen"
+                            | "go back"
+                            | "next tab"
+                            | "pause the show"
+                            | "put the show back on"
+                    )
+                {
+                    errs.push(format!("{} alias {alias:?} steals a v0 door", page.id));
                 }
                 let raw: Vec<&str> = n.split_whitespace().collect();
                 if raw.len() == 1 && banned.contains(&raw[0]) {

@@ -23,6 +23,18 @@ const ARMS: &[(&str, &[&str])] = &[
     ("evince", &["org.gnome.evince", "evince"]),
     ("papers", &["org.gnome.papers", "papers"]),
     ("foliate", &["foliate"]),
+    ("spotify", &["spotify"]),
+    ("ncspot", &["ncspot"]),
+    (
+        "strawberry",
+        &["org.strawberrymusicplayer.strawberry", "strawberry"],
+    ),
+    ("amberol", &["io.bassi.amberol", "amberol"]),
+    ("mpd", &["mpd"]),
+    ("mpv", &["mpv"]),
+    ("vlc", &["vlc"]),
+    ("loupe", &["org.gnome.loupe", "loupe"]),
+    ("imv", &["imv"]),
     ("signal", &["signal"]),
     ("element", &["element"]),
     // Vesktop's class is `vesktop`. The Discord class is the same app id.
@@ -76,6 +88,16 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "thunar" => Some("thunar"),
         "dolphin" => Some("dolphin"),
         "yazi" => Some("yazi"),
+        "spotify" => Some("spotify"),
+        "ncspot" => Some("ncspot"),
+        "strawberry" => Some("strawberry"),
+        "amberol" => Some("amberol"),
+        "mpd" => Some("mpd"),
+        "mpv" => Some("mpv"),
+        "vlc" => Some("vlc"),
+        "jellyfin" => Some("jellyfin"),
+        "loupe" => Some("loupe"),
+        "imv" => Some("imv"),
         _ => None,
     }
 }
@@ -146,6 +168,22 @@ mod tests {
         assert_eq!(bin_for_app("yazi"), Some("yazi"));
         assert_eq!(bin_for_app("zathura"), None);
         assert_eq!(bin_for_app("obsidian"), None);
+        assert_eq!(class_to_app("Spotify"), "spotify");
+        assert_eq!(class_to_app("ncspot"), "ncspot");
+        assert_eq!(
+            class_to_app("org.strawberrymusicplayer.strawberry"),
+            "strawberry"
+        );
+        assert_eq!(class_to_app("io.bassi.Amberol"), "amberol");
+        assert_eq!(class_to_app("mpv"), "mpv");
+        assert_eq!(class_to_app("vlc"), "vlc");
+        assert_eq!(class_to_app("org.gnome.Loupe"), "loupe");
+        assert_eq!(class_to_app("imv"), "imv");
+        assert_eq!(bin_for_app("spotify"), Some("spotify"));
+        assert_eq!(bin_for_app("mpv"), Some("mpv"));
+        assert_eq!(bin_for_app("jellyfin"), Some("jellyfin"));
+        assert_eq!(bin_for_app("loupe"), Some("loupe"));
+        assert_eq!(bin_for_app("imv"), Some("imv"));
         assert_eq!(bin_for_app("signal"), None);
         assert_eq!(bin_for_app("vesktop"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));
