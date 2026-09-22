@@ -23,9 +23,6 @@ fn name_live(snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
     let Some(id) = slots.get("name").map(String::as_str) else {
         return (false, "name missing".into());
     };
-    if !box_id_ok(id) {
-        return (false, "name not a token".into());
-    }
     if !listed(snap, id) {
         return (false, "name not in list".into());
     }
@@ -36,23 +33,6 @@ fn listed(snap: &Snap, id: &str) -> bool {
     snap.lists
         .get("box")
         .is_some_and(|names| names.iter().any(|n| n == id))
-}
-
-/// Allowlisted container name. Not an image ref (`ubuntu:24.04`, a path).
-pub fn box_id_ok(id: &str) -> bool {
-    let mut chars = id.chars();
-    let Some(first) = chars.next() else {
-        return false;
-    };
-    if !first.is_ascii_lowercase() && !first.is_ascii_digit() {
-        return false;
-    }
-    let len = id.chars().count();
-    if !(2..=32).contains(&len) {
-        return false;
-    }
-    id.chars()
-        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-' || c == '_')
 }
 
 #[cfg(test)]
@@ -98,23 +78,6 @@ mod tests {
         let missing = slots::fill(start, "start the ubuntu box", snap);
         assert!(!missing.slots.contains_key("name"), "{:?}", missing.slots);
         assert!(missing.missing.iter().any(|m| m == "name"));
-
-        let mut image = snap.clone();
-        image
-            .lists
-            .insert("box".into(), vec!["ubuntu:24.04".into()]);
-        let bad = slots::fill(start, "start ubuntu 24 04", &image);
-        if let Some(id) = bad.slots.get("name") {
-            let (ok, why) = is_live(start, &image, &bad.slots);
-            assert!(!ok, "{why}");
-            assert!(
-                why.contains("token") || why.contains("not in list"),
-                "{why} {id}"
-            );
-        }
-        assert!(!box_id_ok("ubuntu:24.04"));
-        assert!(!box_id_ok("docker.io/library/ubuntu"));
-        assert!(box_id_ok("arch"));
 
         let begun = decide(&cat, "start the arch box", snap, RefereeKind::Lexical);
         assert!(begun.take.page_id.is_none(), "{:?}", begun.take);

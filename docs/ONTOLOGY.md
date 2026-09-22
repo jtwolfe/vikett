@@ -142,7 +142,7 @@ A page that cannot happen is not offered:
 | boxes.start / boxes.stop | name missing or not in `lists.box`, or the runtime is unclaimed. Stop is confirm. An image is refused |
 | games.focus | no matching client. Unmapped does not exec |
 | games.play | title missing or not in `lists.game`. Reserved. No store URL. Buy stays refused |
-| obs.record | reserved. Confirm. Does not steal `capture.record_start`. Stream stays refused |
+| obs.record | no obs client. Confirm. Mapped walk stays `reserved`. Naming obs does not walk the screen recorder. Stream stays refused |
 | obs.scene | scene not in `lists.obs_scene`, or no chord |
 | print.print / print.scan | reserved. Confirm. N copies stay refused |
 | input.ask_battery | `solaarBattery` is null or outside 0..=1. Not `power.ask_battery` |

@@ -1,9 +1,11 @@
-//! OBS record is confirm and reserved: the record command is not claimed.
-//! Scene is `lists.obs_scene` (`desk` or `cam`) and reserved until a chord
-//! exists. Stream is not a page.
+//! OBS record is confirm. It is live only when an OBS client is mapped, and
+//! the walk stays `reserved` — not wf-recorder and not a stream. Unmapped,
+//! phrases that name obs are dead aliases so they do not start the screen
+//! recorder. Scene is the `desk|cam` enum and stays reserved.
 
 use std::collections::BTreeMap;
 
+use crate::classes::client_for_app;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
@@ -14,9 +16,18 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (b
         return (false, "not obs".into());
     }
     match page.id.as_str() {
-        "obs.record" => (false, "reserved — obs record command unknown".into()),
+        "obs.record" => record_live(snap),
         "obs.scene" => scene_live(snap, slots),
         _ => (false, "unknown obs page".into()),
+    }
+}
+
+/// Mapped OBS only. The command is still unknown, so `fill_walk` is `reserved`.
+fn record_live(snap: &Snap) -> (bool, String) {
+    if client_for_app(snap, "obs").is_some() {
+        (true, "obs client".into())
+    } else {
+        (false, "reserved — obs not mapped".into())
     }
 }
 
@@ -51,7 +62,7 @@ mod tests {
     use crate::decide::decide;
     use crate::refuse::refused;
     use crate::slots;
-    use crate::types::RefereeKind;
+    use crate::types::{Client, RefereeKind};
 
     #[test]
     fn record_confirms_and_scene_is_the_enum() {
@@ -86,8 +97,46 @@ mod tests {
         let obs_rec = decide(&cat, "start obs recording", shelf, RefereeKind::Lexical);
         assert!(obs_rec.take.page_id.is_none(), "{:?}", obs_rec.take);
         assert!(obs_rec.walk.is_none());
+        for utt in ["start recording in obs", "stop recording in obs"] {
+            let named = decide(&cat, utt, shelf, RefereeKind::Lexical);
+            assert!(named.take.page_id.is_none(), "{utt} {:?}", named.take);
+            assert!(named.walk.is_none(), "{utt}");
+            assert!(named.answer.is_none(), "{utt}");
+        }
         let cap = decide(&cat, "start recording", shelf, RefereeKind::Lexical);
         assert_eq!(cap.take.page_id.as_deref(), Some("capture.record_start"));
+        let cmd = cap.walk.unwrap().command;
+        assert!(cmd.contains("wf-recorder"), "{cmd}");
+        assert!(!cmd.contains("pkill"), "{cmd}");
+
+        let mut mapped = shelf.clone();
+        mapped.clients.push(Client {
+            address: "0xobs".into(),
+            class: "obs".into(),
+            title: "OBS".into(),
+            workspace: "1".into(),
+            focused: true,
+            fullscreen: false,
+            floating: false,
+        });
+        for utt in ["start recording in obs", "stop recording in obs"] {
+            let taken = decide(&cat, utt, &mapped, RefereeKind::Lexical);
+            assert_eq!(taken.take.page_id.as_deref(), Some("obs.record"), "{utt}");
+            assert!(taken.confirm, "{utt}");
+            let walk = taken.walk.unwrap().command;
+            assert_eq!(walk, "reserved", "{utt} {walk}");
+            assert!(!walk.contains("wf-recorder"), "{walk}");
+            assert!(!walk.contains("pkill"), "{walk}");
+        }
+        let still = decide(&cat, "start recording", &mapped, RefereeKind::Lexical);
+        assert_eq!(
+            still.take.page_id.as_deref(),
+            Some("capture.record_start"),
+            "{:?}",
+            still.take
+        );
+        assert!(still.walk.unwrap().command.contains("wf-recorder"));
+
         assert!(refused("start streaming").is_some());
         assert!(refused("start streaming the screen").is_some());
         let stream = decide(&cat, "start streaming", shelf, RefereeKind::Lexical);

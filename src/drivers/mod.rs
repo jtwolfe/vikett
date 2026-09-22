@@ -158,7 +158,6 @@ pub fn family_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) ->
         "disk" => disk::fill_ask(page, slots, snap),
         "updates" => updates::fill_ask(page, slots, snap),
         "secrets" => secrets::fill_ask(page, slots, snap),
-        "sync" => sync::fill_ask(page, slots, snap),
         "input" => input::fill_ask(page, slots, snap),
         // No term page is an ask. A later ask should get its own fill_ask.
         _ => serde_json::json!({ "unarmed": page.id }),

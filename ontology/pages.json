@@ -8994,18 +8994,18 @@
         "values": [
           {
             "id": "keepassxc",
-            "label": "KeePassXC",
-            "aliases": ["keepassxc", "keepass"]
+            "label": "vault keepassxc",
+            "aliases": ["keepassxc unlocked", "is keepass unlocked"]
           },
           {
             "id": "bitwarden",
-            "label": "Bitwarden",
-            "aliases": ["bitwarden"]
+            "label": "vault bitwarden",
+            "aliases": ["bitwarden unlocked", "is bitwarden unlocked"]
           }
         ]
       }
     ],
-    "when": "secretsUnlocked is Some. None is dead. Guest and empty who do not see it.",
+    "when": "secretsUnlocked is Some. None is dead. Guest and empty who do not see it. A bare app name does not ask.",
     "policy": "private",
     "askShape": "{ unlocked }",
     "examples": ["is the vault unlocked"],
@@ -9322,11 +9322,13 @@
     "module": "obs",
     "kind": "act",
     "title": "Record in OBS",
-    "summary": "Confirm. Reserved because the OBS record command is not claimed. Aliases include obs so this does not steal screen recording. Stream stays refused.",
+    "summary": "Confirm. Live only when an OBS window is mapped, and the walk stays reserved. Naming obs does not start or stop the screen recorder. Stream stays refused.",
     "aliases": [
       "start obs recording",
       "obs record",
-      "record in obs"
+      "record in obs",
+      "start recording in obs",
+      "stop recording in obs"
     ],
     "slots": [
       {
@@ -9342,7 +9344,7 @@
         ]
       }
     ],
-    "when": "Reserved. Not wf-recorder and not a stream.",
+    "when": "An obs client is mapped. Otherwise reserved, so the screen recorder is not walked. Not a stream.",
     "policy": "household",
     "confirm": true,
     "walk": "reserved",
@@ -9454,8 +9456,8 @@
         "values": [
           {
             "id": "solaar",
-            "label": "Solaar",
-            "aliases": ["solaar", "mouse battery", "keyboard battery", "mouse", "keyboard"]
+            "label": "solaar battery",
+            "aliases": ["mouse battery", "keyboard battery"]
           }
         ]
       }
@@ -9488,7 +9490,7 @@
           {
             "id": "solaar",
             "label": "Solaar",
-            "aliases": ["solaar", "mouse dpi", "mouse"]
+            "aliases": ["solaar dpi", "mouse dpi"]
           }
         ]
       },

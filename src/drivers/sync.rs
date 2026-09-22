@@ -3,8 +3,6 @@
 
 use std::collections::BTreeMap;
 
-use serde_json::{json, Value};
-
 use crate::types::{Page, Snap, WalkPlan};
 
 pub fn is_live(page: &Page, _snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
@@ -28,10 +26,6 @@ pub fn fill_walk(_page: &Page, _slots: &BTreeMap<String, String>, _snap: &Snap) 
     }
 }
 
-pub fn fill_ask(page: &Page, _slots: &BTreeMap<String, String>, _snap: &Snap) -> Value {
-    json!({ "unarmed": page.id })
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -49,7 +43,6 @@ mod tests {
         let (ok, why) = is_live(ask, snap, &slots);
         assert!(!ok, "{why}");
         assert!(why.contains("reserved"), "{why}");
-        assert_ne!(fill_ask(ask, &slots, snap), json!({ "ok": true }));
         let status = decide(&cat, "syncthing status", snap, RefereeKind::Lexical);
         assert!(status.take.page_id.is_none(), "{:?}", status.take);
         assert!(status.answer.is_none());
