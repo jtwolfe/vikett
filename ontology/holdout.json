@@ -1,0 +1,194 @@
+[
+  {
+    "id": "h-browser-focus",
+    "snap": "desk-zen",
+    "utterance": "put the browser in front",
+    "expectPage": "browser.focus",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-ask-open",
+    "snap": "desk-zen",
+    "utterance": "is zen running right now",
+    "expectPage": "browser.ask_open",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-new",
+    "snap": "desk-zen",
+    "utterance": "could you open a fresh tab",
+    "expectPage": "browser.tab_new",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-close",
+    "snap": "desk-zen",
+    "utterance": "shut the current tab",
+    "expectPage": "browser.tab_close",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-reopen",
+    "snap": "desk-zen",
+    "utterance": "bring back the tab i just closed",
+    "expectPage": "browser.tab_reopen",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-next",
+    "snap": "desk-zen",
+    "utterance": "move to the following tab",
+    "expectPage": "browser.tab_next",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-tab-prev",
+    "snap": "desk-zen",
+    "utterance": "go to the prior tab",
+    "expectPage": "browser.tab_prev",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-back",
+    "snap": "desk-zen",
+    "utterance": "step back in the browser",
+    "expectPage": "browser.back",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-forward",
+    "snap": "desk-zen",
+    "utterance": "step forward in the browser",
+    "expectPage": "browser.forward",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-reload",
+    "snap": "desk-zen",
+    "utterance": "refresh this browser page",
+    "expectPage": "browser.reload",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-reload-hard",
+    "snap": "desk-zen",
+    "utterance": "reload and skip the cache",
+    "expectPage": "browser.reload_hard",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-home",
+    "snap": "desk-zen",
+    "utterance": "take me to the browser home",
+    "expectPage": "browser.home",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-find",
+    "snap": "desk-zen",
+    "utterance": "search within this page",
+    "expectPage": "browser.find",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-zoom",
+    "snap": "desk-zen",
+    "utterance": "make the page a bit bigger",
+    "expectPage": "browser.zoom",
+    "expectSlots": {
+      "app": "zen",
+      "direction": "up",
+      "amount": "little"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-zoom-reset",
+    "snap": "desk-zen",
+    "utterance": "back to normal page size",
+    "expectPage": "browser.zoom_reset",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-fullscreen",
+    "snap": "desk-zen",
+    "utterance": "make the page fill the screen",
+    "expectPage": "browser.fullscreen",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-downloads",
+    "snap": "desk-zen",
+    "utterance": "are there downloads waiting",
+    "expectPage": "browser.downloads",
+    "expectSlots": {
+      "app": "zen"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-private",
+    "snap": "desk",
+    "utterance": "open a private browsing window",
+    "expectPage": "browser.private",
+    "expectSlots": {
+      "app": "firefox"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-browser-devtools",
+    "snap": "desk",
+    "utterance": "open the inspector",
+    "expectPage": "browser.dev_tools",
+    "expectSlots": {
+      "app": "firefox"
+    },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  }
+]

@@ -5,6 +5,9 @@ use serde_json::{json, Value};
 use crate::types::{Page, Snap};
 
 pub fn fill_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> Value {
+    if crate::drivers::is_family(&page.module) {
+        return crate::drivers::browser::fill_ask(page, slots, snap);
+    }
     match page.id.as_str() {
         "mail.from" => {
             let who = slots.get("who").map(String::as_str).unwrap_or("anyone");
@@ -87,5 +90,22 @@ pub fn fill_ask(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> V
             }
         }
         _ => json!({ "ok": true }),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::catalog::Catalog;
+    use crate::types::PageKind;
+
+    #[test]
+    fn every_ask_has_an_ask_arm() {
+        let cat = Catalog::load();
+        let snap = cat.snap("desk").unwrap();
+        for page in cat.pages.iter().filter(|p| p.kind == PageKind::Ask) {
+            let body = fill_ask(page, &Default::default(), snap);
+            assert_ne!(body, json!({ "ok": true }), "{}", page.id);
+        }
     }
 }

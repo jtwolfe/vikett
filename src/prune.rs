@@ -64,6 +64,11 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
         };
     }
 
+    if crate::drivers::is_family(&page.module) {
+        let (ok, why) = crate::drivers::browser::is_live(page, snap, slots);
+        return Liveness { ok, why };
+    }
+
     match page.id.as_str() {
         "wm.focus" => {
             let c = client_match(snap, slots.get("target").map(String::as_str));
@@ -357,7 +362,9 @@ pub fn live_and_dead(
     let mut live = Vec::new();
     let mut dead = Vec::new();
     for page in pages {
-        let filled = utterance.map(|u| slots::fill(page, u)).unwrap_or_default();
+        let filled = utterance
+            .map(|u| slots::fill(page, u, snap))
+            .unwrap_or_default();
         let status = is_live(page, snap, &filled.slots);
         if status.ok {
             live.push(LiveVikett {

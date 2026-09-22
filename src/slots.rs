@@ -1,17 +1,21 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
+use crate::classes::app_for_class;
 use crate::text::{contains_phrase, tokens};
-use crate::types::Page;
+use crate::types::{Page, Snap};
 
 #[derive(Clone, Debug, Default)]
 pub struct SlotFill {
     pub slots: BTreeMap<String, String>,
     pub missing: Vec<String>,
+    /// Slot ids filled from the focused class, not the utterance.
+    pub defaulted: BTreeSet<String>,
 }
 
-pub fn fill(page: &Page, utterance: &str) -> SlotFill {
+pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
     let mut slots = BTreeMap::new();
     let mut missing = Vec::new();
+    let mut defaulted = BTreeSet::new();
     let utokens = tokens(utterance);
 
     for slot in &page.slots {
@@ -35,8 +39,23 @@ pub fn fill(page: &Page, utterance: &str) -> SlotFill {
                 }
             }
         }
+        if hit.is_none() && slot.id == "folder" && page.id == "browser.bookmark" {
+            hit = list_hit(snap, "bookmark_folder", utterance);
+        }
         if let Some(id) = hit {
             slots.insert(slot.id.clone(), id);
+        } else if slot.id == "app" && crate::drivers::is_family(&page.module) {
+            // Focused class only. `launch.app` is not a family and must not default.
+            if let Some(app) = focused_app(snap) {
+                if slot.values.iter().any(|v| v.id == app) {
+                    slots.insert(slot.id.clone(), app.to_string());
+                    defaulted.insert(slot.id.clone());
+                } else {
+                    missing.push(slot.id.clone());
+                }
+            } else if slot.required {
+                missing.push(slot.id.clone());
+            }
         } else if slot.required {
             missing.push(slot.id.clone());
         } else if slot.id == "target" && contains_phrase(utterance, "this") {
@@ -46,7 +65,31 @@ pub fn fill(page: &Page, utterance: &str) -> SlotFill {
         }
     }
 
-    SlotFill { slots, missing }
+    SlotFill {
+        slots,
+        missing,
+        defaulted,
+    }
+}
+
+fn focused_app(snap: &Snap) -> Option<&'static str> {
+    let class = snap.clients.iter().find(|c| c.focused)?.class.as_str();
+    app_for_class(class)
+}
+
+fn list_hit(snap: &Snap, key: &str, utterance: &str) -> Option<String> {
+    let names = snap.lists.get(key)?;
+    let mut best: Option<&str> = None;
+    for name in names {
+        if name.is_empty() || !contains_phrase(utterance, name) {
+            continue;
+        }
+        let longer = best.is_none_or(|b| name.len() > b.len());
+        if longer {
+            best = Some(name);
+        }
+    }
+    best.map(str::to_string)
 }
 
 #[cfg(test)]
@@ -58,7 +101,8 @@ mod tests {
     fn fills_volume_notch() {
         let cat = Catalog::load();
         let page = cat.page("audio.bump").unwrap();
-        let fill = fill(page, "increase the volume a bit");
+        let snap = cat.snap("desk").unwrap();
+        let fill = fill(page, "increase the volume a bit", snap);
         assert_eq!(fill.slots.get("direction").map(String::as_str), Some("up"));
         assert_eq!(fill.slots.get("amount").map(String::as_str), Some("little"));
         assert!(fill.missing.is_empty());

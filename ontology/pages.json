@@ -1874,5 +1874,1746 @@
     "refuse": [
       "should I take a jacket"
     ]
+  },
+  {
+    "id": "browser.focus",
+    "module": "browser",
+    "kind": "act",
+    "title": "Focus a browser",
+    "summary": "Focus a mapped browser, or exec its binary when allowlisted and unmapped.",
+    "aliases": [
+      "focus the browser",
+      "firefox window",
+      "zen browser",
+      "chrome window",
+      "chromium window",
+      "brave window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A client matches app, or the app is allowlisted and bins contains its binary.",
+    "policy": "household",
+    "examples": [
+      "focus the browser",
+      "firefox window"
+    ],
+    "refuse": [
+      "open this link",
+      "search the web"
+    ],
+    "walk": "hl.dsp.focus or hl.dsp.exec_cmd"
+  },
+  {
+    "id": "browser.ask_open",
+    "module": "browser",
+    "kind": "ask",
+    "title": "Is the browser open",
+    "summary": "Whether an allowlisted browser has a window, and whether it is focused.",
+    "aliases": [
+      "is the browser open",
+      "is firefox open right now",
+      "is zen open right now",
+      "is chrome open right now"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "App is on the allowlist.",
+    "policy": "household",
+    "examples": [
+      "is the browser open"
+    ],
+    "refuse": [],
+    "askShape": "{ app, open, focused }"
+  },
+  {
+    "id": "browser.tab_new",
+    "module": "browser",
+    "kind": "act",
+    "title": "New tab",
+    "summary": "Open a tab in the named or focused browser.",
+    "aliases": [
+      "new tab",
+      "open a new tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+T is armed.",
+    "policy": "household",
+    "examples": [
+      "new tab"
+    ],
+    "refuse": [
+      "open this link",
+      "search the web"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.tab_close",
+    "module": "browser",
+    "kind": "act",
+    "title": "Close tab",
+    "summary": "Close the current tab. Not the window.",
+    "aliases": [
+      "close tab",
+      "close this tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+W is armed.",
+    "policy": "confirm",
+    "examples": [
+      "close tab"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.tab_reopen",
+    "module": "browser",
+    "kind": "act",
+    "title": "Reopen tab",
+    "summary": "Reopen the last closed tab.",
+    "aliases": [
+      "reopen tab",
+      "undo close tab",
+      "restore the tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+Shift+T is armed.",
+    "policy": "household",
+    "examples": [
+      "reopen tab"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.tab_next",
+    "module": "browser",
+    "kind": "act",
+    "title": "Next tab",
+    "summary": "Select the next tab.",
+    "aliases": [
+      "next tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+Tab is armed.",
+    "policy": "household",
+    "examples": [
+      "next tab"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.tab_prev",
+    "module": "browser",
+    "kind": "act",
+    "title": "Previous tab",
+    "summary": "Select the previous tab.",
+    "aliases": [
+      "previous tab",
+      "browser previous tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+Shift+Tab is armed.",
+    "policy": "household",
+    "examples": [
+      "previous tab"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.tab_pin",
+    "module": "browser",
+    "kind": "act",
+    "title": "Pin tab",
+    "summary": "Pin the current tab. Reserved until a per-app chord exists.",
+    "aliases": [
+      "pin tab",
+      "pin this tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord.",
+    "policy": "household",
+    "examples": [
+      "pin tab"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.tab_mute",
+    "module": "browser",
+    "kind": "act",
+    "title": "Mute tab",
+    "summary": "Mute the current tab. Reserved until a per-app chord exists.",
+    "aliases": [
+      "mute tab",
+      "mute this tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord.",
+    "policy": "household",
+    "examples": [
+      "mute tab"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.back",
+    "module": "browser",
+    "kind": "act",
+    "title": "Browser back",
+    "summary": "History back. Not media previous.",
+    "aliases": [
+      "browser back",
+      "page back",
+      "back in the browser"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Alt+Left is armed.",
+    "policy": "household",
+    "examples": [
+      "browser back"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.forward",
+    "module": "browser",
+    "kind": "act",
+    "title": "Browser forward",
+    "summary": "History forward.",
+    "aliases": [
+      "browser forward",
+      "page forward"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Alt+Right is armed.",
+    "policy": "household",
+    "examples": [
+      "browser forward"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.reload",
+    "module": "browser",
+    "kind": "act",
+    "title": "Reload",
+    "summary": "Reload the page.",
+    "aliases": [
+      "reload the page",
+      "refresh the page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+R is armed.",
+    "policy": "household",
+    "examples": [
+      "reload the page"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.reload_hard",
+    "module": "browser",
+    "kind": "act",
+    "title": "Hard reload",
+    "summary": "Reload, bypassing cache.",
+    "aliases": [
+      "hard reload",
+      "force reload"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+Shift+R is armed.",
+    "policy": "household",
+    "examples": [
+      "hard reload"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.home",
+    "module": "browser",
+    "kind": "act",
+    "title": "Browser home",
+    "summary": "Open the home page. No free URL.",
+    "aliases": [
+      "browser home",
+      "home page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Alt+Home is armed.",
+    "policy": "household",
+    "examples": [
+      "browser home"
+    ],
+    "refuse": [
+      "open this link"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.find",
+    "module": "browser",
+    "kind": "act",
+    "title": "Find in page",
+    "summary": "Open the find bar. No query string.",
+    "aliases": [
+      "find in page",
+      "find on this page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+F is armed.",
+    "policy": "household",
+    "examples": [
+      "find in page"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.zoom",
+    "module": "browser",
+    "kind": "act",
+    "title": "Zoom the page",
+    "summary": "Zoom in or out by a notch. Little is one chord, lot is three.",
+    "aliases": [
+      "zoom in",
+      "zoom out",
+      "zoom in a lot",
+      "zoom out a lot"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "in",
+            "aliases": [
+              "in",
+              "zoom in"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "out",
+            "aliases": [
+              "out",
+              "zoom out"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+plus or Ctrl+minus is armed.",
+    "policy": "household",
+    "examples": [
+      "zoom in",
+      "zoom in a lot"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.zoom_reset",
+    "module": "browser",
+    "kind": "act",
+    "title": "Reset zoom",
+    "summary": "Reset page zoom.",
+    "aliases": [
+      "reset zoom",
+      "zoom reset",
+      "actual size"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and Ctrl+0 is armed.",
+    "policy": "household",
+    "examples": [
+      "reset zoom"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.reader",
+    "module": "browser",
+    "kind": "act",
+    "title": "Reader mode",
+    "summary": "Reserved until a per-app chord exists.",
+    "aliases": [
+      "reader mode",
+      "reading mode"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord.",
+    "policy": "household",
+    "examples": [
+      "reader mode"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.fullscreen",
+    "module": "browser",
+    "kind": "act",
+    "title": "Browser fullscreen",
+    "summary": "Fullscreen the page with F11. Not the window-manager fullscreen.",
+    "aliases": [
+      "browser fullscreen",
+      "fullscreen the page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A browser client matches and F11 is armed.",
+    "policy": "household",
+    "examples": [
+      "fullscreen the page"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.pip",
+    "module": "browser",
+    "kind": "act",
+    "title": "Picture in picture",
+    "summary": "Reserved until a per-app chord exists.",
+    "aliases": [
+      "picture in picture",
+      "pop out the video"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord.",
+    "policy": "household",
+    "examples": [
+      "picture in picture"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.bookmark",
+    "module": "browser",
+    "kind": "act",
+    "title": "Bookmark page",
+    "summary": "Bookmark into a discovered folder. Reserved until a chord exists. The folder is not a path.",
+    "aliases": [
+      "bookmark this page",
+      "bookmark work"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "folder",
+        "label": "folder",
+        "required": true,
+        "values": []
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord. Folder must be in lists.bookmark_folder.",
+    "policy": "household",
+    "examples": [
+      "bookmark this page"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.downloads",
+    "module": "browser",
+    "kind": "ask",
+    "title": "Downloads",
+    "summary": "How many downloads, as a bucket. No names and no URLs.",
+    "aliases": [
+      "how many downloads",
+      "any downloads",
+      "download count"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "downloads is set, and the caller is not a guest.",
+    "policy": "private",
+    "examples": [
+      "how many downloads"
+    ],
+    "refuse": [],
+    "askShape": "{ bucket }"
+  },
+  {
+    "id": "browser.download_cancel",
+    "module": "browser",
+    "kind": "act",
+    "title": "Cancel download",
+    "summary": "Cancel the current download. Reserved until a chord exists.",
+    "aliases": [
+      "cancel the download",
+      "cancel download"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord.",
+    "policy": "confirm",
+    "examples": [
+      "cancel the download"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.private",
+    "module": "browser",
+    "kind": "act",
+    "title": "Private window",
+    "summary": "Firefox private window. Chrome and Chromium stay reserved.",
+    "aliases": [
+      "private window",
+      "new private window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Firefox client matches and Ctrl+Shift+P is armed. Other apps have no builtin.",
+    "policy": "household",
+    "examples": [
+      "private window"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "browser.translate",
+    "module": "browser",
+    "kind": "act",
+    "title": "Translate page",
+    "summary": "Reserved until a per-app chord exists.",
+    "aliases": [
+      "translate this page",
+      "translate the page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved \u2014 no shared chord.",
+    "policy": "household",
+    "examples": [
+      "translate this page"
+    ],
+    "refuse": [],
+    "walk": "reserved"
+  },
+  {
+    "id": "browser.dev_tools",
+    "module": "browser",
+    "kind": "act",
+    "title": "Developer tools",
+    "summary": "Open developer tools. Owner only.",
+    "aliases": [
+      "dev tools",
+      "developer tools",
+      "inspect element"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "browser",
+        "required": true,
+        "values": [
+          {
+            "id": "zen",
+            "label": "Zen",
+            "aliases": [
+              "zen",
+              "zen browser"
+            ]
+          },
+          {
+            "id": "firefox",
+            "label": "Firefox",
+            "aliases": [
+              "firefox"
+            ]
+          },
+          {
+            "id": "chrome",
+            "label": "Chrome",
+            "aliases": [
+              "chrome",
+              "google chrome"
+            ]
+          },
+          {
+            "id": "chromium",
+            "label": "Chromium",
+            "aliases": [
+              "chromium"
+            ]
+          },
+          {
+            "id": "brave",
+            "label": "Brave",
+            "aliases": [
+              "brave"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Owner, a browser client matches, and Ctrl+Shift+I is armed.",
+    "policy": "owner",
+    "examples": [
+      "dev tools"
+    ],
+    "refuse": [],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut",
+    "confirm": true
   }
 ]

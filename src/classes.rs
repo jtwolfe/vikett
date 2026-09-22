@@ -38,6 +38,39 @@ pub fn class_to_app(class: &str) -> String {
     }
 }
 
+/// `which` name. Unmapped `browser.focus` may exec only when `snap.bins` contains it.
+pub fn bin_for_app(app: &str) -> Option<&'static str> {
+    match app {
+        // This box: `which zen-browser`, class still `zen`.
+        "zen" => Some("zen-browser"),
+        "firefox" => Some("firefox"),
+        "chrome" => Some("google-chrome"),
+        "chromium" => Some("chromium"),
+        "brave" => Some("brave"),
+        _ => None,
+    }
+}
+
+/// Class equality through `app_for_class` only. A title that mentions Firefox is not Firefox.
+pub fn client_for_app<'a>(
+    snap: &'a crate::types::Snap,
+    app: &str,
+) -> Option<&'a crate::types::Client> {
+    let mut found = None;
+    for c in &snap.clients {
+        if app_for_class(&c.class) != Some(app) {
+            continue;
+        }
+        if c.focused {
+            return Some(c);
+        }
+        if found.is_none() {
+            found = Some(c);
+        }
+    }
+    found
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

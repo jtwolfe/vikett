@@ -311,5 +311,201 @@
       "inMin": 40
     },
     "weather": "clear"
+  },
+  {
+    "id": "desk-zen",
+    "title": "Desk \u2014 Zen focused",
+    "who": "jim",
+    "where": "desk",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xzen",
+        "class": "zen",
+        "title": "Zen",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xfoot",
+        "class": "foot",
+        "title": "~",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1"
+    ],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "zen",
+      "foot",
+      "firefox",
+      "chrome",
+      "chromium",
+      "brave"
+    ],
+    "running": [
+      "zen",
+      "foot"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave",
+      "school"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 2,
+        "subjects": [
+          "Re: invoice",
+          "lunch"
+        ]
+      },
+      "school": {
+        "count": 0,
+        "subjects": []
+      }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "showers",
+    "bins": [
+      "zen-browser",
+      "firefox",
+      "google-chrome",
+      "chromium",
+      "brave"
+    ],
+    "lists": {
+      "bookmark_folder": [
+        "work"
+      ]
+    },
+    "downloads": 2,
+    "monitors": 1
+  },
+  {
+    "id": "desk-browsers",
+    "title": "Desk \u2014 Firefox, Chrome, and Zen",
+    "who": "jim",
+    "where": "desk",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xzen",
+        "class": "zen",
+        "title": "Zen",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xff",
+        "class": "firefox",
+        "title": "Firefox",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xch",
+        "class": "google-chrome",
+        "title": "Chrome",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1"
+    ],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "zen",
+      "firefox",
+      "chrome",
+      "chromium",
+      "brave"
+    ],
+    "running": [
+      "zen",
+      "firefox",
+      "chrome"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave",
+      "school"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 2,
+        "subjects": [
+          "Re: invoice",
+          "lunch"
+        ]
+      },
+      "school": {
+        "count": 0,
+        "subjects": []
+      }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "showers",
+    "bins": [
+      "zen-browser",
+      "firefox",
+      "google-chrome",
+      "chromium",
+      "brave"
+    ],
+    "lists": {
+      "bookmark_folder": [
+        "work"
+      ]
+    },
+    "monitors": 1
   }
 ]

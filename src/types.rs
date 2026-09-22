@@ -166,6 +166,15 @@ pub struct Snap {
     pub sinks: Vec<String>,
     #[serde(default)]
     pub focused_output: Option<String>,
+    /// Binaries `browser.focus` may `exec_cmd` when the window is unmapped.
+    #[serde(default)]
+    pub bins: Vec<String>,
+    /// Closed name lists. `bookmark_folder` is discovered on the live snap.
+    #[serde(default)]
+    pub lists: BTreeMap<String, Vec<String>>,
+    /// `browser.downloads` bucket. `None` keeps that ask dead (not `{ok:true}`).
+    #[serde(default)]
+    pub downloads: Option<u32>,
 }
 
 fn default_owner() -> String {

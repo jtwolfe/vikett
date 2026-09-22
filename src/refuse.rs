@@ -40,12 +40,25 @@ const ADVERSARIAL: &[&str] = &[
     "put it on the tv",
     "put this on the tv",
     "put it on the living room",
+    "open this link",
+    "search the web",
+    "google this",
+    "fill the form",
+    "fill in the form",
+    "reveal the password",
+    "show my password",
+    "copy the password",
 ];
 
 pub fn refused(utterance: &str) -> Option<&'static str> {
     let n = norm(utterance);
     // `%` is stripped by norm(); catch "40%" on the raw string.
     let has_percent = utterance.contains('%') && utterance.chars().any(|c| c.is_ascii_digit());
+    // `norm` turns `https://…` into tokens. The raw string still has the paste.
+    let pasted = utterance.contains("://") || utterance.to_lowercase().contains("www.");
+    if pasted {
+        return Some("refused — no page for a pasted url");
+    }
     if has_percent || REFUSE_RE.is_match(&n) {
         return Some("refused — no page for compose/send/buy/click/free-number");
     }
@@ -70,5 +83,8 @@ mod tests {
         assert!(refused("mute").is_none());
         assert!(refused("close everything").is_some());
         assert!(refused("put it on the TV").is_some());
+        assert!(refused("open this link").is_some());
+        assert!(refused("see https://example.com").is_some());
+        assert!(refused("open www.example.com").is_some());
     }
 }

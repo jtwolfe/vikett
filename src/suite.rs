@@ -116,6 +116,7 @@ fn authored() -> Vec<Case> {
     v.extend(policy());
     v.extend(compound());
     v.extend(paraphrases());
+    v.extend(browser());
     v
 }
 
@@ -1671,6 +1672,411 @@ fn paraphrases() -> Vec<Case> {
     ]
 }
 
+fn browser() -> Vec<Case> {
+    vec![
+        c(
+            "browser-tab-new",
+            "desk-zen",
+            "new tab",
+            Some("browser.tab_new"),
+            &[("app", "zen")],
+            Some("key = \"T\""),
+            &["browser", "exact"],
+            "Ctrl+T on the focused Zen window.",
+        ),
+        c(
+            "browser-tab-close",
+            "desk-zen",
+            "close tab",
+            Some("browser.tab_close"),
+            &[("app", "zen")],
+            Some("key = \"W\""),
+            &["browser", "exact", "confirm"],
+            "Not wm.close.",
+        ),
+        c(
+            "browser-tab-reopen",
+            "desk-zen",
+            "reopen tab",
+            Some("browser.tab_reopen"),
+            &[("app", "zen")],
+            Some("CTRL + SHIFT"),
+            &["browser", "exact"],
+            "Ctrl+Shift+T.",
+        ),
+        c(
+            "browser-tab-next",
+            "desk-zen",
+            "next tab",
+            Some("browser.tab_next"),
+            &[("app", "zen")],
+            Some("key = \"Tab\""),
+            &["browser", "exact"],
+            "Live door beats a dead same-length alias.",
+        ),
+        c(
+            "browser-tab-prev",
+            "desk-zen",
+            "previous tab",
+            Some("browser.tab_prev"),
+            &[("app", "zen")],
+            Some("CTRL + SHIFT"),
+            &["browser", "exact"],
+            "",
+        ),
+        c(
+            "browser-back",
+            "desk-zen",
+            "browser back",
+            Some("browser.back"),
+            &[("app", "zen")],
+            Some("key = \"Left\""),
+            &["browser", "exact"],
+            "Not media.prev.",
+        ),
+        c(
+            "browser-forward",
+            "desk-zen",
+            "browser forward",
+            Some("browser.forward"),
+            &[("app", "zen")],
+            Some("key = \"Right\""),
+            &["browser", "exact"],
+            "",
+        ),
+        c(
+            "browser-reload",
+            "desk-zen",
+            "reload the page",
+            Some("browser.reload"),
+            &[("app", "zen")],
+            Some("mods = \"CTRL\", key = \"R\""),
+            &["browser", "exact"],
+            "",
+        ),
+        c(
+            "browser-reload-hard",
+            "desk-zen",
+            "hard reload",
+            Some("browser.reload_hard"),
+            &[("app", "zen")],
+            Some("CTRL + SHIFT"),
+            &["browser", "exact"],
+            "",
+        ),
+        c(
+            "browser-home",
+            "desk-zen",
+            "browser home",
+            Some("browser.home"),
+            &[("app", "zen")],
+            Some("key = \"Home\""),
+            &["browser", "exact"],
+            "",
+        ),
+        c(
+            "browser-find",
+            "desk-zen",
+            "find in page",
+            Some("browser.find"),
+            &[("app", "zen")],
+            Some("key = \"F\""),
+            &["browser", "exact"],
+            "Bar only, no query.",
+        ),
+        c(
+            "browser-zoom-little",
+            "desk-zen",
+            "zoom in",
+            Some("browser.zoom"),
+            &[("app", "zen"), ("direction", "up"), ("amount", "little")],
+            Some("key = \"plus\""),
+            &["browser", "exact"],
+            "One chord.",
+        ),
+        c(
+            "browser-zoom-lot",
+            "desk-zen",
+            "zoom in a lot",
+            Some("browser.zoom"),
+            &[("app", "zen"), ("direction", "up"), ("amount", "lot")],
+            Some("key = \"plus\""),
+            &["browser", "exact"],
+            "Three identical chords.",
+        ),
+        c(
+            "browser-zoom-reset",
+            "desk-zen",
+            "actual size",
+            Some("browser.zoom_reset"),
+            &[("app", "zen")],
+            Some("key = \"0\""),
+            &["browser", "exact"],
+            "",
+        ),
+        c(
+            "browser-fullscreen-page",
+            "desk-zen",
+            "fullscreen the page",
+            Some("browser.fullscreen"),
+            &[("app", "zen")],
+            Some("mods = \"\", key = \"F11\""),
+            &["browser", "exact"],
+            "Empty mods, not wm.fullscreen.",
+        ),
+        c(
+            "browser-focus-mapped",
+            "desk-zen",
+            "focus the browser",
+            Some("browser.focus"),
+            &[("app", "zen")],
+            Some("hl.dsp.focus"),
+            &["browser", "exact"],
+            "Address only.",
+        ),
+        c(
+            "browser-focus-exec",
+            "desk-zen",
+            "firefox window",
+            Some("browser.focus"),
+            &[("app", "firefox")],
+            Some("exec_cmd(\"firefox\")"),
+            &["browser", "exact"],
+            "Unmapped, allowlisted, bins has the binary.",
+        ),
+        c(
+            "browser-private-ff",
+            "desk",
+            "private window",
+            Some("browser.private"),
+            &[("app", "firefox")],
+            Some("CTRL + SHIFT\", key = \"P\""),
+            &["browser", "exact"],
+            "Firefox only.",
+        ),
+        c(
+            "browser-devtools",
+            "desk",
+            "dev tools",
+            Some("browser.dev_tools"),
+            &[("app", "firefox")],
+            Some("key = \"I\""),
+            &["browser", "exact", "confirm"],
+            "Owner.",
+        ),
+        c(
+            "browser-ask-open",
+            "desk-zen",
+            "is the browser open",
+            Some("browser.ask_open"),
+            &[("app", "zen")],
+            None,
+            &["browser", "ask"],
+            "Allowlist, mapped or not.",
+        ),
+        c(
+            "browser-downloads",
+            "desk-zen",
+            "how many downloads",
+            Some("browser.downloads"),
+            &[("app", "zen")],
+            None,
+            &["browser", "ask", "private"],
+            "Bucket, not {ok:true}.",
+        ),
+        c(
+            "browser-kitchen-close-tab",
+            "kitchen",
+            "close tab",
+            Some("browser.tab_close"),
+            &[("app", "chromium")],
+            Some("send_shortcut"),
+            &["browser", "exact"],
+            "Chromium class matches.",
+        ),
+        c(
+            "browser-close-tab-guest",
+            "guest-living",
+            "close tab",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Dead alias longer than wm.close.",
+        ),
+        c(
+            "browser-next-tab-guest",
+            "guest-living",
+            "next tab",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Does not walk media.next.",
+        ),
+        c(
+            "browser-fs-page-guest",
+            "guest-living",
+            "fullscreen the page",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Does not walk wm.fullscreen.",
+        ),
+        c(
+            "browser-close-this-guest",
+            "guest-living",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["wm", "confirm"],
+            "Bare close this stays.",
+        ),
+        c(
+            "browser-close-this-kitchen",
+            "kitchen",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["wm", "confirm"],
+            "Bare close this stays.",
+        ),
+        c(
+            "browser-next-bare",
+            "guest-living",
+            "next",
+            Some("media.next"),
+            &[],
+            Some("playerctl next"),
+            &["media", "exact"],
+            "Bare next stays.",
+        ),
+        c(
+            "browser-fullscreen-bare-zen",
+            "desk-zen",
+            "fullscreen",
+            Some("wm.fullscreen"),
+            &[],
+            Some("fullscreen"),
+            &["wm", "exact"],
+            "Bare fullscreen stays wm.",
+        ),
+        c(
+            "browser-close-bare-zen",
+            "desk-zen",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["wm", "confirm"],
+            "",
+        ),
+        c(
+            "browser-private-chrome-dead",
+            "desk-browsers",
+            "chrome private window",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Chrome private is reserved.",
+        ),
+        c(
+            "browser-devtools-guest",
+            "guest-living",
+            "dev tools",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Owner page, guest.",
+        ),
+        c(
+            "browser-downloads-guest",
+            "guest-living",
+            "how many downloads",
+            None,
+            &[],
+            None,
+            &["browser", "dead", "private"],
+            "Private.",
+        ),
+        c(
+            "browser-pin-dead",
+            "desk-zen",
+            "pin tab",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "No builtin chord.",
+        ),
+        c(
+            "browser-mute-tab-dead",
+            "desk-zen",
+            "mute tab",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Does not mute the sink.",
+        ),
+        c(
+            "browser-reader-dead",
+            "desk-zen",
+            "reader mode",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "",
+        ),
+        c(
+            "browser-pip-dead",
+            "desk-zen",
+            "picture in picture",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "",
+        ),
+        c(
+            "browser-bookmark-dead",
+            "desk-zen",
+            "bookmark this page",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "Folder list does not arm the chord.",
+        ),
+        c(
+            "browser-translate-dead",
+            "desk-zen",
+            "translate this page",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "",
+        ),
+        c(
+            "browser-download-cancel-dead",
+            "desk-zen",
+            "cancel the download",
+            None,
+            &[],
+            None,
+            &["browser", "dead"],
+            "",
+        ),
+    ]
+}
+
 pub fn run_case(cat: &Catalog, case: &Case, referee: RefereeKind) -> CaseResult {
     let Some(snap) = cat.snap(&case.snap) else {
         return CaseResult {
@@ -1921,5 +2327,63 @@ mod tests {
         let wm = run_suite(&cat, RefereeKind::Lexical, Some("wm")).expect("wm tag");
         assert!(!wm.skipped);
         assert!(!wm.results.is_empty());
+    }
+
+    #[test]
+    fn browser_alias_lint() {
+        let cat = Catalog::load();
+        let cases = all_cases(&cat);
+        let banned = [
+            "next",
+            "close",
+            "zoom",
+            "save",
+            "back",
+            "open",
+            "focus",
+            "mute",
+            "play",
+            "pause",
+            "workspace",
+        ];
+        let mut errs = Vec::new();
+        for page in cat.pages.iter().filter(|p| p.module == "browser") {
+            for alias in &page.aliases {
+                let n = crate::text::norm(alias);
+                if n == "browser" {
+                    errs.push(format!("{} alias is the bare word browser", page.id));
+                }
+                let raw: Vec<&str> = n.split_whitespace().collect();
+                if raw.len() == 1 && banned.contains(&raw[0]) {
+                    errs.push(format!("{} banned single-token alias {alias}", page.id));
+                }
+                if raw.len() < 2 {
+                    continue;
+                }
+                let at = crate::text::tokens(alias);
+                if at.is_empty() {
+                    continue;
+                }
+                for case in &cases {
+                    if !case.lexical_must() {
+                        continue;
+                    }
+                    let Some(expect) = case.expect_page.as_deref() else {
+                        continue;
+                    };
+                    if expect == page.id {
+                        continue;
+                    }
+                    let ut = crate::text::tokens(&case.utterance);
+                    if at.iter().all(|t| ut.iter().any(|u| u == t)) {
+                        errs.push(format!(
+                            "{} alias {alias:?} token-subsets {} {:?}",
+                            page.id, case.id, case.utterance
+                        ));
+                    }
+                }
+            }
+        }
+        assert!(errs.is_empty(), "{}", errs.join("\n"));
     }
 }

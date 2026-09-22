@@ -4,6 +4,9 @@ use crate::prune::client_match;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> WalkPlan {
+    if crate::drivers::is_family(&page.module) {
+        return crate::drivers::browser::fill_walk(page, slots, snap);
+    }
     let command = match page.id.as_str() {
         "audio.bump" => {
             let dir = if slots.get("direction").map(String::as_str) == Some("down") {

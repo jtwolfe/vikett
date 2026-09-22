@@ -37,6 +37,9 @@
         "inMin": { "type": "number" }
       }
     },
-    "weather": { "type": ["string", "null"] }
+    "weather": { "type": ["string", "null"] },
+    "bins": { "type": "array", "items": { "type": "string" } },
+    "lists": { "type": "object" },
+    "downloads": { "type": ["number", "null"] }
   }
 }
