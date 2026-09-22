@@ -72,13 +72,6 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "thunar" => Some("thunar"),
         "dolphin" => Some("dolphin"),
         "yazi" => Some("yazi"),
-        "obsidian" => Some("obsidian"),
-        "logseq" => Some("logseq"),
-        "joplin" => Some("joplin"),
-        "zathura" => Some("zathura"),
-        "evince" => Some("evince"),
-        "papers" => Some("papers"),
-        "foliate" => Some("foliate"),
         _ => None,
     }
 }
@@ -141,7 +134,9 @@ mod tests {
         assert_eq!(class_to_app("com.github.johnfactotum.Foliate"), "foliate");
         assert_eq!(class_to_app("NotMapped"), "notmapped");
         assert_eq!(bin_for_app("nautilus"), Some("nautilus"));
-        assert_eq!(bin_for_app("zathura"), Some("zathura"));
+        assert_eq!(bin_for_app("yazi"), Some("yazi"));
+        assert_eq!(bin_for_app("zathura"), None);
+        assert_eq!(bin_for_app("obsidian"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));
         assert_eq!(bin_for_app("wezterm"), Some("wezterm"));
     }

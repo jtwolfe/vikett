@@ -37,7 +37,7 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             None => reserved("notes"),
         };
     }
-    chord_walk(&page.id, app, slots, snap, "notes", None)
+    chord_walk(&page.id, app, slots, snap, "notes")
 }
 
 fn is_notes_app(app: &str) -> bool {

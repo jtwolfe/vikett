@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 
 use crate::classes::{bin_for_app, client_for_app};
 use crate::drivers::hl;
-use crate::keymap::{self, Chord};
+use crate::keymap;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
@@ -36,7 +36,7 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
     if page.id == "files.open" {
         return open_walk(app, slots, snap, driver);
     }
-    chord_walk(&page.id, app, slots, snap, driver, None)
+    chord_walk(&page.id, app, slots, snap, driver)
 }
 
 fn is_files_app(app: &str) -> bool {
@@ -134,31 +134,28 @@ fn open_walk(app: &str, slots: &BTreeMap<String, String>, snap: &Snap, driver: &
     }
 }
 
-type ChordShape = fn(&str, &BTreeMap<String, String>, Chord) -> Chord;
-
 pub(crate) fn chord_walk(
     page_id: &str,
     app: &str,
     slots: &BTreeMap<String, String>,
     snap: &Snap,
     driver: &str,
-    shape: Option<ChordShape>,
 ) -> WalkPlan {
     let Some(c) = client_for_app(snap, app) else {
         return reserved(driver);
     };
-    let Some(chord) = keymap::chord_for(page_id, app, &snap.id, slots) else {
+    let Some(mut chord) = keymap::chord_for(page_id, app, &snap.id, slots) else {
         return reserved(driver);
     };
-    let chord = match shape {
-        Some(shape) => shape(page_id, slots, chord),
-        None => chord,
-    };
-    let reps = if page_id == "read.zoom" && slots.get("amount").map(String::as_str) == Some("lot") {
-        3
-    } else {
-        1
-    };
+    let mut reps = 1;
+    if page_id == "read.zoom" {
+        if slots.get("direction").map(String::as_str) == Some("down") {
+            chord.key = "minus".into();
+        }
+        if slots.get("amount").map(String::as_str) == Some("lot") {
+            reps = 3;
+        }
+    }
     let mut parts = vec![hl::focus_cmd(&c.address)];
     for _ in 0..reps {
         parts.push(hl::shortcut_cmd(&chord, &c.address));

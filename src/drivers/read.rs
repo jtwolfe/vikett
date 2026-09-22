@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 
 use crate::classes::client_for_app;
 use crate::drivers::files::{chord_walk, reserved};
-use crate::keymap::{self, Chord};
+use crate::keymap;
 use crate::types::{Page, Snap, WalkPlan};
 
 pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> (bool, String) {
@@ -38,7 +38,7 @@ pub fn fill_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -> 
             None => reserved("read"),
         };
     }
-    chord_walk(&page.id, app, slots, snap, "read", Some(shape))
+    chord_walk(&page.id, app, slots, snap, "read")
 }
 
 fn is_reader(app: &str) -> bool {
@@ -58,13 +58,6 @@ fn chord_live(
         return (false, "reserved — no chord".into());
     }
     (true, format!("client {}", c.class))
-}
-
-fn shape(page_id: &str, slots: &BTreeMap<String, String>, mut chord: Chord) -> Chord {
-    if page_id == "read.zoom" && slots.get("direction").map(String::as_str) == Some("down") {
-        chord.key = "minus".into();
-    }
-    chord
 }
 
 #[cfg(test)]
