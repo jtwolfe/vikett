@@ -97,21 +97,33 @@ pub fn take(
     }
 }
 
-pub fn laya_take(
+#[derive(Clone, Debug, Serialize)]
+pub struct CriteriaProbe {
+    /// False when the lexical shortlist is empty. Laya is not posted.
+    pub post: bool,
+    pub criteria: BTreeMap<String, String>,
+    pub state: serde_json::Value,
+    pub questions: serde_json::Value,
+}
+
+pub fn criteria_for(
     utterance: &str,
     snap: &Snap,
     live: &[LiveVikett],
     pages: &[Page],
-) -> Result<Take> {
-    let cfg = ModelConfig::default();
+) -> CriteriaProbe {
     let live_ids: HashSet<&str> = live.iter().map(|l| l.page_id.as_str()).collect();
     let scored = lexical::score_live(pages, &live_ids, utterance, snap);
     // Lexical is the shortlist. An empty shortlist must not be padded with
     // unrelated live pages (that made Laya walk wm.focus on dead/guest doors).
     if scored.is_empty() {
-        return Ok(Take::silence(
-            "no lexical shortlist — Laya not offered live pages",
-        ));
+        let criteria = criteria_map(live, &[]);
+        return CriteriaProbe {
+            post: false,
+            state: state_json(snap, utterance, &[]),
+            questions: questions_json(&criteria),
+            criteria,
+        };
     }
     let criteria = criteria_map(live, &scored);
     let shortlist: Vec<&LiveVikett> = scored
@@ -119,7 +131,16 @@ pub fn laya_take(
         .take(SHORTLIST)
         .filter_map(|s| live.iter().find(|l| l.page_id == s.page_id))
         .collect();
-    let state = json!({
+    CriteriaProbe {
+        post: true,
+        state: state_json(snap, utterance, &shortlist),
+        questions: questions_json(&criteria),
+        criteria,
+    }
+}
+
+fn state_json(snap: &Snap, utterance: &str, shortlist: &[&LiveVikett]) -> serde_json::Value {
+    json!({
         "who": snap.who,
         "where": snap.place,
         "guest": snap.guest,
@@ -128,8 +149,11 @@ pub fn laya_take(
             "id": l.page_id,
             "label": l.label,
         })).collect::<Vec<_>>(),
-    });
-    let questions = json!({
+    })
+}
+
+fn questions_json(criteria: &BTreeMap<String, String>) -> serde_json::Value {
+    json!({
         "page": {
             "type": "choice",
             "instructions": "Which live vikett did they mean? Pick none if unsure, if the door is not live, or if they asked to send/buy/click/invent a number.",
@@ -139,11 +163,26 @@ pub fn laya_take(
             "type": "noul",
             "instructions": "Does the utterance contain a second action after this take (e.g. 'and then fullscreen')?",
         },
-    });
+    })
+}
+
+pub fn laya_take(
+    utterance: &str,
+    snap: &Snap,
+    live: &[LiveVikett],
+    pages: &[Page],
+) -> Result<Take> {
+    let cfg = ModelConfig::default();
+    let probe = criteria_for(utterance, snap, live, pages);
+    if !probe.post {
+        return Ok(Take::silence(
+            "no lexical shortlist — Laya not offered live pages",
+        ));
+    }
     let body = json!({
         "model": "laya",
-        "state": state,
-        "questions": questions,
+        "state": probe.state,
+        "questions": probe.questions,
     });
     let url = format!("{}/v1/systemone", cfg.laya_url.trim_end_matches('/'));
     let resp: SystemOneResponse = client()?
@@ -320,6 +359,26 @@ mod tests {
         assert_eq!(map.len(), 1);
         assert!(map.contains_key("none"));
         assert!(!map.contains_key("wm.focus"));
+    }
+
+    #[test]
+    fn criteria_for_posts_only_with_a_shortlist() {
+        let cat = crate::catalog::Catalog::load();
+        let desk = cat.snap("desk").unwrap();
+        let (live, _) = crate::prune::live_and_dead(&cat.pages, desk, Some("mute"));
+        let probe = criteria_for("mute", desk, &live, &cat.pages);
+        assert!(probe.post);
+        assert!(probe.criteria.contains_key("none"));
+        assert!(probe.criteria.contains_key("audio.mute"));
+        assert_eq!(
+            probe.questions["page"]["criteria"],
+            serde_json::to_value(&probe.criteria).unwrap()
+        );
+        let (live, _) = crate::prune::live_and_dead(&cat.pages, desk, Some("other monitor"));
+        let probe = criteria_for("other monitor", desk, &live, &cat.pages);
+        assert!(!probe.post);
+        assert!(!probe.criteria.contains_key("wm.focus"));
+        assert!(probe.state["live"].as_array().unwrap().is_empty());
     }
 
     #[test]

@@ -1,6 +1,6 @@
 //! Extensive prompt suite: goldens + authored coverage + refuses + policy.
 //!
-//! Lexical cases without the `paraphrase` tag are a hard gate.
+//! Lexical cases without the `paraphrase` or `holdout` tag are a hard gate.
 //! Laya misses into silence are reported and only fail under `--strict`.
 //! A wrong act (expected silence, but a walk or an ask) fails both referees.
 
@@ -11,7 +11,7 @@ use anyhow::{bail, Result};
 
 use crate::catalog::Catalog;
 use crate::eval_on;
-use crate::types::{Golden, RefereeKind};
+use crate::types::{Golden, Holdout, RefereeKind};
 
 #[derive(Clone, Debug)]
 pub struct Case {
@@ -27,7 +27,10 @@ pub struct Case {
 
 impl Case {
     pub fn lexical_must(&self) -> bool {
-        !self.tags.iter().any(|t| t == "paraphrase")
+        !self
+            .tags
+            .iter()
+            .any(|t| t == "paraphrase" || t == "holdout")
     }
 }
 
@@ -49,6 +52,18 @@ pub struct CaseResult {
 }
 
 pub fn all_cases(cat: &Catalog) -> Vec<Case> {
+    let mut out = base_cases(cat);
+    let mut seen: BTreeSet<String> = out.iter().map(|c| c.id.clone()).collect();
+    for h in &cat.holdouts {
+        if seen.insert(h.id.clone()) {
+            out.push(from_holdout(h));
+        }
+    }
+    out
+}
+
+/// Goldens and authored coverage. Does not read holdout rows.
+pub fn base_cases(cat: &Catalog) -> Vec<Case> {
     let mut out = Vec::new();
     let mut seen = BTreeSet::new();
     for g in &cat.goldens {
@@ -74,6 +89,19 @@ fn from_golden(g: &Golden) -> Case {
         expect_walk_substr: None,
         tags: vec!["golden".into()],
         notes: g.notes.clone(),
+    }
+}
+
+fn from_holdout(h: &Holdout) -> Case {
+    Case {
+        id: h.id.clone(),
+        snap: h.snap.clone(),
+        utterance: h.utterance.clone(),
+        expect_page: h.expect_page.clone(),
+        expect_slots: h.expect_slots.clone().unwrap_or_default(),
+        expect_walk_substr: None,
+        tags: vec!["holdout".into()],
+        notes: h.notes.clone(),
     }
 }
 
@@ -6086,7 +6114,11 @@ pub struct SuiteReport {
 pub fn run_suite(cat: &Catalog, referee: RefereeKind, tag: Option<&str>) -> Result<SuiteReport> {
     let cases: Vec<Case> = all_cases(cat)
         .into_iter()
-        .filter(|c| tag.is_none_or(|t| c.tags.iter().any(|x| x == t)))
+        .filter(|c| match tag {
+            Some(t) => c.tags.iter().any(|x| x == t),
+            // Untagged suite is the must-pass run. Holdout is L2 only.
+            None => !c.tags.iter().any(|x| x == "holdout"),
+        })
         .collect();
     if cases.is_empty() {
         match tag {
@@ -6243,17 +6275,52 @@ mod tests {
     #[test]
     fn empty_tag_fails() {
         let cat = Catalog::load();
-        let err = match run_suite(&cat, RefereeKind::Lexical, Some("holdout")) {
+        let err = match run_suite(&cat, RefereeKind::Lexical, Some("no-such-tag")) {
             Err(e) => e,
             Ok(_) => panic!("empty tag must fail"),
         };
         assert!(
-            err.to_string().contains("holdout tag matched nothing"),
+            err.to_string().contains("no-such-tag tag matched nothing"),
             "{err}"
         );
         let wm = run_suite(&cat, RefereeKind::Lexical, Some("wm")).expect("wm tag");
         assert!(!wm.skipped);
         assert!(!wm.results.is_empty());
+    }
+
+    #[test]
+    fn from_golden_tag_stays_golden() {
+        let cat = Catalog::load();
+        let g = cat
+            .goldens
+            .iter()
+            .find(|g| g.id == "vol-little")
+            .expect("golden");
+        let c = from_golden(g);
+        assert_eq!(c.tags, vec!["golden".to_string()]);
+    }
+
+    #[test]
+    fn holdout_is_not_the_must_pass_suite() {
+        let cat = Catalog::load();
+        assert!(!cat.holdouts.is_empty());
+        let cases = all_cases(&cat);
+        let tagged: Vec<_> = cases
+            .iter()
+            .filter(|c| c.tags == ["holdout".to_string()])
+            .collect();
+        assert_eq!(tagged.len(), cat.holdouts.len());
+        for c in &tagged {
+            assert!(!c.lexical_must(), "{}", c.id);
+            assert!(!c.tags.iter().any(|t| t == "golden"), "{}", c.id);
+        }
+        let report = run_suite(&cat, RefereeKind::Lexical, None).expect("suite");
+        let ids: BTreeSet<_> = report.results.iter().map(|r| r.id.as_str()).collect();
+        for h in &cat.holdouts {
+            assert!(!ids.contains(h.id.as_str()), "{}", h.id);
+        }
+        let hold = run_suite(&cat, RefereeKind::Lexical, Some("holdout")).expect("holdout tag");
+        assert_eq!(hold.results.len(), cat.holdouts.len());
     }
 
     #[test]
