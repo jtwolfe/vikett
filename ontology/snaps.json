@@ -511,5 +511,151 @@
       ]
     },
     "monitors": 1
+  },
+  {
+    "id": "desk-files",
+    "title": "Desk — files, notes, and a reader",
+    "who": "jim",
+    "where": "desk",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xnaut",
+        "class": "org.gnome.Nautilus",
+        "title": "Downloads",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xobs",
+        "class": "obsidian",
+        "title": "notes",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xlog",
+        "class": "logseq",
+        "title": "Journal",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xevi",
+        "class": "evince",
+        "title": "paper.pdf",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xpap",
+        "class": "org.gnome.Papers",
+        "title": "paper.pdf",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xzat",
+        "class": "org.pwmt.zathura",
+        "title": "paper.pdf",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xfol",
+        "class": "foliate",
+        "title": "book",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1"
+    ],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "nautilus",
+      "nemo",
+      "thunar",
+      "dolphin",
+      "yazi",
+      "obsidian",
+      "logseq",
+      "joplin",
+      "zathura",
+      "evince",
+      "papers",
+      "foliate"
+    ],
+    "running": [
+      "nautilus",
+      "obsidian",
+      "logseq",
+      "evince",
+      "papers",
+      "zathura",
+      "foliate"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 1,
+        "subjects": [
+          "note"
+        ]
+      }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "showers",
+    "bins": [
+      "nautilus",
+      "nemo",
+      "thunar",
+      "dolphin",
+      "yazi"
+    ],
+    "lists": {
+      "dir": [
+        "home",
+        "downloads",
+        "pictures",
+        "documents"
+      ]
+    },
+    "monitors": 1
   }
 ]

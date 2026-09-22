@@ -134,5 +134,29 @@
     "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap; exec_cmd only for unmapped focus",
     "snap": "clients, allowlist, bins",
     "priority": 46
+  },
+  {
+    "id": "files",
+    "title": "Files",
+    "summary": "Nautilus, Nemo, Thunar, Dolphin, and Yazi. Open only authored directory ids. Trash confirms.",
+    "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap; exec_cmd for an authored folder",
+    "snap": "clients, allowlist, bins, lists.dir",
+    "priority": 44
+  },
+  {
+    "id": "notes",
+    "title": "Notes",
+    "summary": "Obsidian, Logseq, and Joplin. Daily and vault are private. No paragraph slot.",
+    "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap",
+    "snap": "clients",
+    "priority": 42
+  },
+  {
+    "id": "read",
+    "title": "Reader",
+    "summary": "Zathura, Evince, Papers, and Foliate. Next and previous page, chapter, zoom notch, dark. No page number.",
+    "driver": "hl.dsp.focus + hl.dsp.send_shortcut from keymap",
+    "snap": "clients",
+    "priority": 40
   }
 ]

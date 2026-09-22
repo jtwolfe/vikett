@@ -4924,5 +4924,1235 @@
       "run this command"
     ],
     "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "files.focus",
+    "module": "files",
+    "kind": "act",
+    "title": "Focus a file manager",
+    "summary": "Focus a mapped file manager. Unmapped does not exec.",
+    "aliases": [
+      "focus nautilus",
+      "focus nemo",
+      "focus thunar",
+      "focus dolphin",
+      "focus yazi",
+      "focus the file manager",
+      "nautilus window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That file manager's class is mapped.",
+    "policy": "household",
+    "examples": [
+      "focus nautilus"
+    ],
+    "refuse": [
+      "delete the file"
+    ],
+    "walk": "hl.dsp.focus"
+  },
+  {
+    "id": "files.open",
+    "module": "files",
+    "kind": "act",
+    "title": "Open an authored folder",
+    "summary": "Open home, downloads, pictures, or documents. The path is written in the driver. The id must be in lists.dir.",
+    "aliases": [
+      "open the download folder",
+      "open the downloads folder",
+      "open the pictures folder",
+      "open the documents folder",
+      "open the home folder",
+      "download folder",
+      "downloads folder",
+      "pictures folder",
+      "documents folder",
+      "home folder"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dir",
+        "label": "folder",
+        "required": true,
+        "values": [
+          {
+            "id": "home",
+            "label": "Home",
+            "aliases": [
+              "home",
+              "home folder"
+            ]
+          },
+          {
+            "id": "downloads",
+            "label": "Downloads",
+            "aliases": [
+              "downloads",
+              "downloads folder",
+              "download folder"
+            ]
+          },
+          {
+            "id": "pictures",
+            "label": "Pictures",
+            "aliases": [
+              "pictures",
+              "pictures folder"
+            ]
+          },
+          {
+            "id": "documents",
+            "label": "Documents",
+            "aliases": [
+              "documents",
+              "documents folder"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "dir is an authored id in lists.dir, and the app is mapped or allowlisted with its binary in bins.",
+    "policy": "household",
+    "examples": [
+      "open the downloads folder"
+    ],
+    "refuse": [
+      "delete the file",
+      "open ../secrets"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.exec_cmd"
+  },
+  {
+    "id": "files.back",
+    "module": "files",
+    "kind": "act",
+    "title": "Back in files",
+    "summary": "Alt+Left in Nautilus, Nemo, Thunar, and Dolphin. Not go back.",
+    "aliases": [
+      "back in files",
+      "back in nautilus",
+      "back in nemo",
+      "back in thunar",
+      "back in dolphin",
+      "back in yazi"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching file manager is mapped and Alt+Left is known. Yazi stays reserved.",
+    "policy": "household",
+    "examples": [
+      "back in files"
+    ],
+    "refuse": [
+      "delete the file"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "files.up",
+    "module": "files",
+    "kind": "act",
+    "title": "Parent folder",
+    "summary": "Alt+Up to the parent folder. Not a free path.",
+    "aliases": [
+      "parent folder",
+      "parent folder in dolphin",
+      "parent folder in yazi"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching file manager is mapped and Alt+Up is known. Yazi stays reserved.",
+    "policy": "household",
+    "examples": [
+      "parent folder"
+    ],
+    "refuse": [
+      "delete the file"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "files.hidden",
+    "module": "files",
+    "kind": "act",
+    "title": "Hidden files",
+    "summary": "Ctrl+H in Nautilus, Nemo, and Thunar. Dolphin and Yazi stay reserved.",
+    "aliases": [
+      "show hidden files",
+      "show hidden files in dolphin",
+      "show hidden files in yazi"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching file manager is mapped and Ctrl+H is known.",
+    "policy": "household",
+    "examples": [
+      "show hidden files"
+    ],
+    "refuse": [
+      "delete the file"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "files.sort",
+    "module": "files",
+    "kind": "act",
+    "title": "Sort files",
+    "summary": "Sort by name or date. No default chord, so the door stays reserved.",
+    "aliases": [
+      "sort files by name",
+      "sort files by date"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "by",
+        "label": "sort",
+        "required": true,
+        "values": [
+          {
+            "id": "name",
+            "label": "Name",
+            "aliases": [
+              "name",
+              "by name"
+            ]
+          },
+          {
+            "id": "date",
+            "label": "Date",
+            "aliases": [
+              "date",
+              "by date"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default sort chord.",
+    "policy": "household",
+    "examples": [
+      "sort files by name"
+    ],
+    "refuse": [
+      "delete the file"
+    ],
+    "walk": "reserved"
+  },
+  {
+    "id": "files.trash",
+    "module": "files",
+    "kind": "act",
+    "title": "Move to trash",
+    "summary": "Confirm before trash. Delete is unmodified and is not armed. Not a free delete.",
+    "aliases": [
+      "move to trash",
+      "trash the file",
+      "send to trash"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "file manager",
+        "required": true,
+        "values": [
+          {
+            "id": "nautilus",
+            "label": "Nautilus",
+            "aliases": [
+              "nautilus"
+            ]
+          },
+          {
+            "id": "nemo",
+            "label": "Nemo",
+            "aliases": [
+              "nemo"
+            ]
+          },
+          {
+            "id": "thunar",
+            "label": "Thunar",
+            "aliases": [
+              "thunar"
+            ]
+          },
+          {
+            "id": "dolphin",
+            "label": "Dolphin",
+            "aliases": [
+              "dolphin"
+            ]
+          },
+          {
+            "id": "yazi",
+            "label": "Yazi",
+            "aliases": [
+              "yazi"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No armable trash chord. Confirm stays on.",
+    "policy": "confirm",
+    "confirm": true,
+    "examples": [
+      "move to trash"
+    ],
+    "refuse": [
+      "delete the file",
+      "permanently delete"
+    ],
+    "walk": "reserved"
+  },
+  {
+    "id": "notes.focus",
+    "module": "notes",
+    "kind": "act",
+    "title": "Focus notes",
+    "summary": "Focus a mapped notes app. Does not exec.",
+    "aliases": [
+      "focus obsidian",
+      "focus logseq",
+      "focus joplin",
+      "obsidian window",
+      "focus the notes app"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "notes",
+        "required": true,
+        "values": [
+          {
+            "id": "obsidian",
+            "label": "Obsidian",
+            "aliases": [
+              "obsidian"
+            ]
+          },
+          {
+            "id": "logseq",
+            "label": "Logseq",
+            "aliases": [
+              "logseq"
+            ]
+          },
+          {
+            "id": "joplin",
+            "label": "Joplin",
+            "aliases": [
+              "joplin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That notes class is mapped.",
+    "policy": "household",
+    "examples": [
+      "focus obsidian"
+    ],
+    "refuse": [
+      "write a paragraph"
+    ],
+    "walk": "hl.dsp.focus"
+  },
+  {
+    "id": "notes.vault",
+    "module": "notes",
+    "kind": "act",
+    "title": "Notes vault",
+    "summary": "Switch to an authored vault id. Private. No text and no default chord.",
+    "aliases": [
+      "work vault",
+      "personal vault"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "notes",
+        "required": true,
+        "values": [
+          {
+            "id": "obsidian",
+            "label": "Obsidian",
+            "aliases": [
+              "obsidian"
+            ]
+          },
+          {
+            "id": "logseq",
+            "label": "Logseq",
+            "aliases": [
+              "logseq"
+            ]
+          },
+          {
+            "id": "joplin",
+            "label": "Joplin",
+            "aliases": [
+              "joplin"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "vault",
+        "label": "vault",
+        "required": true,
+        "values": [
+          {
+            "id": "work",
+            "label": "Work",
+            "aliases": [
+              "work",
+              "work vault"
+            ]
+          },
+          {
+            "id": "personal",
+            "label": "Personal",
+            "aliases": [
+              "personal",
+              "personal vault"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Private. Reserved until a vault chord exists.",
+    "policy": "private",
+    "examples": [
+      "work vault"
+    ],
+    "refuse": [
+      "write a paragraph"
+    ],
+    "walk": "reserved"
+  },
+  {
+    "id": "notes.daily",
+    "module": "notes",
+    "kind": "act",
+    "title": "Daily note",
+    "summary": "Open today's journal. Private. Armed only for Logseq Alt+J.",
+    "aliases": [
+      "daily note",
+      "logseq daily note",
+      "obsidian daily note",
+      "joplin daily note"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "notes",
+        "required": true,
+        "values": [
+          {
+            "id": "obsidian",
+            "label": "Obsidian",
+            "aliases": [
+              "obsidian"
+            ]
+          },
+          {
+            "id": "logseq",
+            "label": "Logseq",
+            "aliases": [
+              "logseq"
+            ]
+          },
+          {
+            "id": "joplin",
+            "label": "Joplin",
+            "aliases": [
+              "joplin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Private. Logseq Alt+J when mapped. Obsidian and Joplin stay reserved.",
+    "policy": "private",
+    "examples": [
+      "logseq daily note"
+    ],
+    "refuse": [
+      "write a paragraph"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "notes.sidebar",
+    "module": "notes",
+    "kind": "act",
+    "title": "Notes sidebar",
+    "summary": "Toggle the notes sidebar. No default chord we can send.",
+    "aliases": [
+      "notes sidebar",
+      "toggle the notes sidebar"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "notes",
+        "required": true,
+        "values": [
+          {
+            "id": "obsidian",
+            "label": "Obsidian",
+            "aliases": [
+              "obsidian"
+            ]
+          },
+          {
+            "id": "logseq",
+            "label": "Logseq",
+            "aliases": [
+              "logseq"
+            ]
+          },
+          {
+            "id": "joplin",
+            "label": "Joplin",
+            "aliases": [
+              "joplin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Joplin's F10 cannot arm, and Obsidian has no default.",
+    "policy": "household",
+    "examples": [
+      "notes sidebar"
+    ],
+    "refuse": [
+      "write a paragraph"
+    ],
+    "walk": "reserved"
+  },
+  {
+    "id": "read.focus",
+    "module": "read",
+    "kind": "act",
+    "title": "Focus a reader",
+    "summary": "Focus a mapped reader. Does not exec.",
+    "aliases": [
+      "focus zathura",
+      "focus evince",
+      "focus papers",
+      "focus foliate",
+      "focus the reader",
+      "zathura window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That reader class is mapped.",
+    "policy": "household",
+    "examples": [
+      "focus zathura"
+    ],
+    "refuse": [
+      "page 4"
+    ],
+    "walk": "hl.dsp.focus"
+  },
+  {
+    "id": "read.next_page",
+    "module": "read",
+    "kind": "act",
+    "title": "Next page",
+    "summary": "Ctrl+Page Down in Evince and Papers. Not a page number. Not next tab.",
+    "aliases": [
+      "next page",
+      "next evince page",
+      "next papers page",
+      "next zathura page",
+      "next foliate page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Evince or Papers is mapped. Zathura and Foliate stay reserved.",
+    "policy": "household",
+    "examples": [
+      "next evince page"
+    ],
+    "refuse": [
+      "page 4",
+      "jump to 3"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "read.prev_page",
+    "module": "read",
+    "kind": "act",
+    "title": "Previous page",
+    "summary": "Ctrl+Page Up in Evince and Papers. Not go back.",
+    "aliases": [
+      "previous page",
+      "previous evince page",
+      "previous papers page",
+      "previous zathura page",
+      "previous foliate page"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Evince or Papers is mapped. Zathura and Foliate stay reserved.",
+    "policy": "household",
+    "examples": [
+      "previous evince page"
+    ],
+    "refuse": [
+      "page 4"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "read.chapter_next",
+    "module": "read",
+    "kind": "act",
+    "title": "Next chapter",
+    "summary": "Next chapter only. No page number and no default chord.",
+    "aliases": [
+      "next chapter",
+      "next chapter in the book"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default chapter chord.",
+    "policy": "household",
+    "examples": [
+      "next chapter"
+    ],
+    "refuse": [
+      "page 4",
+      "jump to 3"
+    ],
+    "walk": "reserved"
+  },
+  {
+    "id": "read.chapter_prev",
+    "module": "read",
+    "kind": "act",
+    "title": "Previous chapter",
+    "summary": "Previous chapter only. Not go back. No default chord.",
+    "aliases": [
+      "previous chapter",
+      "previous chapter in the book"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No default chapter chord.",
+    "policy": "household",
+    "examples": [
+      "previous chapter"
+    ],
+    "refuse": [
+      "page 4"
+    ],
+    "walk": "reserved"
+  },
+  {
+    "id": "read.zoom",
+    "module": "read",
+    "kind": "act",
+    "title": "Reader zoom",
+    "summary": "Zoom the document by a notch. Little is one chord, lot is three. Not the browser.",
+    "aliases": [
+      "larger evince document",
+      "smaller evince document",
+      "larger evince document a lot",
+      "larger papers document",
+      "larger foliate document",
+      "larger zathura document"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "in",
+            "aliases": [
+              "in",
+              "larger",
+              "zoom in"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "out",
+            "aliases": [
+              "out",
+              "smaller",
+              "zoom out"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Evince, Papers, or Foliate is mapped. Zathura zoom stays reserved.",
+    "policy": "household",
+    "examples": [
+      "larger evince document"
+    ],
+    "refuse": [
+      "page 4"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
+  },
+  {
+    "id": "read.dark",
+    "module": "read",
+    "kind": "act",
+    "title": "Reader dark mode",
+    "summary": "Zathura recolor is Ctrl+R. Other readers stay reserved.",
+    "aliases": [
+      "reader dark mode",
+      "zathura dark mode",
+      "evince dark mode",
+      "papers dark mode",
+      "foliate dark mode"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "reader",
+        "required": true,
+        "values": [
+          {
+            "id": "zathura",
+            "label": "Zathura",
+            "aliases": [
+              "zathura"
+            ]
+          },
+          {
+            "id": "evince",
+            "label": "Evince",
+            "aliases": [
+              "evince"
+            ]
+          },
+          {
+            "id": "papers",
+            "label": "Papers",
+            "aliases": [
+              "papers"
+            ]
+          },
+          {
+            "id": "foliate",
+            "label": "Foliate",
+            "aliases": [
+              "foliate"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Zathura is mapped. Evince, Papers, and Foliate stay reserved.",
+    "policy": "household",
+    "examples": [
+      "zathura dark mode"
+    ],
+    "refuse": [
+      "page 4"
+    ],
+    "walk": "hl.dsp.focus then hl.dsp.send_shortcut"
   }
 ]

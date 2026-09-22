@@ -27,6 +27,15 @@ pub fn builtin(page_id: &str, app: &str) -> Option<Chord> {
     if let Some(chord) = term_builtin(page_id, app) {
         return Some(chord);
     }
+    if let Some(chord) = files_builtin(page_id, app) {
+        return Some(chord);
+    }
+    if let Some(chord) = notes_builtin(page_id, app) {
+        return Some(chord);
+    }
+    if let Some(chord) = read_builtin(page_id, app) {
+        return Some(chord);
+    }
     if !browser_app(app) {
         return None;
     }
@@ -117,6 +126,55 @@ fn term_builtin(page_id: &str, app: &str) -> Option<Chord> {
             "foot" | "ghostty" | "alacritty" => ("CTRL", "plus"),
             _ => return None,
         },
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// Alt+Left / Alt+Up are Nautilus, Nemo, Thunar, and Dolphin.
+/// Ctrl+H shows hidden files in Nautilus, Nemo, and Thunar. Dolphin's hidden
+/// chord is not one key we can cite, and Yazi's defaults are unmodified.
+/// Trash is Delete or an unconfirmed Ctrl+Delete, so it stays reserved.
+fn files_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if !matches!(app, "nautilus" | "nemo" | "thunar" | "dolphin" | "yazi") {
+        return None;
+    }
+    let pair = match page_id {
+        "files.back" if matches!(app, "nautilus" | "nemo" | "thunar" | "dolphin") => {
+            ("ALT", "Left")
+        }
+        "files.up" if matches!(app, "nautilus" | "nemo" | "thunar" | "dolphin") => ("ALT", "Up"),
+        "files.hidden" if matches!(app, "nautilus" | "nemo" | "thunar") => ("CTRL", "H"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// Logseq's default `:go/journals` is Alt+J on Linux. Obsidian daily and the
+/// sidebar have no default hotkey. Joplin's sidebar is F10, which cannot arm
+/// (empty mods are only legal for F11). Joplin daily is a plugin chord.
+fn notes_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if page_id == "notes.daily" && app == "logseq" {
+        Some(chord("ALT", "J"))
+    } else {
+        None
+    }
+}
+
+/// Evince and Papers: Ctrl+Page Down / Up, Ctrl+plus (GNOME help).
+/// Foliate zoom includes Ctrl+plus; its page keys are unmodified.
+/// Zathura recolor is Ctrl+R. Zathura page and zoom keys are unmodified.
+/// Chapter next/prev has no single default chord.
+fn read_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if !matches!(app, "zathura" | "evince" | "papers" | "foliate") {
+        return None;
+    }
+    let pdf = matches!(app, "evince" | "papers");
+    let pair = match page_id {
+        "read.next_page" if pdf => ("CTRL", "Page_Down"),
+        "read.prev_page" if pdf => ("CTRL", "Page_Up"),
+        "read.zoom" if matches!(app, "evince" | "papers" | "foliate") => ("CTRL", "plus"),
+        "read.dark" if app == "zathura" => ("CTRL", "R"),
         _ => return None,
     };
     Some(chord(pair.0, pair.1))
@@ -249,5 +307,36 @@ mod tests {
         assert_eq!(builtin("term.font", "wezterm").unwrap().key, "equal");
         assert!(builtin("term.font", "firefox").is_none());
         assert!(chord_for("term.new_tab", "foot", "desk-zen", &BTreeMap::new()).is_none());
+    }
+
+    #[test]
+    fn desk_chords_are_documented_defaults_only() {
+        assert_eq!(builtin("files.back", "nautilus").unwrap().key, "Left");
+        assert_eq!(builtin("files.up", "dolphin").unwrap().mods, "ALT");
+        assert_eq!(builtin("files.hidden", "thunar").unwrap().key, "H");
+        assert!(builtin("files.hidden", "dolphin").is_none());
+        assert!(builtin("files.back", "yazi").is_none());
+        assert!(builtin("files.trash", "nautilus").is_none());
+        assert!(builtin("files.sort", "nemo").is_none());
+        assert_eq!(builtin("notes.daily", "logseq").unwrap().key, "J");
+        assert!(builtin("notes.daily", "obsidian").is_none());
+        assert!(builtin("notes.daily", "joplin").is_none());
+        assert!(builtin("notes.sidebar", "joplin").is_none());
+        assert!(builtin("notes.vault", "obsidian").is_none());
+        assert_eq!(
+            builtin("read.next_page", "evince").unwrap().key,
+            "Page_Down"
+        );
+        assert_eq!(builtin("read.prev_page", "papers").unwrap().key, "Page_Up");
+        assert_eq!(builtin("read.zoom", "foliate").unwrap().key, "plus");
+        assert_eq!(builtin("read.dark", "zathura").unwrap().key, "R");
+        assert!(builtin("read.next_page", "zathura").is_none());
+        assert!(builtin("read.next_page", "foliate").is_none());
+        assert!(builtin("read.zoom", "zathura").is_none());
+        assert!(builtin("read.dark", "evince").is_none());
+        assert!(builtin("read.dark", "papers").is_none());
+        assert!(builtin("read.dark", "foliate").is_none());
+        assert!(builtin("read.chapter_next", "foliate").is_none());
+        assert!(builtin("read.chapter_prev", "evince").is_none());
     }
 }
