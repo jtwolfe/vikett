@@ -42,6 +42,15 @@ pub fn builtin(page_id: &str, app: &str) -> Option<Chord> {
     if let Some(chord) = image_builtin(page_id, app) {
         return Some(chord);
     }
+    if let Some(chord) = edit_builtin(page_id, app) {
+        return Some(chord);
+    }
+    if let Some(chord) = office_builtin(page_id, app) {
+        return Some(chord);
+    }
+    if let Some(chord) = draw_builtin(page_id, app) {
+        return Some(chord);
+    }
     if !browser_app(app) {
         return None;
     }
@@ -216,6 +225,61 @@ fn image_builtin(page_id: &str, app: &str) -> Option<Chord> {
     Some(chord(pair.0, pair.1))
 }
 
+/// VS Code and VSCodium share the default keymap: Ctrl+S, Ctrl+W, Ctrl+PageDown,
+/// Ctrl+backslash, Shift+Alt+F. Zed's linux defaults are ctrl-s, ctrl-w,
+/// ctrl-pagedown, and ctrl-shift-i (`default-linux.json`). Zed's split is a
+/// sequence. nvim, helix, and emacs are not one chord: helix Ctrl-S saves a
+/// selection, emacs Ctrl-S is isearch, and `:w` / `C-x C-s` are sequences.
+fn edit_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if !matches!(app, "nvim" | "helix" | "code" | "codium" | "zed" | "emacs") {
+        return None;
+    }
+    let vscode = matches!(app, "code" | "codium");
+    let gui = vscode || app == "zed";
+    let pair = match page_id {
+        "edit.save" if gui => ("CTRL", "S"),
+        "edit.close_tab" if gui => ("CTRL", "W"),
+        "edit.next_tab" if gui => ("CTRL", "Page_Down"),
+        "edit.split" if vscode => ("CTRL", "backslash"),
+        "edit.format" if vscode => ("SHIFT + ALT", "F"),
+        "edit.format" if app == "zed" => ("CTRL + SHIFT", "I"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// Calc Guide: save is Ctrl+S, next sheet is Ctrl+PgDown. Zoom is the wheel.
+fn office_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if app != "libreoffice" {
+        return None;
+    }
+    let pair = match page_id {
+        "office.save" => ("CTRL", "S"),
+        "office.next_sheet" => ("CTRL", "Page_Down"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// GIMP, Krita, and Inkscape: Ctrl+S and Ctrl+Z. Krita zoom-in is Ctrl++
+/// (`view_zoom_in` in `krita_default.shortcuts`). GIMP and Inkscape zoom keys
+/// are unmodified. Inkscape export-to-png is Ctrl+Shift+E. Krita export has
+/// no default. GIMP export is not png-specific. Darktable stays reserved.
+fn draw_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if !matches!(app, "gimp" | "krita" | "inkscape" | "darktable") {
+        return None;
+    }
+    let painted = matches!(app, "gimp" | "krita" | "inkscape");
+    let pair = match page_id {
+        "draw.save" if painted => ("CTRL", "S"),
+        "draw.undo" if painted => ("CTRL", "Z"),
+        "draw.zoom" if app == "krita" => ("CTRL", "plus"),
+        "draw.export_png" if app == "inkscape" => ("CTRL + SHIFT", "E"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
 /// Zen index binds are unset. `desk-browsers` walks a fiction chord whose key
 /// is the filled `ws` id (`2`, not a constant `1`). Not a snap overlay, and
 /// not this Hyprland config. Live snaps use id `live`.
@@ -374,5 +438,39 @@ mod tests {
         assert!(builtin("read.dark", "foliate").is_none());
         assert!(builtin("read.chapter_next", "foliate").is_none());
         assert!(builtin("read.chapter_prev", "evince").is_none());
+    }
+
+    #[test]
+    fn edit_office_draw_chords_are_documented_defaults_only() {
+        assert_eq!(builtin("edit.save", "code").unwrap().key, "S");
+        assert_eq!(builtin("edit.save", "codium").unwrap().mods, "CTRL");
+        assert_eq!(builtin("edit.save", "zed").unwrap().key, "S");
+        assert!(builtin("edit.save", "nvim").is_none());
+        assert!(builtin("edit.save", "helix").is_none());
+        assert!(builtin("edit.save", "emacs").is_none());
+        assert_eq!(builtin("edit.close_tab", "zed").unwrap().key, "W");
+        assert_eq!(builtin("edit.next_tab", "code").unwrap().key, "Page_Down");
+        assert_eq!(builtin("edit.split", "codium").unwrap().key, "backslash");
+        assert!(builtin("edit.split", "zed").is_none());
+        assert_eq!(builtin("edit.format", "code").unwrap().mods, "SHIFT + ALT");
+        assert_eq!(builtin("edit.format", "zed").unwrap().key, "I");
+        assert!(builtin("edit.format", "emacs").is_none());
+        assert_eq!(builtin("office.save", "libreoffice").unwrap().key, "S");
+        assert_eq!(
+            builtin("office.next_sheet", "libreoffice").unwrap().key,
+            "Page_Down"
+        );
+        assert!(builtin("office.zoom", "libreoffice").is_none());
+        assert_eq!(builtin("draw.save", "gimp").unwrap().key, "S");
+        assert_eq!(builtin("draw.undo", "krita").unwrap().key, "Z");
+        assert_eq!(builtin("draw.zoom", "krita").unwrap().key, "plus");
+        assert!(builtin("draw.zoom", "gimp").is_none());
+        assert!(builtin("draw.zoom", "inkscape").is_none());
+        assert!(builtin("draw.save", "darktable").is_none());
+        assert!(builtin("draw.undo", "darktable").is_none());
+        assert_eq!(builtin("draw.export_png", "inkscape").unwrap().key, "E");
+        assert!(builtin("draw.export_png", "gimp").is_none());
+        assert!(builtin("draw.export_png", "krita").is_none());
+        assert!(builtin("draw.export_png", "darktable").is_none());
     }
 }

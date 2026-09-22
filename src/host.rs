@@ -182,11 +182,46 @@ pub fn output_class(name: &str) -> Option<&'static str> {
     }
 }
 
-/// Bookmark folder titles only. The other three discovered lists land with their families.
+/// Bookmark folder titles and project directory names.
+/// `vpn` and `game` land with their families.
 pub fn discover_lists() -> BTreeMap<String, Vec<String>> {
     let mut lists = BTreeMap::new();
     lists.insert("bookmark_folder".into(), bookmark_folders());
+    lists.insert("project".into(), project_names());
     lists
+}
+
+/// Immediate child directory names of `~/storage` and `~/src`. No recursion.
+/// The id is the normed name, never the path. Missing dirs yield an empty vec.
+fn project_names() -> Vec<String> {
+    let Some(home) = std::env::var_os("HOME").map(std::path::PathBuf::from) else {
+        return Vec::new();
+    };
+    let mut out = Vec::new();
+    for root in [home.join("storage"), home.join("src")] {
+        let Ok(rd) = std::fs::read_dir(&root) else {
+            continue;
+        };
+        for ent in rd.flatten() {
+            if !ent.path().is_dir() {
+                continue;
+            }
+            let name = ent.file_name();
+            let Some(name) = name.to_str() else {
+                continue;
+            };
+            if name.starts_with('.') {
+                continue;
+            }
+            let id = crate::text::norm(name);
+            if id.is_empty() || out.iter().any(|e| e == &id) {
+                continue;
+            }
+            out.push(id);
+        }
+    }
+    out.sort();
+    out
 }
 
 fn present_bins() -> Vec<String> {
@@ -419,10 +454,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn discover_lists_is_bookmark_folders_only() {
+    fn discover_lists_has_folders_and_projects() {
         let lists = discover_lists();
-        assert_eq!(lists.len(), 1);
+        assert_eq!(lists.len(), 2);
         assert!(lists.contains_key("bookmark_folder"));
+        assert!(lists.contains_key("project"));
+        let projects = &lists["project"];
+        assert!(projects.iter().all(|id| !id.contains('/')));
+        assert!(projects.iter().all(|id| !id.starts_with('.')));
     }
 
     #[test]

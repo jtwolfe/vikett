@@ -812,5 +812,172 @@
       "playlist": ["focus", "jazz"]
     },
     "monitors": 1
+  },
+  {
+    "id": "desk-edit",
+    "title": "Desk — editors, office, and drawing",
+    "who": "jim",
+    "where": "desk",
+    "occupants": [
+      "jim"
+    ],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xcode",
+        "class": "code",
+        "title": "code",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xcodium",
+        "class": "VSCodium",
+        "title": "codium",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xnvim",
+        "class": "nvim",
+        "title": "nvim",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xzed",
+        "class": "zed",
+        "title": "zed",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xlo",
+        "class": "libreoffice-calc",
+        "title": "budget",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xgimp",
+        "class": "gimp",
+        "title": "drawing",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xkrita",
+        "class": "krita",
+        "title": "canvas",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xink",
+        "class": "inkscape",
+        "title": "poster",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xdt",
+        "class": "darktable",
+        "title": "rolls",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": [
+      "1"
+    ],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "nvim",
+      "helix",
+      "code",
+      "codium",
+      "zed",
+      "emacs",
+      "libreoffice",
+      "gimp",
+      "krita",
+      "inkscape",
+      "darktable"
+    ],
+    "running": [
+      "code",
+      "codium",
+      "nvim",
+      "zed",
+      "libreoffice",
+      "gimp",
+      "krita",
+      "inkscape",
+      "darktable"
+    ],
+    "mailOnline": true,
+    "contacts": [
+      "dave"
+    ],
+    "unreadFrom": {
+      "dave": {
+        "count": 1,
+        "subjects": [
+          "note"
+        ]
+      }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": {
+      "title": "standup",
+      "inMin": 40
+    },
+    "weather": "showers",
+    "bins": [
+      "nvim",
+      "hx",
+      "code",
+      "codium",
+      "zed",
+      "libreoffice",
+      "gimp",
+      "krita",
+      "inkscape",
+      "darktable"
+    ],
+    "lists": {
+      "project": [
+        "vikett"
+      ]
+    },
+    "monitors": 1
   }
 ]

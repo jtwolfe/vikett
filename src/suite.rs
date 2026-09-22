@@ -122,6 +122,7 @@ fn authored() -> Vec<Case> {
     v.extend(inbox());
     v.extend(session_power());
     v.extend(players());
+    v.extend(editors());
     v
 }
 
@@ -2042,6 +2043,625 @@ fn players() -> Vec<Case> {
             Some("exec_cmd(\"imv\")"),
             &["image", "exact"],
             "",
+        ),
+    ]
+}
+
+fn editors() -> Vec<Case> {
+    vec![
+        c(
+            "edit-focus-nvim",
+            "desk-edit",
+            "focus the nvim project vikett",
+            Some("edit.focus"),
+            &[("app", "nvim"), ("project", "vikett")],
+            Some("address:0xnvim"),
+            &["edit", "exact"],
+            "Mapped focus. The project id is not a path.",
+        ),
+        c(
+            "edit-focus-code",
+            "desk-edit",
+            "focus the code project vikett",
+            Some("edit.focus"),
+            &[("app", "code"), ("project", "vikett")],
+            Some("address:0xcode"),
+            &["edit", "exact"],
+            "Does not take wm.focus.",
+        ),
+        c(
+            "edit-focus-codium",
+            "desk-edit",
+            "focus the codium project vikett",
+            Some("edit.focus"),
+            &[("app", "codium"), ("project", "vikett")],
+            Some("address:0xcodium"),
+            &["edit", "exact"],
+            "VSCodium window, not the code window.",
+        ),
+        c(
+            "edit-focus-zed",
+            "desk-edit",
+            "focus the zed project vikett",
+            Some("edit.focus"),
+            &[("app", "zed"), ("project", "vikett")],
+            Some("address:0xzed"),
+            &["edit", "exact"],
+            "",
+        ),
+        c(
+            "edit-focus-helix-exec",
+            "desk-edit",
+            "focus the helix project vikett",
+            Some("edit.focus"),
+            &[("app", "helix"), ("project", "vikett")],
+            Some("exec_cmd(\"hx\")"),
+            &["edit", "exact"],
+            "Allowlisted, unmapped, bins has hx.",
+        ),
+        c(
+            "edit-focus-emacs-dead",
+            "desk-edit",
+            "focus the emacs project vikett",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "Allowlisted but the binary is not in bins.",
+        ),
+        c(
+            "edit-focus-unknown",
+            "desk-edit",
+            "focus the nvim project secret",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "A name that is not in the list does not fill.",
+        ),
+        c(
+            "edit-focus-guest",
+            "guest-living",
+            "focus the nvim project vikett",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "Not mapped and not allowlisted.",
+        ),
+        c(
+            "edit-save-code",
+            "desk-edit",
+            "save in code",
+            Some("edit.save"),
+            &[("app", "code")],
+            Some("key = \"S\""),
+            &["edit", "exact"],
+            "Ctrl+S.",
+        ),
+        c(
+            "edit-save-codium",
+            "desk-edit",
+            "save in codium",
+            Some("edit.save"),
+            &[("app", "codium")],
+            Some("address:0xcodium"),
+            &["edit", "exact"],
+            "",
+        ),
+        c(
+            "edit-save-zed",
+            "desk-edit",
+            "save in zed",
+            Some("edit.save"),
+            &[("app", "zed")],
+            Some("key = \"S\""),
+            &["edit", "exact"],
+            "",
+        ),
+        c(
+            "edit-save-nvim-dead",
+            "desk-edit",
+            "save in nvim",
+            None,
+            &[],
+            None,
+            &["edit", "reserved"],
+            "No single save chord.",
+        ),
+        c(
+            "edit-save-helix-dead",
+            "desk-edit",
+            "save in helix",
+            None,
+            &[],
+            None,
+            &["edit", "reserved"],
+            "Unmapped, and save does not exec.",
+        ),
+        c(
+            "edit-save-emacs-dead",
+            "desk-edit",
+            "save in emacs",
+            None,
+            &[],
+            None,
+            &["edit", "reserved"],
+            "Ctrl+S is isearch. C-x C-s is a sequence.",
+        ),
+        c(
+            "edit-close-tab",
+            "desk-edit",
+            "close editor tab",
+            Some("edit.close_tab"),
+            &[("app", "code")],
+            Some("key = \"W\""),
+            &["edit", "exact", "confirm"],
+            "Not close tab and not close this.",
+        ),
+        c(
+            "edit-close-zed",
+            "desk-edit",
+            "close the zed tab",
+            Some("edit.close_tab"),
+            &[("app", "zed")],
+            Some("address:0xzed"),
+            &["edit", "exact", "confirm"],
+            "",
+        ),
+        c(
+            "edit-close-tab-zen",
+            "desk-zen",
+            "close tab",
+            Some("browser.tab_close"),
+            &[("app", "zen")],
+            Some("key = \"W\""),
+            &["browser", "exact"],
+            "Editor close does not steal close tab.",
+        ),
+        c(
+            "edit-close-tab-desk-edit",
+            "desk-edit",
+            "close tab",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "Dead browser alias keeps close tab.",
+        ),
+        c(
+            "edit-next-editor-tab",
+            "desk-edit",
+            "next editor tab",
+            Some("edit.next_tab"),
+            &[("app", "code")],
+            Some("key = \"Page_Down\""),
+            &["edit", "exact"],
+            "Not next tab.",
+        ),
+        c(
+            "edit-next-tab-zen",
+            "desk-zen",
+            "next tab",
+            Some("browser.tab_next"),
+            &[("app", "zen")],
+            Some("key = \"Tab\""),
+            &["browser", "exact"],
+            "desk-zen next tab stays the browser.",
+        ),
+        c(
+            "edit-next-tab-editor-focused",
+            "desk-edit",
+            "next tab",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "Dead browser alias. Does not take the editor.",
+        ),
+        c(
+            "edit-next-editor-zen",
+            "desk-zen",
+            "next editor tab",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "No editor. Does not take browser.tab_next.",
+        ),
+        c(
+            "edit-next-editor-guest",
+            "guest-living",
+            "next editor tab",
+            None,
+            &[],
+            None,
+            &["edit", "dead"],
+            "Does not take media.next.",
+        ),
+        c(
+            "edit-next-nvim-dead",
+            "desk-edit",
+            "next nvim tab",
+            None,
+            &[],
+            None,
+            &["edit", "reserved"],
+            "nvim has no tab chord.",
+        ),
+        c(
+            "edit-split-code",
+            "desk-edit",
+            "split the editor",
+            Some("edit.split"),
+            &[("app", "code")],
+            Some("key = \"backslash\""),
+            &["edit", "exact"],
+            "Ctrl+backslash. Not split horizontal.",
+        ),
+        c(
+            "edit-split-zed-dead",
+            "desk-edit",
+            "split zed",
+            None,
+            &[],
+            None,
+            &["edit", "reserved"],
+            "Zed split is a sequence.",
+        ),
+        c(
+            "edit-format-code",
+            "desk-edit",
+            "format in code",
+            Some("edit.format"),
+            &[("app", "code")],
+            Some("SHIFT + ALT"),
+            &["edit", "exact"],
+            "Shift+Alt+F.",
+        ),
+        c(
+            "edit-format-zed",
+            "desk-edit",
+            "format in zed",
+            Some("edit.format"),
+            &[("app", "zed")],
+            Some("key = \"I\""),
+            &["edit", "exact"],
+            "ctrl-shift-i.",
+        ),
+        c(
+            "edit-format-nvim-dead",
+            "desk-edit",
+            "format in nvim",
+            None,
+            &[],
+            None,
+            &["edit", "reserved"],
+            "",
+        ),
+        c(
+            "office-save",
+            "desk-edit",
+            "save in libreoffice",
+            Some("office.save"),
+            &[("app", "libreoffice")],
+            Some("address:0xlo"),
+            &["office", "exact"],
+            "Ctrl+S.",
+        ),
+        c(
+            "office-zoom-dead",
+            "desk-edit",
+            "larger libreoffice sheet",
+            None,
+            &[],
+            None,
+            &["office", "reserved"],
+            "No modifier zoom chord.",
+        ),
+        c(
+            "office-zoom-lot-dead",
+            "desk-edit",
+            "larger libreoffice sheet a lot",
+            None,
+            &[],
+            None,
+            &["office", "reserved"],
+            "Still reserved. Notch would repeat if a chord existed.",
+        ),
+        c(
+            "office-next-sheet",
+            "desk-edit",
+            "next libreoffice sheet",
+            Some("office.next_sheet"),
+            &[("app", "libreoffice")],
+            Some("address:0xlo"),
+            &["office", "exact"],
+            "Ctrl+PageDown. Not next tab.",
+        ),
+        c(
+            "office-next-sheet-guest",
+            "guest-living",
+            "next sheet",
+            None,
+            &[],
+            None,
+            &["office", "dead"],
+            "Does not take media.next.",
+        ),
+        c(
+            "office-cell-refuse",
+            "desk-edit",
+            "edit cell b2",
+            None,
+            &[],
+            None,
+            &["office", "refuse"],
+            "No cell slot.",
+        ),
+        c(
+            "draw-save-gimp",
+            "desk-edit",
+            "save in gimp",
+            Some("draw.save"),
+            &[("app", "gimp")],
+            Some("address:0xgimp"),
+            &["draw", "exact"],
+            "",
+        ),
+        c(
+            "draw-save-krita",
+            "desk-edit",
+            "save in krita",
+            Some("draw.save"),
+            &[("app", "krita")],
+            Some("key = \"S\""),
+            &["draw", "exact"],
+            "",
+        ),
+        c(
+            "draw-save-inkscape",
+            "desk-edit",
+            "save in inkscape",
+            Some("draw.save"),
+            &[("app", "inkscape")],
+            Some("address:0xink"),
+            &["draw", "exact"],
+            "",
+        ),
+        c(
+            "draw-save-darktable-dead",
+            "desk-edit",
+            "save in darktable",
+            None,
+            &[],
+            None,
+            &["draw", "reserved"],
+            "No cited save chord.",
+        ),
+        c(
+            "draw-undo-gimp",
+            "desk-edit",
+            "undo in gimp",
+            Some("draw.undo"),
+            &[("app", "gimp")],
+            Some("key = \"Z\""),
+            &["draw", "exact"],
+            "Not undo close tab.",
+        ),
+        c(
+            "draw-undo-krita",
+            "desk-edit",
+            "undo in krita",
+            Some("draw.undo"),
+            &[("app", "krita")],
+            Some("address:0xkrita"),
+            &["draw", "exact"],
+            "",
+        ),
+        c(
+            "draw-undo-darktable-dead",
+            "desk-edit",
+            "undo in darktable",
+            None,
+            &[],
+            None,
+            &["draw", "reserved"],
+            "",
+        ),
+        c(
+            "draw-zoom-krita",
+            "desk-edit",
+            "larger krita canvas",
+            Some("draw.zoom"),
+            &[("app", "krita"), ("direction", "up"), ("amount", "little")],
+            Some("key = \"plus\""),
+            &["draw", "exact"],
+            "Ctrl+plus once.",
+        ),
+        c(
+            "draw-zoom-krita-lot",
+            "desk-edit",
+            "larger krita canvas a lot",
+            Some("draw.zoom"),
+            &[("app", "krita"), ("direction", "up"), ("amount", "lot")],
+            Some("key = \"plus\""),
+            &["draw", "exact"],
+            "Lot repeats three times.",
+        ),
+        c(
+            "draw-zoom-krita-down",
+            "desk-edit",
+            "smaller krita canvas",
+            Some("draw.zoom"),
+            &[
+                ("app", "krita"),
+                ("direction", "down"),
+                ("amount", "little"),
+            ],
+            Some("key = \"minus\""),
+            &["draw", "exact"],
+            "",
+        ),
+        c(
+            "draw-zoom-gimp-dead",
+            "desk-edit",
+            "larger gimp canvas",
+            None,
+            &[],
+            None,
+            &["draw", "reserved"],
+            "Plus is unmodified.",
+        ),
+        c(
+            "draw-export-inkscape",
+            "desk-edit",
+            "export png from inkscape",
+            Some("draw.export_png"),
+            &[("app", "inkscape")],
+            Some("key = \"E\""),
+            &["draw", "exact", "confirm"],
+            "Ctrl+Shift+E.",
+        ),
+        c(
+            "draw-export-gimp-dead",
+            "desk-edit",
+            "export png from gimp",
+            None,
+            &[],
+            None,
+            &["draw", "reserved"],
+            "Export is not a png chord.",
+        ),
+        c(
+            "draw-export-krita-dead",
+            "desk-edit",
+            "export png from krita",
+            None,
+            &[],
+            None,
+            &["draw", "reserved"],
+            "Krita export has no default.",
+        ),
+        c(
+            "draw-layer-refuse",
+            "desk-edit",
+            "select the layer",
+            None,
+            &[],
+            None,
+            &["draw", "refuse"],
+            "",
+        ),
+        c(
+            "draw-shape-refuse",
+            "desk-edit",
+            "draw a shape",
+            None,
+            &[],
+            None,
+            &["draw", "refuse"],
+            "",
+        ),
+        c(
+            "edit-commit-refuse",
+            "desk-edit",
+            "commit this",
+            None,
+            &[],
+            None,
+            &["edit", "refuse"],
+            "Commit stays refused.",
+        ),
+        c(
+            "edit-push-refuse",
+            "desk-edit",
+            "push to origin",
+            None,
+            &[],
+            None,
+            &["edit", "refuse"],
+            "Push stays refused.",
+        ),
+        c(
+            "edit-rewrite-refuse",
+            "desk-edit",
+            "rewrite the file",
+            None,
+            &[],
+            None,
+            &["edit", "refuse"],
+            "",
+        ),
+        c(
+            "edit-keep-pause",
+            "guest-living",
+            "pause",
+            Some("media.play_pause"),
+            &[],
+            Some("play-pause"),
+            &["media", "exact"],
+            "Not an editor door.",
+        ),
+        c(
+            "edit-keep-next",
+            "guest-living",
+            "next",
+            Some("media.next"),
+            &[],
+            Some("playerctl next"),
+            &["media", "exact"],
+            "Bare next stays.",
+        ),
+        c(
+            "edit-keep-mute",
+            "guest-living",
+            "mute",
+            Some("audio.mute"),
+            &[],
+            Some("set-mute"),
+            &["audio", "exact"],
+            "",
+        ),
+        c(
+            "edit-keep-back",
+            "guest-living",
+            "go back",
+            Some("media.prev"),
+            &[],
+            Some("previous"),
+            &["media", "exact"],
+            "",
+        ),
+        c(
+            "edit-keep-close-this",
+            "kitchen",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["wm", "confirm"],
+            "",
+        ),
+        c(
+            "edit-keep-fullscreen",
+            "desk",
+            "fullscreen",
+            Some("wm.fullscreen"),
+            &[],
+            Some("fullscreen"),
+            &["wm", "exact"],
+            "",
+        ),
+        c(
+            "edit-keep-go-code",
+            "desk",
+            "go to code",
+            Some("wm.focus"),
+            &[("target", "code")],
+            Some("focuswindow"),
+            &["wm", "exact"],
+            "Editor focus does not steal go to code.",
         ),
     ]
 }
@@ -4418,6 +5038,9 @@ mod tests {
                     | "music"
                     | "video"
                     | "image"
+                    | "edit"
+                    | "office"
+                    | "draw"
             )
         }) {
             for alias in &page.aliases {
@@ -4438,22 +5061,36 @@ mod tests {
                         page.id
                     ));
                 }
-                if matches!(page.module.as_str(), "music" | "video" | "image")
-                    && matches!(
-                        n.as_str(),
-                        "pause"
-                            | "play"
-                            | "next"
-                            | "mute"
-                            | "fullscreen"
-                            | "full screen"
-                            | "go back"
-                            | "next tab"
-                            | "pause the show"
-                            | "put the show back on"
-                    )
-                {
+                if matches!(
+                    page.module.as_str(),
+                    "music" | "video" | "image" | "edit" | "office" | "draw"
+                ) && matches!(
+                    n.as_str(),
+                    "pause"
+                        | "play"
+                        | "next"
+                        | "mute"
+                        | "fullscreen"
+                        | "full screen"
+                        | "go back"
+                        | "next tab"
+                        | "close this"
+                        | "close tab"
+                        | "pause the show"
+                        | "put the show back on"
+                ) {
                     errs.push(format!("{} alias {alias:?} steals a v0 door", page.id));
+                }
+                if matches!(page.module.as_str(), "edit" | "office" | "draw")
+                    && (crate::text::contains_phrase(alias, "next tab")
+                        || crate::text::contains_phrase(alias, "go back")
+                        || crate::text::contains_phrase(alias, "close this")
+                        || crate::text::contains_phrase(alias, "close tab"))
+                {
+                    errs.push(format!(
+                        "{} alias {alias:?} steals next tab or close tab",
+                        page.id
+                    ));
                 }
                 let raw: Vec<&str> = n.split_whitespace().collect();
                 if raw.len() == 1 && banned.contains(&raw[0]) {
@@ -4478,6 +5115,19 @@ mod tests {
                     }
                     let ut = crate::text::tokens(&case.utterance);
                     if at.iter().all(|t| ut.iter().any(|u| u == t)) {
+                        // "next editor tab" holds the tokens of "next tab" but
+                        // not the phrase. desk-zen "next tab" still takes the
+                        // browser. Only a real phrase collision is a steal.
+                        let phrase = crate::text::contains_phrase(&case.utterance, alias);
+                        let editor_door = expect.starts_with("edit.")
+                            || expect.starts_with("office.")
+                            || expect.starts_with("draw.");
+                        if !phrase
+                            && editor_door
+                            && matches!(page.id.as_str(), "browser.tab_next" | "browser.tab_close")
+                        {
+                            continue;
+                        }
                         errs.push(format!(
                             "{} alias {alias:?} token-subsets {} {:?}",
                             page.id, case.id, case.utterance

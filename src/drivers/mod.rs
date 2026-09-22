@@ -9,11 +9,14 @@ use crate::types::{Page, Snap, WalkPlan};
 pub mod browser;
 pub mod chat;
 pub mod display;
+pub mod draw;
+pub mod edit;
 pub mod files;
 pub(crate) mod hl;
 pub mod image;
 pub mod music;
 pub mod notes;
+pub mod office;
 pub mod read;
 pub mod session;
 pub mod term;
@@ -33,6 +36,9 @@ pub fn is_family(module: &str) -> bool {
             | "music"
             | "video"
             | "image"
+            | "edit"
+            | "office"
+            | "draw"
     )
 }
 
@@ -49,6 +55,9 @@ pub fn family_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -
         "music" => music::is_live(page, snap, slots),
         "video" => video::is_live(page, snap, slots),
         "image" => image::is_live(page, snap, slots),
+        "edit" => edit::is_live(page, snap, slots),
+        "office" => office::is_live(page, snap, slots),
+        "draw" => draw::is_live(page, snap, slots),
         _ => (false, "not a family".into()),
     }
 }
@@ -66,6 +75,9 @@ pub fn family_walk(page: &Page, slots: &BTreeMap<String, String>, snap: &Snap) -
         "music" => music::fill_walk(page, slots, snap),
         "video" => video::fill_walk(page, slots, snap),
         "image" => image::fill_walk(page, slots, snap),
+        "edit" => edit::fill_walk(page, slots, snap),
+        "office" => office::fill_walk(page, slots, snap),
+        "draw" => draw::fill_walk(page, slots, snap),
         _ => WalkPlan {
             command: "UNARMED".into(),
             driver: page.module.clone(),

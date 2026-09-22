@@ -47,6 +47,11 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
         if hit.is_none() && slot.id == "folder" && page.id == "browser.bookmark" {
             hit = list_hit(snap, "bookmark_folder", utterance);
         }
+        // Discovered or fixture project names. A name that is not in the list
+        // does not fill, and the page is not scored.
+        if hit.is_none() && slot.id == "project" {
+            hit = list_hit(snap, "project", utterance);
+        }
         if let Some(id) = hit {
             slots.insert(slot.id.clone(), id);
         } else if slot.id == "app" && crate::drivers::is_family(&page.module) {

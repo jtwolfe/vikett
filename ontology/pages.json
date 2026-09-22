@@ -7628,5 +7628,944 @@
     "examples": [
       "trash the loupe picture"
     ]
+  },
+  {
+    "id": "edit.focus",
+    "module": "edit",
+    "kind": "act",
+    "title": "Focus an editor project",
+    "summary": "Focus a mapped editor, or exec its binary when the project is in lists.project and the app is allowlisted, unmapped, and in bins. The walk is not a path.",
+    "aliases": [
+      "focus the nvim project",
+      "focus the helix project",
+      "focus the code project",
+      "focus the codium project",
+      "focus the zed project",
+      "focus the emacs project"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "editor",
+        "required": true,
+        "values": [
+          {
+            "id": "nvim",
+            "label": "Neovim",
+            "aliases": [
+              "nvim"
+            ]
+          },
+          {
+            "id": "helix",
+            "label": "Helix",
+            "aliases": [
+              "helix"
+            ]
+          },
+          {
+            "id": "code",
+            "label": "Code",
+            "aliases": [
+              "code"
+            ]
+          },
+          {
+            "id": "codium",
+            "label": "VSCodium",
+            "aliases": [
+              "codium",
+              "vscodium"
+            ]
+          },
+          {
+            "id": "zed",
+            "label": "Zed",
+            "aliases": [
+              "zed"
+            ]
+          },
+          {
+            "id": "emacs",
+            "label": "Emacs",
+            "aliases": [
+              "emacs"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "project",
+        "label": "project",
+        "required": true,
+        "values": []
+      }
+    ],
+    "when": "The project id is in lists.project. Mapped focuses the window. Otherwise exec only if allowlisted and bins contains the binary.",
+    "policy": "household",
+    "walk": "hl.dsp.focus or hl.dsp.exec_cmd",
+    "examples": [
+      "focus the nvim project vikett"
+    ],
+    "refuse": [
+      "commit",
+      "push",
+      "rewrite"
+    ]
+  },
+  {
+    "id": "edit.save",
+    "module": "edit",
+    "kind": "act",
+    "title": "Save in the editor",
+    "summary": "Ctrl+S in Code, VSCodium, and Zed. nvim, helix, and emacs stay reserved.",
+    "aliases": [
+      "save in nvim",
+      "save in helix",
+      "save in code",
+      "save in codium",
+      "save in zed",
+      "save in emacs"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "editor",
+        "required": true,
+        "values": [
+          {
+            "id": "nvim",
+            "label": "Neovim",
+            "aliases": [
+              "nvim"
+            ]
+          },
+          {
+            "id": "helix",
+            "label": "Helix",
+            "aliases": [
+              "helix"
+            ]
+          },
+          {
+            "id": "code",
+            "label": "Code",
+            "aliases": [
+              "code"
+            ]
+          },
+          {
+            "id": "codium",
+            "label": "VSCodium",
+            "aliases": [
+              "codium",
+              "vscodium"
+            ]
+          },
+          {
+            "id": "zed",
+            "label": "Zed",
+            "aliases": [
+              "zed"
+            ]
+          },
+          {
+            "id": "emacs",
+            "label": "Emacs",
+            "aliases": [
+              "emacs"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a save chord. Does not exec.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "save in code"
+    ],
+    "refuse": [
+      "commit",
+      "push",
+      "rewrite"
+    ]
+  },
+  {
+    "id": "edit.close_tab",
+    "module": "edit",
+    "kind": "act",
+    "title": "Close an editor tab",
+    "summary": "Ctrl+W in Code, VSCodium, and Zed. Not close tab and not close this.",
+    "aliases": [
+      "close editor tab",
+      "close the nvim tab",
+      "close the helix tab",
+      "close the code tab",
+      "close the codium tab",
+      "close the zed tab",
+      "close the emacs tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "editor",
+        "required": true,
+        "values": [
+          {
+            "id": "nvim",
+            "label": "Neovim",
+            "aliases": [
+              "nvim"
+            ]
+          },
+          {
+            "id": "helix",
+            "label": "Helix",
+            "aliases": [
+              "helix"
+            ]
+          },
+          {
+            "id": "code",
+            "label": "Code",
+            "aliases": [
+              "code"
+            ]
+          },
+          {
+            "id": "codium",
+            "label": "VSCodium",
+            "aliases": [
+              "codium",
+              "vscodium"
+            ]
+          },
+          {
+            "id": "zed",
+            "label": "Zed",
+            "aliases": [
+              "zed"
+            ]
+          },
+          {
+            "id": "emacs",
+            "label": "Emacs",
+            "aliases": [
+              "emacs"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a close chord.",
+    "policy": "confirm",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "close editor tab"
+    ],
+    "refuse": [
+      "commit",
+      "push",
+      "rewrite"
+    ]
+  },
+  {
+    "id": "edit.next_tab",
+    "module": "edit",
+    "kind": "act",
+    "title": "Next editor tab",
+    "summary": "Ctrl+PageDown in Code, VSCodium, and Zed. Not next tab.",
+    "aliases": [
+      "next editor tab",
+      "next nvim tab",
+      "next helix tab",
+      "next code tab",
+      "next codium tab",
+      "next zed tab",
+      "next emacs tab"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "editor",
+        "required": true,
+        "values": [
+          {
+            "id": "nvim",
+            "label": "Neovim",
+            "aliases": [
+              "nvim"
+            ]
+          },
+          {
+            "id": "helix",
+            "label": "Helix",
+            "aliases": [
+              "helix"
+            ]
+          },
+          {
+            "id": "code",
+            "label": "Code",
+            "aliases": [
+              "code"
+            ]
+          },
+          {
+            "id": "codium",
+            "label": "VSCodium",
+            "aliases": [
+              "codium",
+              "vscodium"
+            ]
+          },
+          {
+            "id": "zed",
+            "label": "Zed",
+            "aliases": [
+              "zed"
+            ]
+          },
+          {
+            "id": "emacs",
+            "label": "Emacs",
+            "aliases": [
+              "emacs"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a next-tab chord.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "next editor tab"
+    ],
+    "refuse": [
+      "commit",
+      "push",
+      "rewrite"
+    ]
+  },
+  {
+    "id": "edit.split",
+    "module": "edit",
+    "kind": "act",
+    "title": "Split the editor",
+    "summary": "Ctrl+backslash in Code and VSCodium. Zed's split is a sequence. nvim and helix stay reserved.",
+    "aliases": [
+      "split the editor",
+      "split nvim",
+      "split helix",
+      "split code",
+      "split codium",
+      "split zed",
+      "split emacs"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "editor",
+        "required": true,
+        "values": [
+          {
+            "id": "nvim",
+            "label": "Neovim",
+            "aliases": [
+              "nvim"
+            ]
+          },
+          {
+            "id": "helix",
+            "label": "Helix",
+            "aliases": [
+              "helix"
+            ]
+          },
+          {
+            "id": "code",
+            "label": "Code",
+            "aliases": [
+              "code"
+            ]
+          },
+          {
+            "id": "codium",
+            "label": "VSCodium",
+            "aliases": [
+              "codium",
+              "vscodium"
+            ]
+          },
+          {
+            "id": "zed",
+            "label": "Zed",
+            "aliases": [
+              "zed"
+            ]
+          },
+          {
+            "id": "emacs",
+            "label": "Emacs",
+            "aliases": [
+              "emacs"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a split chord.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "split the editor"
+    ],
+    "refuse": [
+      "commit",
+      "push",
+      "rewrite"
+    ]
+  },
+  {
+    "id": "edit.format",
+    "module": "edit",
+    "kind": "act",
+    "title": "Format the editor",
+    "summary": "Shift+Alt+F in Code and VSCodium. Zed is Ctrl+Shift+I. The others stay reserved.",
+    "aliases": [
+      "format in nvim",
+      "format in helix",
+      "format in code",
+      "format in codium",
+      "format in zed",
+      "format in emacs"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "editor",
+        "required": true,
+        "values": [
+          {
+            "id": "nvim",
+            "label": "Neovim",
+            "aliases": [
+              "nvim"
+            ]
+          },
+          {
+            "id": "helix",
+            "label": "Helix",
+            "aliases": [
+              "helix"
+            ]
+          },
+          {
+            "id": "code",
+            "label": "Code",
+            "aliases": [
+              "code"
+            ]
+          },
+          {
+            "id": "codium",
+            "label": "VSCodium",
+            "aliases": [
+              "codium",
+              "vscodium"
+            ]
+          },
+          {
+            "id": "zed",
+            "label": "Zed",
+            "aliases": [
+              "zed"
+            ]
+          },
+          {
+            "id": "emacs",
+            "label": "Emacs",
+            "aliases": [
+              "emacs"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a format chord.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "format in code"
+    ],
+    "refuse": [
+      "commit",
+      "push",
+      "rewrite"
+    ]
+  },
+  {
+    "id": "office.save",
+    "module": "office",
+    "kind": "act",
+    "title": "Save the spreadsheet",
+    "summary": "Ctrl+S in LibreOffice. Does not exec.",
+    "aliases": [
+      "save in libreoffice",
+      "save the spreadsheet"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "office",
+        "required": true,
+        "values": [
+          {
+            "id": "libreoffice",
+            "label": "LibreOffice",
+            "aliases": [
+              "libreoffice"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A LibreOffice client is mapped.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "save in libreoffice"
+    ],
+    "refuse": [
+      "edit the cell",
+      "edit cell"
+    ]
+  },
+  {
+    "id": "office.zoom",
+    "module": "office",
+    "kind": "act",
+    "title": "Zoom the sheet",
+    "summary": "A notch. LibreOffice zoom has no modifier chord, so the door stays reserved.",
+    "aliases": [
+      "larger libreoffice sheet",
+      "smaller libreoffice sheet",
+      "larger libreoffice sheet a lot",
+      "smaller libreoffice sheet a lot"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "office",
+        "required": true,
+        "values": [
+          {
+            "id": "libreoffice",
+            "label": "LibreOffice",
+            "aliases": [
+              "libreoffice"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "forward",
+            "aliases": [
+              "larger"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "back",
+            "aliases": [
+              "smaller"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly",
+              "notch"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved until a modifier chord exists.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": [
+      "larger libreoffice sheet"
+    ],
+    "refuse": [
+      "edit the cell",
+      "edit cell"
+    ]
+  },
+  {
+    "id": "office.next_sheet",
+    "module": "office",
+    "kind": "act",
+    "title": "Next sheet",
+    "summary": "Ctrl+PageDown in Calc. Not next and not next tab.",
+    "aliases": [
+      "next libreoffice sheet",
+      "next spreadsheet sheet",
+      "next sheet"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "office",
+        "required": true,
+        "values": [
+          {
+            "id": "libreoffice",
+            "label": "LibreOffice",
+            "aliases": [
+              "libreoffice"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A LibreOffice client is mapped.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "next libreoffice sheet"
+    ],
+    "refuse": [
+      "edit the cell",
+      "edit cell"
+    ]
+  },
+  {
+    "id": "draw.save",
+    "module": "draw",
+    "kind": "act",
+    "title": "Save the drawing",
+    "summary": "Ctrl+S in GIMP, Krita, and Inkscape. Darktable stays reserved.",
+    "aliases": [
+      "save in gimp",
+      "save in krita",
+      "save in inkscape",
+      "save in darktable"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "drawing app",
+        "required": true,
+        "values": [
+          {
+            "id": "gimp",
+            "label": "GIMP",
+            "aliases": [
+              "gimp"
+            ]
+          },
+          {
+            "id": "krita",
+            "label": "Krita",
+            "aliases": [
+              "krita"
+            ]
+          },
+          {
+            "id": "inkscape",
+            "label": "Inkscape",
+            "aliases": [
+              "inkscape"
+            ]
+          },
+          {
+            "id": "darktable",
+            "label": "darktable",
+            "aliases": [
+              "darktable"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a save chord.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "save in gimp"
+    ],
+    "refuse": [
+      "select a layer",
+      "select the layer",
+      "draw a shape",
+      "draw the shape"
+    ]
+  },
+  {
+    "id": "draw.undo",
+    "module": "draw",
+    "kind": "act",
+    "title": "Undo the drawing",
+    "summary": "Ctrl+Z in GIMP, Krita, and Inkscape. Not undo close tab. Darktable stays reserved.",
+    "aliases": [
+      "undo in gimp",
+      "undo in krita",
+      "undo in inkscape",
+      "undo in darktable"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "drawing app",
+        "required": true,
+        "values": [
+          {
+            "id": "gimp",
+            "label": "GIMP",
+            "aliases": [
+              "gimp"
+            ]
+          },
+          {
+            "id": "krita",
+            "label": "Krita",
+            "aliases": [
+              "krita"
+            ]
+          },
+          {
+            "id": "inkscape",
+            "label": "Inkscape",
+            "aliases": [
+              "inkscape"
+            ]
+          },
+          {
+            "id": "darktable",
+            "label": "darktable",
+            "aliases": [
+              "darktable"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and an undo chord.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "undo in gimp"
+    ],
+    "refuse": [
+      "select a layer",
+      "select the layer",
+      "draw a shape",
+      "draw the shape"
+    ]
+  },
+  {
+    "id": "draw.zoom",
+    "module": "draw",
+    "kind": "act",
+    "title": "Zoom the canvas",
+    "summary": "Krita zoom is Ctrl+plus or Ctrl+minus. Lot repeats three times. GIMP and Inkscape zoom keys are unmodified. Darktable stays reserved.",
+    "aliases": [
+      "larger krita canvas",
+      "smaller krita canvas",
+      "larger krita canvas a lot",
+      "larger gimp canvas",
+      "smaller gimp canvas",
+      "larger inkscape canvas",
+      "smaller inkscape canvas",
+      "larger darktable canvas",
+      "smaller darktable canvas"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "drawing app",
+        "required": true,
+        "values": [
+          {
+            "id": "gimp",
+            "label": "GIMP",
+            "aliases": [
+              "gimp"
+            ]
+          },
+          {
+            "id": "krita",
+            "label": "Krita",
+            "aliases": [
+              "krita"
+            ]
+          },
+          {
+            "id": "inkscape",
+            "label": "Inkscape",
+            "aliases": [
+              "inkscape"
+            ]
+          },
+          {
+            "id": "darktable",
+            "label": "darktable",
+            "aliases": [
+              "darktable"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "forward",
+            "aliases": [
+              "larger"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "back",
+            "aliases": [
+              "smaller"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly",
+              "notch"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a modifier zoom chord.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "larger krita canvas"
+    ],
+    "refuse": [
+      "select a layer",
+      "select the layer",
+      "draw a shape",
+      "draw the shape"
+    ]
+  },
+  {
+    "id": "draw.export_png",
+    "module": "draw",
+    "kind": "act",
+    "title": "Export a png",
+    "summary": "Inkscape export-to-png is Ctrl+Shift+E and confirms. GIMP, Krita, and darktable stay reserved.",
+    "aliases": [
+      "export png from inkscape",
+      "export png from gimp",
+      "export png from krita",
+      "export png from darktable"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "drawing app",
+        "required": true,
+        "values": [
+          {
+            "id": "gimp",
+            "label": "GIMP",
+            "aliases": [
+              "gimp"
+            ]
+          },
+          {
+            "id": "krita",
+            "label": "Krita",
+            "aliases": [
+              "krita"
+            ]
+          },
+          {
+            "id": "inkscape",
+            "label": "Inkscape",
+            "aliases": [
+              "inkscape"
+            ]
+          },
+          {
+            "id": "darktable",
+            "label": "darktable",
+            "aliases": [
+              "darktable"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a png export chord. Confirm before the walk.",
+    "policy": "household",
+    "walk": "hl.dsp.send_shortcut",
+    "examples": [
+      "export png from inkscape"
+    ],
+    "refuse": [
+      "select a layer",
+      "select the layer",
+      "draw a shape",
+      "draw the shape"
+    ],
+    "confirm": true
   }
 ]

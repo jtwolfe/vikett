@@ -35,6 +35,16 @@ const ARMS: &[(&str, &[&str])] = &[
     ("vlc", &["vlc"]),
     ("loupe", &["org.gnome.loupe", "loupe"]),
     ("imv", &["imv"]),
+    // `codium` stays on the `code` arm below. Neovide is the nvim GUI class.
+    ("nvim", &["neovide", "nvim"]),
+    ("helix", &["helix"]),
+    ("zed", &["dev.zed.zed", "zed"]),
+    ("emacs", &["emacs"]),
+    ("libreoffice", &["libreoffice", "soffice"]),
+    ("gimp", &["gimp"]),
+    ("krita", &["org.kde.krita", "krita"]),
+    ("inkscape", &["org.inkscape.inkscape", "inkscape"]),
+    ("darktable", &["darktable"]),
     ("signal", &["signal"]),
     ("element", &["element"]),
     // Vesktop's class is `vesktop`. The Discord class is the same app id.
@@ -98,6 +108,18 @@ pub fn bin_for_app(app: &str) -> Option<&'static str> {
         "jellyfin" => Some("jellyfin"),
         "loupe" => Some("loupe"),
         "imv" => Some("imv"),
+        "nvim" => Some("nvim"),
+        // The app id is helix. `which` name is hx.
+        "helix" => Some("hx"),
+        "code" => Some("code"),
+        "codium" => Some("codium"),
+        "zed" => Some("zed"),
+        "emacs" => Some("emacs"),
+        "libreoffice" => Some("libreoffice"),
+        "gimp" => Some("gimp"),
+        "krita" => Some("krita"),
+        "inkscape" => Some("inkscape"),
+        "darktable" => Some("darktable"),
         _ => None,
     }
 }
@@ -184,6 +206,28 @@ mod tests {
         assert_eq!(bin_for_app("jellyfin"), Some("jellyfin"));
         assert_eq!(bin_for_app("loupe"), Some("loupe"));
         assert_eq!(bin_for_app("imv"), Some("imv"));
+        assert_eq!(class_to_app("nvim"), "nvim");
+        assert_eq!(class_to_app("neovide"), "nvim");
+        assert_eq!(class_to_app("helix"), "helix");
+        assert_eq!(class_to_app("dev.zed.Zed"), "zed");
+        assert_eq!(class_to_app("Emacs"), "emacs");
+        assert_eq!(class_to_app("libreoffice-calc"), "libreoffice");
+        assert_eq!(class_to_app("soffice"), "libreoffice");
+        assert_eq!(class_to_app("gimp"), "gimp");
+        assert_eq!(class_to_app("org.kde.krita"), "krita");
+        assert_eq!(class_to_app("org.inkscape.Inkscape"), "inkscape");
+        assert_eq!(class_to_app("darktable"), "darktable");
+        assert_eq!(bin_for_app("nvim"), Some("nvim"));
+        assert_eq!(bin_for_app("helix"), Some("hx"));
+        assert_eq!(bin_for_app("code"), Some("code"));
+        assert_eq!(bin_for_app("codium"), Some("codium"));
+        assert_eq!(bin_for_app("zed"), Some("zed"));
+        assert_eq!(bin_for_app("emacs"), Some("emacs"));
+        assert_eq!(bin_for_app("libreoffice"), Some("libreoffice"));
+        assert_eq!(bin_for_app("gimp"), Some("gimp"));
+        assert_eq!(bin_for_app("krita"), Some("krita"));
+        assert_eq!(bin_for_app("inkscape"), Some("inkscape"));
+        assert_eq!(bin_for_app("darktable"), Some("darktable"));
         assert_eq!(bin_for_app("signal"), None);
         assert_eq!(bin_for_app("vesktop"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));
