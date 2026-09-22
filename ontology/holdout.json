@@ -653,5 +653,121 @@
     "utterance": "the next window in the group",
     "expectPage": "wm.group_next",
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-music-focus",
+    "snap": "desk-media",
+    "utterance": "bring spotify forward",
+    "expectPage": "music.focus",
+    "expectSlots": { "app": "spotify" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-music-pause",
+    "snap": "desk-media",
+    "utterance": "hold the music",
+    "expectPage": "music.play_pause",
+    "expectSlots": { "app": "spotify" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-music-next",
+    "snap": "desk-media",
+    "utterance": "another song please",
+    "expectPage": "music.next",
+    "expectSlots": { "app": "spotify" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-music-seek",
+    "snap": "desk-media",
+    "utterance": "jump ahead in this song a bit",
+    "expectPage": "music.seek",
+    "expectSlots": { "app": "spotify", "direction": "up", "amount": "little" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-music-playlist",
+    "snap": "desk-media",
+    "utterance": "put on that jazz list",
+    "expectPage": "music.playlist",
+    "expectSlots": { "app": "spotify", "playlist": "jazz" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-video-focus",
+    "snap": "desk-media",
+    "utterance": "show me the mpv window",
+    "expectPage": "video.focus",
+    "expectSlots": { "app": "mpv" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-video-chapter",
+    "snap": "desk-media",
+    "utterance": "move ahead a vlc chapter",
+    "expectPage": "video.chapter",
+    "expectSlots": { "app": "vlc" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-video-seek",
+    "snap": "guest-living",
+    "utterance": "nudge the video forward a little",
+    "expectPage": "video.seek",
+    "expectSlots": { "app": "jellyfin", "direction": "up", "amount": "little" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-video-subs",
+    "snap": "desk-media",
+    "utterance": "flip vlc captions",
+    "expectPage": "video.subs",
+    "expectSlots": { "app": "vlc" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-video-fullscreen",
+    "snap": "desk-media",
+    "utterance": "make the video fill the screen",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-video-pip",
+    "snap": "desk-media",
+    "utterance": "float the video in a corner",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-image-focus",
+    "snap": "desk-media",
+    "utterance": "show the loupe window",
+    "expectPage": "image.focus",
+    "expectSlots": { "app": "loupe" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-image-next",
+    "snap": "desk-media",
+    "utterance": "the following picture",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-image-zoom",
+    "snap": "desk-media",
+    "utterance": "make the loupe photo bigger",
+    "expectPage": "image.zoom",
+    "expectSlots": { "app": "loupe", "direction": "up", "amount": "little" },
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-image-trash",
+    "snap": "desk-media",
+    "utterance": "throw this photo away",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]

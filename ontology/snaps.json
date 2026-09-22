@@ -717,5 +717,100 @@
     "weather": "showers",
     "chatUnread": { "signal": 2, "vesktop": 0 },
     "monitors": 1
+  },
+  {
+    "id": "desk-media",
+    "title": "Desk — music, video, and images",
+    "who": "jim",
+    "where": "desk",
+    "occupants": ["jim"],
+    "guest": false,
+    "clients": [
+      {
+        "address": "0xspot",
+        "class": "Spotify",
+        "title": "Spotify",
+        "workspace": "1",
+        "focused": true,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xmpv",
+        "class": "mpv",
+        "title": "mpv",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xvlc",
+        "class": "vlc",
+        "title": "VLC",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      },
+      {
+        "address": "0xloupe",
+        "class": "org.gnome.Loupe",
+        "title": "photo",
+        "workspace": "1",
+        "focused": false,
+        "fullscreen": false,
+        "floating": false
+      }
+    ],
+    "workspaces": ["1"],
+    "activeWorkspace": "1",
+    "volume": 0.42,
+    "muted": false,
+    "defaultSink": "speakers",
+    "allowlist": [
+      "spotify",
+      "ncspot",
+      "strawberry",
+      "amberol",
+      "mpd",
+      "mpv",
+      "vlc",
+      "jellyfin",
+      "loupe",
+      "imv"
+    ],
+    "running": ["spotify", "mpv", "vlc", "loupe", "jellyfin"],
+    "mailOnline": true,
+    "contacts": ["dave"],
+    "unreadFrom": {
+      "dave": { "count": 1, "subjects": ["note"] }
+    },
+    "mediaPlaying": false,
+    "nowPlaying": null,
+    "scene": null,
+    "lights": 0.6,
+    "timerSec": null,
+    "buckyListening": true,
+    "brightness": 0.7,
+    "climate": 21,
+    "nextEvent": { "title": "standup", "inMin": 40 },
+    "weather": "showers",
+    "bins": [
+      "spotify",
+      "ncspot",
+      "strawberry",
+      "amberol",
+      "mpd",
+      "mpv",
+      "vlc",
+      "jellyfin",
+      "loupe",
+      "imv"
+    ],
+    "lists": {
+      "playlist": ["focus", "jazz"]
+    },
+    "monitors": 1
   }
 ]

@@ -189,7 +189,7 @@ pub fn decide_with_model(
         };
     }
 
-    let take = match (referee, model_take) {
+    let mut take = match (referee, model_take) {
         (RefereeKind::Lexical, _) | (_, None) if referee == RefereeKind::Lexical => {
             lexical_take(cat, first, snap, &live, &live_ids, &mut trace)
         }
@@ -239,6 +239,19 @@ pub fn decide_with_model(
         }
         _ => lexical_take(cat, first, snap, &live, &live_ids, &mut trace),
     };
+
+    // "play the metal playlist" contains the bare alias "play". If that did
+    // not take music.playlist, do not toggle whatever player is live.
+    if contains_phrase(first, "playlist") && take.page_id.as_deref() != Some("music.playlist") {
+        let why = "playlist utterance did not take music.playlist — silence";
+        trace.push(TraceNode::new(
+            "playlist",
+            "silence",
+            TraceStatus::Fail,
+            why,
+        ));
+        take = Take::silence(why);
+    }
 
     let mut walk_plan: Option<WalkPlan> = None;
     let mut answer = None;

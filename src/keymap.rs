@@ -36,6 +36,12 @@ pub fn builtin(page_id: &str, app: &str) -> Option<Chord> {
     if let Some(chord) = read_builtin(page_id, app) {
         return Some(chord);
     }
+    if let Some(chord) = video_builtin(page_id, app) {
+        return Some(chord);
+    }
+    if let Some(chord) = image_builtin(page_id, app) {
+        return Some(chord);
+    }
     if !browser_app(app) {
         return None;
     }
@@ -175,6 +181,36 @@ fn read_builtin(page_id: &str, app: &str) -> Option<Chord> {
         "read.prev_page" if pdf => ("CTRL", "Page_Up"),
         "read.zoom" if matches!(app, "evince" | "papers" | "foliate") => ("CTRL", "plus"),
         "read.dark" if app == "zathura" => ("CTRL", "R"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// VLC Shift+N is next chapter and Shift+V hides subtitles (published hotkey
+/// tables). mpv chapter is Page Up and its sub key is `v`, both unmodified,
+/// so they stay reserved. Fullscreen `f` and PiP have no modifier chord.
+fn video_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if app != "vlc" {
+        return None;
+    }
+    let pair = match page_id {
+        "video.chapter" => ("SHIFT", "N"),
+        "video.subs" => ("SHIFT", "v"),
+        _ => return None,
+    };
+    Some(chord(pair.0, pair.1))
+}
+
+/// Loupe help: Ctrl+plus / Ctrl+minus. The bare plus key cannot arm.
+/// imv's default config zooms in with Shift+plus. Zoom out there is an
+/// unmodified minus, and next/trash arrows are unmodified, so those stay dead.
+fn image_builtin(page_id: &str, app: &str) -> Option<Chord> {
+    if page_id != "image.zoom" {
+        return None;
+    }
+    let pair = match app {
+        "loupe" => ("CTRL", "plus"),
+        "imv" => ("SHIFT", "plus"),
         _ => return None,
     };
     Some(chord(pair.0, pair.1))

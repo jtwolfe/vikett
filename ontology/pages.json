@@ -6625,5 +6625,1008 @@
     "walk": "hl.dsp.layout",
     "examples": ["dwindle layout"],
     "refuse": ["pixel click", "set the resolution"]
+  },
+  {
+    "id": "music.focus",
+    "module": "music",
+    "kind": "act",
+    "title": "Focus a music player",
+    "summary": "Focus a mapped player, or exec the binary when it is allowlisted, unmapped, and in bins. Not a volume door.",
+    "aliases": [
+      "focus spotify",
+      "focus ncspot",
+      "focus strawberry",
+      "focus amberol",
+      "focus mpd",
+      "spotify window",
+      "focus the music player"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "spotify",
+            "label": "Spotify",
+            "aliases": [
+              "spotify"
+            ]
+          },
+          {
+            "id": "ncspot",
+            "label": "ncspot",
+            "aliases": [
+              "ncspot"
+            ]
+          },
+          {
+            "id": "strawberry",
+            "label": "Strawberry",
+            "aliases": [
+              "strawberry"
+            ]
+          },
+          {
+            "id": "amberol",
+            "label": "Amberol",
+            "aliases": [
+              "amberol"
+            ]
+          },
+          {
+            "id": "mpd",
+            "label": "MPD",
+            "aliases": [
+              "mpd"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Mapped, or allowlisted and the binary is in bins. Unmapped transport stays dead.",
+    "walk": "hl.dsp.focus or hl.dsp.exec_cmd",
+    "refuse": [
+      "set the music to 40 percent"
+    ],
+    "policy": "household",
+    "examples": [
+      "focus spotify"
+    ]
+  },
+  {
+    "id": "music.play_pause",
+    "module": "music",
+    "kind": "act",
+    "title": "Pause the music",
+    "summary": "playerctl play-pause for one named player. Not bare pause, and not the sink.",
+    "aliases": [
+      "pause the music",
+      "play the music",
+      "resume the music",
+      "pause spotify",
+      "pause ncspot",
+      "pause strawberry",
+      "pause amberol",
+      "pause mpd"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "spotify",
+            "label": "Spotify",
+            "aliases": [
+              "spotify"
+            ]
+          },
+          {
+            "id": "ncspot",
+            "label": "ncspot",
+            "aliases": [
+              "ncspot"
+            ]
+          },
+          {
+            "id": "strawberry",
+            "label": "Strawberry",
+            "aliases": [
+              "strawberry"
+            ]
+          },
+          {
+            "id": "amberol",
+            "label": "Amberol",
+            "aliases": [
+              "amberol"
+            ]
+          },
+          {
+            "id": "mpd",
+            "label": "MPD",
+            "aliases": [
+              "mpd"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That player class is mapped. Unmapped does not exec.",
+    "walk": "playerctl -p <app> play-pause",
+    "refuse": [
+      "pause",
+      "mute"
+    ],
+    "policy": "household",
+    "examples": [
+      "pause the music"
+    ]
+  },
+  {
+    "id": "music.next",
+    "module": "music",
+    "kind": "act",
+    "title": "Next song",
+    "summary": "playerctl next for one player. Not bare next.",
+    "aliases": [
+      "next song",
+      "next track",
+      "skip the song",
+      "next spotify track"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "spotify",
+            "label": "Spotify",
+            "aliases": [
+              "spotify"
+            ]
+          },
+          {
+            "id": "ncspot",
+            "label": "ncspot",
+            "aliases": [
+              "ncspot"
+            ]
+          },
+          {
+            "id": "strawberry",
+            "label": "Strawberry",
+            "aliases": [
+              "strawberry"
+            ]
+          },
+          {
+            "id": "amberol",
+            "label": "Amberol",
+            "aliases": [
+              "amberol"
+            ]
+          },
+          {
+            "id": "mpd",
+            "label": "MPD",
+            "aliases": [
+              "mpd"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That player class is mapped.",
+    "walk": "playerctl -p <app> next",
+    "refuse": [
+      "next",
+      "skip"
+    ],
+    "policy": "household",
+    "examples": [
+      "next song"
+    ]
+  },
+  {
+    "id": "music.seek",
+    "module": "music",
+    "kind": "act",
+    "title": "Seek the song",
+    "summary": "playerctl position notch. Little is 10 seconds, lot is 30. Not a percent.",
+    "aliases": [
+      "seek the song forward",
+      "seek the song back",
+      "rewind the song",
+      "skip ahead in the song"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "spotify",
+            "label": "Spotify",
+            "aliases": [
+              "spotify"
+            ]
+          },
+          {
+            "id": "ncspot",
+            "label": "ncspot",
+            "aliases": [
+              "ncspot"
+            ]
+          },
+          {
+            "id": "strawberry",
+            "label": "Strawberry",
+            "aliases": [
+              "strawberry"
+            ]
+          },
+          {
+            "id": "amberol",
+            "label": "Amberol",
+            "aliases": [
+              "amberol"
+            ]
+          },
+          {
+            "id": "mpd",
+            "label": "MPD",
+            "aliases": [
+              "mpd"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "forward",
+            "aliases": [
+              "forward",
+              "ahead"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "back",
+            "aliases": [
+              "back",
+              "rewind"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly",
+              "notch"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That player class is mapped.",
+    "walk": "playerctl -p <app> position 10+|30+|10-|30-",
+    "refuse": [
+      "set the music to 40 percent"
+    ],
+    "policy": "household",
+    "examples": [
+      "seek the song forward"
+    ]
+  },
+  {
+    "id": "music.playlist",
+    "module": "music",
+    "kind": "act",
+    "title": "Play a playlist",
+    "summary": "Authored playlist id from lists.playlist. Dead when the id is absent. Not a free title.",
+    "aliases": [
+      "play the focus playlist",
+      "play the jazz playlist",
+      "focus playlist",
+      "jazz playlist",
+      "spotify jazz playlist"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "spotify",
+            "label": "Spotify",
+            "aliases": [
+              "spotify"
+            ]
+          },
+          {
+            "id": "ncspot",
+            "label": "ncspot",
+            "aliases": [
+              "ncspot"
+            ]
+          },
+          {
+            "id": "strawberry",
+            "label": "Strawberry",
+            "aliases": [
+              "strawberry"
+            ]
+          },
+          {
+            "id": "amberol",
+            "label": "Amberol",
+            "aliases": [
+              "amberol"
+            ]
+          },
+          {
+            "id": "mpd",
+            "label": "MPD",
+            "aliases": [
+              "mpd"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "playlist",
+        "label": "playlist",
+        "required": true,
+        "values": [
+          {
+            "id": "focus",
+            "label": "Focus",
+            "aliases": [
+              "focus",
+              "focus playlist"
+            ]
+          },
+          {
+            "id": "jazz",
+            "label": "Jazz",
+            "aliases": [
+              "jazz",
+              "jazz playlist"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "The player is mapped and lists.playlist contains the id.",
+    "walk": "playerctl -p <app> open playlist:<id>",
+    "refuse": [
+      "play the movie",
+      "put on the album"
+    ],
+    "policy": "household",
+    "examples": [
+      "play the focus playlist"
+    ]
+  },
+  {
+    "id": "video.focus",
+    "module": "video",
+    "kind": "act",
+    "title": "Focus a video player",
+    "summary": "Focus mpv, vlc, or jellyfin. Exec only for this page, and only when allowlisted, unmapped, and in bins.",
+    "aliases": [
+      "focus mpv",
+      "focus vlc",
+      "focus jellyfin",
+      "mpv window",
+      "vlc window",
+      "jellyfin window",
+      "focus the video"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "mpv",
+            "label": "mpv",
+            "aliases": [
+              "mpv"
+            ]
+          },
+          {
+            "id": "vlc",
+            "label": "VLC",
+            "aliases": [
+              "vlc"
+            ]
+          },
+          {
+            "id": "jellyfin",
+            "label": "Jellyfin",
+            "aliases": [
+              "jellyfin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Mapped, or the focus exec path. Other video acts need a client.",
+    "walk": "hl.dsp.focus or hl.dsp.exec_cmd",
+    "refuse": [
+      "play the movie"
+    ],
+    "policy": "household",
+    "examples": [
+      "focus mpv"
+    ]
+  },
+  {
+    "id": "video.chapter",
+    "module": "video",
+    "kind": "act",
+    "title": "Video chapter",
+    "summary": "VLC Shift+N. mpv and jellyfin chapter keys are unmodified, so they stay reserved. Not next chapter in a book.",
+    "aliases": [
+      "advance the vlc chapter",
+      "advance the mpv chapter",
+      "advance the jellyfin chapter"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "mpv",
+            "label": "mpv",
+            "aliases": [
+              "mpv"
+            ]
+          },
+          {
+            "id": "vlc",
+            "label": "VLC",
+            "aliases": [
+              "vlc"
+            ]
+          },
+          {
+            "id": "jellyfin",
+            "label": "Jellyfin",
+            "aliases": [
+              "jellyfin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a modifier chord. Not bare next.",
+    "walk": "hl.dsp.send_shortcut",
+    "refuse": [
+      "play the movie",
+      "jump to page"
+    ],
+    "policy": "household",
+    "examples": [
+      "advance the vlc chapter"
+    ]
+  },
+  {
+    "id": "video.seek",
+    "module": "video",
+    "kind": "act",
+    "title": "Seek the video",
+    "summary": "playerctl position notch. Little is 10 seconds, lot is 30. Not a title.",
+    "aliases": [
+      "seek the video forward",
+      "seek the video back",
+      "seek the mpv video forward",
+      "seek the vlc video back",
+      "rewind the video"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "mpv",
+            "label": "mpv",
+            "aliases": [
+              "mpv"
+            ]
+          },
+          {
+            "id": "vlc",
+            "label": "VLC",
+            "aliases": [
+              "vlc"
+            ]
+          },
+          {
+            "id": "jellyfin",
+            "label": "Jellyfin",
+            "aliases": [
+              "jellyfin"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "forward",
+            "aliases": [
+              "forward",
+              "ahead"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "back",
+            "aliases": [
+              "back",
+              "rewind"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly",
+              "notch"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "That player class is mapped.",
+    "walk": "playerctl -p <app> position 10+|30+|10-|30-",
+    "refuse": [
+      "play the movie",
+      "play this title"
+    ],
+    "policy": "household",
+    "examples": [
+      "seek the video forward"
+    ]
+  },
+  {
+    "id": "video.subs",
+    "module": "video",
+    "kind": "act",
+    "title": "Toggle subtitles",
+    "summary": "VLC Shift+V. mpv's sub key is unmodified v, so mpv and jellyfin stay reserved.",
+    "aliases": [
+      "toggle vlc subtitles",
+      "toggle mpv subtitles",
+      "toggle jellyfin subtitles"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "mpv",
+            "label": "mpv",
+            "aliases": [
+              "mpv"
+            ]
+          },
+          {
+            "id": "vlc",
+            "label": "VLC",
+            "aliases": [
+              "vlc"
+            ]
+          },
+          {
+            "id": "jellyfin",
+            "label": "Jellyfin",
+            "aliases": [
+              "jellyfin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a modifier chord.",
+    "walk": "hl.dsp.send_shortcut",
+    "refuse": [
+      "play the movie"
+    ],
+    "policy": "household",
+    "examples": [
+      "toggle vlc subtitles"
+    ]
+  },
+  {
+    "id": "video.fullscreen",
+    "module": "video",
+    "kind": "act",
+    "title": "Video fullscreen",
+    "summary": "Reserved. mpv and vlc fullscreen is an unmodified f, which cannot arm. Not wm.fullscreen.",
+    "aliases": [
+      "fullscreen the video",
+      "video fullscreen"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "mpv",
+            "label": "mpv",
+            "aliases": [
+              "mpv"
+            ]
+          },
+          {
+            "id": "vlc",
+            "label": "VLC",
+            "aliases": [
+              "vlc"
+            ]
+          },
+          {
+            "id": "jellyfin",
+            "label": "Jellyfin",
+            "aliases": [
+              "jellyfin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved until a modifier chord exists.",
+    "walk": "reserved",
+    "refuse": [
+      "fullscreen"
+    ],
+    "policy": "household",
+    "examples": [
+      "fullscreen the video"
+    ]
+  },
+  {
+    "id": "video.pip",
+    "module": "video",
+    "kind": "act",
+    "title": "Video picture in picture",
+    "summary": "Reserved. No modifier PiP chord on mpv, vlc, or jellyfin.",
+    "aliases": [
+      "pip the video",
+      "video pip"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "player",
+        "required": true,
+        "values": [
+          {
+            "id": "mpv",
+            "label": "mpv",
+            "aliases": [
+              "mpv"
+            ]
+          },
+          {
+            "id": "vlc",
+            "label": "VLC",
+            "aliases": [
+              "vlc"
+            ]
+          },
+          {
+            "id": "jellyfin",
+            "label": "Jellyfin",
+            "aliases": [
+              "jellyfin"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved until a modifier chord exists.",
+    "walk": "reserved",
+    "refuse": [
+      "play the movie"
+    ],
+    "policy": "household",
+    "examples": [
+      "pip the video"
+    ]
+  },
+  {
+    "id": "image.focus",
+    "module": "image",
+    "kind": "act",
+    "title": "Focus an image viewer",
+    "summary": "Focus loupe or imv. Exec only for this page when allowlisted, unmapped, and in bins.",
+    "aliases": [
+      "focus loupe",
+      "focus imv",
+      "loupe window",
+      "imv window",
+      "focus the image viewer"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "viewer",
+        "required": true,
+        "values": [
+          {
+            "id": "loupe",
+            "label": "Loupe",
+            "aliases": [
+              "loupe"
+            ]
+          },
+          {
+            "id": "imv",
+            "label": "imv",
+            "aliases": [
+              "imv"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Mapped, or the focus exec path.",
+    "walk": "hl.dsp.focus or hl.dsp.exec_cmd",
+    "refuse": [
+      "delete the file"
+    ],
+    "policy": "household",
+    "examples": [
+      "focus loupe"
+    ]
+  },
+  {
+    "id": "image.next",
+    "module": "image",
+    "kind": "act",
+    "title": "Next image",
+    "summary": "Reserved. Loupe and imv next keys are unmodified arrows.",
+    "aliases": [
+      "next loupe image",
+      "next imv image",
+      "next picture"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "viewer",
+        "required": true,
+        "values": [
+          {
+            "id": "loupe",
+            "label": "Loupe",
+            "aliases": [
+              "loupe"
+            ]
+          },
+          {
+            "id": "imv",
+            "label": "imv",
+            "aliases": [
+              "imv"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Not bare next and not next tab.",
+    "walk": "reserved",
+    "refuse": [
+      "next"
+    ],
+    "policy": "household",
+    "examples": [
+      "next loupe image"
+    ]
+  },
+  {
+    "id": "image.zoom",
+    "module": "image",
+    "kind": "act",
+    "title": "Zoom the picture",
+    "summary": "Loupe Ctrl+plus or Ctrl+minus. imv zoom-in is Shift+plus. Lot repeats the chord three times. imv zoom-out stays reserved.",
+    "aliases": [
+      "larger loupe photo",
+      "smaller loupe photo",
+      "larger loupe photo a lot",
+      "larger imv photo",
+      "smaller imv photo"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "viewer",
+        "required": true,
+        "values": [
+          {
+            "id": "loupe",
+            "label": "Loupe",
+            "aliases": [
+              "loupe"
+            ]
+          },
+          {
+            "id": "imv",
+            "label": "imv",
+            "aliases": [
+              "imv"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "direction",
+        "label": "direction",
+        "required": true,
+        "values": [
+          {
+            "id": "up",
+            "label": "forward",
+            "aliases": [
+              "larger"
+            ]
+          },
+          {
+            "id": "down",
+            "label": "back",
+            "aliases": [
+              "smaller"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": [
+              "a bit",
+              "a little",
+              "slightly",
+              "notch"
+            ]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": [
+              "a lot",
+              "way",
+              "much"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "A matching client and a modifier chord.",
+    "walk": "hl.dsp.send_shortcut",
+    "refuse": [
+      "zoom in"
+    ],
+    "policy": "household",
+    "examples": [
+      "larger loupe photo"
+    ]
+  },
+  {
+    "id": "image.trash",
+    "module": "image",
+    "kind": "act",
+    "title": "Trash the picture",
+    "summary": "Confirm, but Delete is unmodified so the door stays reserved.",
+    "aliases": [
+      "trash the loupe picture",
+      "trash the imv picture",
+      "trash the picture"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "viewer",
+        "required": true,
+        "values": [
+          {
+            "id": "loupe",
+            "label": "Loupe",
+            "aliases": [
+              "loupe"
+            ]
+          },
+          {
+            "id": "imv",
+            "label": "imv",
+            "aliases": [
+              "imv"
+            ]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Confirm is set for when a modifier chord exists.",
+    "confirm": true,
+    "policy": "household",
+    "walk": "reserved",
+    "refuse": [
+      "delete the file",
+      "permanently delete"
+    ],
+    "examples": [
+      "trash the loupe picture"
+    ]
   }
 ]
