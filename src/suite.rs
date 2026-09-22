@@ -123,6 +123,7 @@ fn authored() -> Vec<Case> {
     v.extend(session_power());
     v.extend(players());
     v.extend(editors());
+    v.extend(shelf_look());
     v
 }
 
@@ -2706,6 +2707,281 @@ fn editors() -> Vec<Case> {
     ]
 }
 
+fn shelf_look() -> Vec<Case> {
+    vec![
+        c(
+            "shelf-launcher",
+            "desk-shelf",
+            "show the launcher",
+            Some("shelf.fuzzel"),
+            &[],
+            Some("fuzzel"),
+            &["shelf", "exact"],
+            "Unnamed launcher is fuzzel. No query.",
+        ),
+        c(
+            "shelf-walker",
+            "desk-shelf",
+            "show walker",
+            Some("shelf.fuzzel"),
+            &[("launcher", "walker")],
+            Some("walker"),
+            &["shelf", "exact"],
+            "Named walker wins over fuzzel.",
+        ),
+        c(
+            "shelf-fuzzel",
+            "desk-shelf",
+            "open fuzzel",
+            Some("shelf.fuzzel"),
+            &[("launcher", "fuzzel")],
+            Some("fuzzel"),
+            &["shelf", "exact"],
+            "",
+        ),
+        c(
+            "shelf-launcher-dead",
+            "desk",
+            "show the launcher",
+            None,
+            &[],
+            None,
+            &["shelf", "dead"],
+            "Neither fuzzel nor walker is in desk bins.",
+        ),
+        c(
+            "clip-ask",
+            "desk-shelf",
+            "what's on the clipboard",
+            Some("clip.ask"),
+            &[],
+            None,
+            &["shelf", "ask", "private"],
+            "Kind and bucket. Not the bytes.",
+        ),
+        c(
+            "clip-ask-guest",
+            "guest-living",
+            "what's on the clipboard",
+            None,
+            &[],
+            None,
+            &["shelf", "guest", "private"],
+            "",
+        ),
+        c(
+            "clip-clear",
+            "desk-shelf",
+            "clear the clipboard",
+            Some("clip.clear"),
+            &[],
+            Some("wl-copy -c"),
+            &["shelf", "exact", "confirm"],
+            "Clears. Does not paste.",
+        ),
+        c(
+            "clip-password",
+            "desk-shelf",
+            "copy a password",
+            None,
+            &[],
+            None,
+            &["shelf", "refuse"],
+            "No password copy.",
+        ),
+        c(
+            "clip-password-the",
+            "desk-shelf",
+            "copy the password",
+            None,
+            &[],
+            None,
+            &["shelf", "refuse"],
+            "",
+        ),
+        c(
+            "look-wallpaper-dark",
+            "desk-shelf",
+            "dark wallpaper",
+            Some("look.wallpaper"),
+            &[("wallpaper", "dark")],
+            Some("swww img dark"),
+            &["look", "exact"],
+            "Enum id, not a path.",
+        ),
+        c(
+            "look-wallpaper-photo",
+            "desk-shelf",
+            "photo wallpaper",
+            Some("look.wallpaper"),
+            &[("wallpaper", "photo")],
+            Some("swww img photo"),
+            &["look", "exact"],
+            "",
+        ),
+        c(
+            "look-wallpaper-unknown",
+            "desk-shelf",
+            "blue wallpaper",
+            None,
+            &[],
+            None,
+            &["look", "dead"],
+            "Not in the enum.",
+        ),
+        c(
+            "look-pick",
+            "desk-shelf",
+            "pick a color",
+            Some("look.pick"),
+            &[],
+            None,
+            &["look", "ask"],
+            "Hex field. hyprpicker is not exec'd.",
+        ),
+        c(
+            "look-pick-dead",
+            "desk",
+            "pick a color",
+            None,
+            &[],
+            None,
+            &["look", "dead"],
+            "No pickedHex on desk.",
+        ),
+        c(
+            "fx-preset-reserved",
+            "desk-shelf",
+            "easyeffects voice preset",
+            None,
+            &[],
+            None,
+            &["fx", "reserved"],
+            "No chord and no routing graph.",
+        ),
+        c(
+            "fx-source-reserved",
+            "desk-shelf",
+            "easyeffects mic source",
+            None,
+            &[],
+            None,
+            &["fx", "reserved"],
+            "",
+        ),
+        c(
+            "capture-record-start",
+            "desk-shelf",
+            "start screen recording",
+            Some("capture.record_start"),
+            &[],
+            Some("wf-recorder"),
+            &["capture", "exact", "confirm"],
+            "wf-recorder is first in bins.",
+        ),
+        c(
+            "capture-record-stop",
+            "desk-shelf",
+            "stop screen recording",
+            Some("capture.record_stop"),
+            &[],
+            Some("pkill -INT -x wf-recorder"),
+            &["capture", "exact", "confirm"],
+            "",
+        ),
+        c(
+            "capture-record-dead",
+            "desk",
+            "start screen recording",
+            None,
+            &[],
+            None,
+            &["capture", "dead"],
+            "Neither recorder is in desk bins.",
+        ),
+        c(
+            "capture-screenshot-stays",
+            "desk-shelf",
+            "screenshot",
+            Some("capture.screenshot"),
+            &[],
+            Some("grim"),
+            &["capture", "confirm"],
+            "Record does not steal screenshot.",
+        ),
+        c(
+            "capture-region-stays",
+            "desk-shelf",
+            "grab a region",
+            Some("capture.region"),
+            &[],
+            Some("slurp"),
+            &["capture", "confirm"],
+            "",
+        ),
+        c(
+            "shelf-keep-pause",
+            "guest-living",
+            "pause",
+            Some("media.play_pause"),
+            &[],
+            Some("play-pause"),
+            &["media", "exact"],
+            "",
+        ),
+        c(
+            "shelf-keep-next",
+            "guest-living",
+            "next",
+            Some("media.next"),
+            &[],
+            Some("playerctl next"),
+            &["media", "exact"],
+            "",
+        ),
+        c(
+            "shelf-keep-mute",
+            "guest-living",
+            "mute",
+            Some("audio.mute"),
+            &[],
+            Some("set-mute"),
+            &["audio", "exact"],
+            "",
+        ),
+        c(
+            "shelf-keep-back",
+            "guest-living",
+            "go back",
+            Some("media.prev"),
+            &[],
+            Some("previous"),
+            &["media", "exact"],
+            "",
+        ),
+        c(
+            "shelf-keep-close-this",
+            "kitchen",
+            "close this",
+            Some("wm.close"),
+            &[("target", "active")],
+            Some("killactive"),
+            &["wm", "confirm"],
+            "",
+        ),
+        c(
+            "shelf-keep-next-tab",
+            "desk-zen",
+            "next tab",
+            Some("browser.tab_next"),
+            &[("app", "zen")],
+            Some("send_shortcut"),
+            &["browser", "exact"],
+            "",
+        ),
+    ]
+}
+
 fn refuses() -> Vec<Case> {
     let desk_none = |id, utt, notes| {
         c(
@@ -5081,6 +5357,9 @@ mod tests {
                     | "edit"
                     | "office"
                     | "draw"
+                    | "shelf"
+                    | "look"
+                    | "fx"
             )
         }) {
             for alias in &page.aliases {
@@ -5129,6 +5408,20 @@ mod tests {
                 {
                     errs.push(format!(
                         "{} alias {alias:?} steals next tab or close tab",
+                        page.id
+                    ));
+                }
+                if matches!(page.module.as_str(), "shelf" | "look" | "fx")
+                    && (crate::text::contains_phrase(alias, "next tab")
+                        || crate::text::contains_phrase(alias, "go back")
+                        || crate::text::contains_phrase(alias, "close this")
+                        || crate::text::contains_phrase(alias, "pause")
+                        || n == "mute"
+                        || n == "next"
+                        || n == "screenshot")
+                {
+                    errs.push(format!(
+                        "{} alias {alias:?} steals pause, next, mute, or a browser door",
                         page.id
                     ));
                 }
@@ -5194,6 +5487,15 @@ mod tests {
             "wm.split_ratio",
             "wm.group_next",
             "wm.layout",
+            "capture.record_start",
+            "capture.record_stop",
+            "shelf.fuzzel",
+            "clip.ask",
+            "clip.clear",
+            "look.wallpaper",
+            "look.pick",
+            "fx.preset",
+            "fx.source",
         ];
         let banned = [
             "next",

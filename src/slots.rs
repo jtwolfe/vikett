@@ -52,6 +52,15 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
         if hit.is_none() && slot.id == "project" {
             hit = list_hit(snap, "project", utterance);
         }
+        if hit.is_none() && slot.id == "wallpaper" {
+            hit = list_hit(snap, "wallpaper", utterance);
+        }
+        if hit.is_none() && slot.id == "preset" && page.module == "fx" {
+            hit = list_hit(snap, "fx_preset", utterance);
+        }
+        if hit.is_none() && slot.id == "source" && page.module == "fx" {
+            hit = list_hit(snap, "source", utterance);
+        }
         if let Some(id) = hit {
             slots.insert(slot.id.clone(), id);
         } else if slot.id == "app" && crate::drivers::is_family(&page.module) {

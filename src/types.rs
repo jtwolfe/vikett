@@ -178,6 +178,15 @@ pub struct Snap {
     /// Per-app unread counts. A missing key keeps `chat.ask_unread` dead, not zero.
     #[serde(default)]
     pub chat_unread: BTreeMap<String, u32>,
+    /// `text`, `image`, or `empty`. Missing keeps `clip.ask` dead. Never the bytes.
+    #[serde(default)]
+    pub clipboard_kind: Option<String>,
+    /// History size for the clipboard bucket. Not the clipboard contents.
+    #[serde(default)]
+    pub clipboard_count: Option<u32>,
+    /// Fixture hex for `look.pick`. This repo does not run hyprpicker.
+    #[serde(default)]
+    pub picked_hex: Option<String>,
 }
 
 fn default_owner() -> String {

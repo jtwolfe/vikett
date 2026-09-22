@@ -41,6 +41,9 @@
     "bins": { "type": "array", "items": { "type": "string" } },
     "lists": { "type": "object" },
     "downloads": { "type": ["number", "null"] },
-    "chatUnread": { "type": "object" }
+    "chatUnread": { "type": "object" },
+    "clipboardKind": { "type": ["string", "null"] },
+    "clipboardCount": { "type": ["number", "null"] },
+    "pickedHex": { "type": ["string", "null"] }
   }
 }

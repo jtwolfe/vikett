@@ -8567,5 +8567,201 @@
       "draw the shape"
     ],
     "confirm": true
+  },
+  {
+    "id": "shelf.fuzzel",
+    "module": "shelf",
+    "kind": "act",
+    "title": "Show the launcher",
+    "summary": "Show fuzzel, or walker when that is the named or only binary. No query and no free command. The user types.",
+    "aliases": [
+      "show the launcher",
+      "show fuzzel",
+      "open fuzzel",
+      "show walker",
+      "open walker"
+    ],
+    "slots": [
+      {
+        "id": "launcher",
+        "label": "launcher",
+        "required": false,
+        "values": [
+          {"id": "fuzzel", "label": "fuzzel", "aliases": ["fuzzel"]},
+          {"id": "walker", "label": "walker", "aliases": ["walker"]}
+        ]
+      }
+    ],
+    "when": "The named binary is in bins. Unnamed prefers fuzzel, then walker.",
+    "policy": "household",
+    "walk": "fuzzel",
+    "examples": ["show the launcher", "show walker"],
+    "refuse": ["run this command"]
+  },
+  {
+    "id": "clip.ask",
+    "module": "shelf",
+    "kind": "ask",
+    "title": "Clipboard kind",
+    "summary": "Kind text, image, or empty, plus a count bucket. Dead when the kind is missing. Never the bytes.",
+    "aliases": ["what's on the clipboard", "clipboard kind", "what kind of clipboard"],
+    "slots": [],
+    "when": "clipboardKind is text, image, or empty.",
+    "policy": "private",
+    "askShape": "{ kind, bucket }",
+    "examples": ["what's on the clipboard"],
+    "refuse": ["copy the password", "copy a password"]
+  },
+  {
+    "id": "clip.clear",
+    "module": "shelf",
+    "kind": "act",
+    "title": "Clear the clipboard",
+    "summary": "Confirm, then cliphist wipe or wl-copy -c. Does not print or copy a password.",
+    "aliases": ["clear the clipboard", "wipe the clipboard"],
+    "slots": [],
+    "when": "cliphist or wl-copy is in bins.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "wl-copy -c",
+    "examples": ["clear the clipboard"],
+    "refuse": ["copy the password", "copy a password"]
+  },
+  {
+    "id": "look.wallpaper",
+    "module": "look",
+    "kind": "act",
+    "title": "Set wallpaper",
+    "summary": "Authored wallpaper id from lists.wallpaper. The walk is swww img plus that id, not a path and not hyprpicker.",
+    "aliases": [
+      "dark wallpaper",
+      "photo wallpaper",
+      "set the dark wallpaper",
+      "set the photo wallpaper"
+    ],
+    "slots": [
+      {
+        "id": "wallpaper",
+        "label": "wallpaper",
+        "required": true,
+        "values": [
+          {"id": "dark", "label": "dark", "aliases": ["dark", "dark wallpaper"]},
+          {"id": "photo", "label": "photo", "aliases": ["photo", "photo wallpaper"]}
+        ]
+      }
+    ],
+    "when": "The id is in lists.wallpaper and swww is in bins.",
+    "policy": "household",
+    "walk": "swww img dark",
+    "examples": ["dark wallpaper"],
+    "refuse": ["set the wallpaper to a path"]
+  },
+  {
+    "id": "look.pick",
+    "module": "look",
+    "kind": "ask",
+    "title": "Picked color",
+    "summary": "Return pickedHex. Dead when it is missing or not a hex color. Does not exec hyprpicker and does not apply a color.",
+    "aliases": ["pick a color", "what color was picked", "picked hex"],
+    "slots": [],
+    "when": "pickedHex is a 6-digit hex color.",
+    "policy": "household",
+    "askShape": "{ hex }",
+    "examples": ["pick a color"],
+    "refuse": ["set the wallpaper to that color"]
+  },
+  {
+    "id": "fx.preset",
+    "module": "fx",
+    "kind": "act",
+    "title": "Effect preset",
+    "summary": "EasyEffects preset enum from lists.fx_preset. Reserved: no confirmed chord and no plugin graph.",
+    "aliases": ["easyeffects voice preset", "easyeffects default preset", "voice effect preset", "default effect preset"],
+    "slots": [
+      {
+        "id": "app",
+        "label": "effects",
+        "required": true,
+        "values": [
+          {"id": "easyeffects", "label": "EasyEffects", "aliases": ["easyeffects"]}
+        ]
+      },
+      {
+        "id": "preset",
+        "label": "preset",
+        "required": true,
+        "values": [
+          {"id": "default", "label": "default", "aliases": ["default preset", "default effect preset"]},
+          {"id": "voice", "label": "voice", "aliases": ["voice preset", "voice effect preset"]}
+        ]
+      }
+    ],
+    "when": "Reserved until a chord exists. The id must be in lists.fx_preset.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["easyeffects voice preset"],
+    "refuse": ["copy a password"]
+  },
+  {
+    "id": "fx.source",
+    "module": "fx",
+    "kind": "act",
+    "title": "Effect source",
+    "summary": "EasyEffects source enum from lists.source. Reserved: no confirmed chord and no routing graph.",
+    "aliases": ["easyeffects mic source", "easyeffects line source", "mic effect source", "line effect source"],
+    "slots": [
+      {
+        "id": "app",
+        "label": "effects",
+        "required": true,
+        "values": [
+          {"id": "easyeffects", "label": "EasyEffects", "aliases": ["easyeffects"]}
+        ]
+      },
+      {
+        "id": "source",
+        "label": "source",
+        "required": true,
+        "values": [
+          {"id": "mic", "label": "mic", "aliases": ["mic source", "mic effect source"]},
+          {"id": "line", "label": "line", "aliases": ["line source", "line effect source"]}
+        ]
+      }
+    ],
+    "when": "Reserved until a chord exists. The id must be in lists.source.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["easyeffects mic source"],
+    "refuse": ["copy a password"]
+  },
+  {
+    "id": "capture.record_start",
+    "module": "capture",
+    "kind": "act",
+    "title": "Start screen recording",
+    "summary": "Confirm, then wf-recorder if it is in bins, else gpu-screen-recorder. Dead if neither is. No GPU probe. Not a screenshot.",
+    "aliases": ["start screen recording", "start recording"],
+    "slots": [],
+    "when": "wf-recorder or gpu-screen-recorder is in bins.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "wf-recorder -f ~/Videos/vikett.mp4",
+    "examples": ["start screen recording"],
+    "refuse": ["start streaming", "screenshot"]
+  },
+  {
+    "id": "capture.record_stop",
+    "module": "capture",
+    "kind": "act",
+    "title": "Stop screen recording",
+    "summary": "Confirm, then interrupt the same recorder binary. Dead if neither recorder is in bins.",
+    "aliases": ["stop screen recording", "stop recording"],
+    "slots": [],
+    "when": "wf-recorder or gpu-screen-recorder is in bins.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "pkill -INT -x wf-recorder",
+    "examples": ["stop screen recording"],
+    "refuse": ["start streaming", "screenshot"]
   }
 ]

@@ -45,6 +45,10 @@ const ARMS: &[(&str, &[&str])] = &[
     ("krita", &["org.kde.krita", "krita"]),
     ("inkscape", &["org.inkscape.inkscape", "inkscape"]),
     ("darktable", &["darktable"]),
+    (
+        "easyeffects",
+        &["com.github.wwmm.easyeffects", "easyeffects"],
+    ),
     ("signal", &["signal"]),
     ("element", &["element"]),
     // Vesktop's class is `vesktop`. The Discord class is the same app id.
@@ -223,6 +227,9 @@ mod tests {
         assert_eq!(bin_for_app("krita"), None);
         assert_eq!(bin_for_app("inkscape"), None);
         assert_eq!(bin_for_app("darktable"), None);
+        assert_eq!(class_to_app("easyeffects"), "easyeffects");
+        assert_eq!(class_to_app("com.github.wwmm.easyeffects"), "easyeffects");
+        assert_eq!(bin_for_app("easyeffects"), None);
         assert_eq!(bin_for_app("signal"), None);
         assert_eq!(bin_for_app("vesktop"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));

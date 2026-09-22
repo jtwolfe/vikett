@@ -64,6 +64,7 @@ const ADVERSARIAL: &[&str] = &[
     "reveal the password",
     "show my password",
     "copy the password",
+    "copy a password",
     "write a paragraph",
     "write me a paragraph",
     "delete the file",
@@ -198,6 +199,10 @@ mod tests {
         assert!(refused("select a layer").is_some());
         assert!(refused("select the layer").is_some());
         assert!(refused("draw a shape").is_some());
+        assert!(refused("copy the password").is_some());
+        assert!(refused("copy a password").is_some());
+        assert!(refused("what's on the clipboard").is_none());
+        assert!(refused("clear the clipboard").is_none());
         assert!(refused("next editor tab").is_none());
         assert!(refused("save in code").is_none());
         assert!(refused("next libreoffice sheet").is_none());
