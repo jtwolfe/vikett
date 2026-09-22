@@ -174,6 +174,30 @@ mod tests {
     }
 
     #[test]
+    fn jsonl_script_reads_the_train_file_not_goldens_json() {
+        let src = include_str!("../scripts/build_laya_set.py");
+        assert!(
+            !src.contains("goldens.json"),
+            "builder must read the train file, not goldens.json"
+        );
+        assert!(!src.contains("holdout.json"));
+        assert!(
+            src.contains("written != len(rows)"),
+            "jsonl line count must match the train file"
+        );
+        let cat = Catalog::load();
+        let rows = train_rows(&cat).expect("train rows");
+        let ids: HashSet<_> = rows.iter().map(|r| r.id.as_str()).collect();
+        for g in crate::ontology::extras::goldens() {
+            assert!(
+                ids.contains(g.id.as_str()),
+                "train file dropped extras golden {}",
+                g.id
+            );
+        }
+    }
+
+    #[test]
     fn train_rows_refuse_live_snap() {
         let err = refuse_live("live").unwrap_err();
         assert!(err.to_string().contains("live"));

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Emit System One JSONL from train inputs. Does not train and does not download weights.
+"""Emit System One JSONL from the train file `vikett train-set` wrote.
 
-Reads the train file, goldens, and suite cases tagged exact. For each row,
-runs `vikett criteria` and writes `{state, questions, answer}`.
-Run from the repo root. Snap id `live` is refused.
+That file is the full train_rows set: paraphrases, catalogue goldens
+(including extras), and exact suite cases. One JSONL line per train row.
+The line count must match the train file. Does not train and does not
+download weights. Run from the repo root. Snap id `live` is refused.
 """
 
 from __future__ import annotations
@@ -20,26 +21,6 @@ def load_rows(path: Path) -> list[dict]:
     if not isinstance(data, list):
         raise SystemExit(f"{path} is not a row list")
     return data
-
-
-def exact_rows(vikett: str) -> list[dict]:
-    raw = subprocess.check_output(
-        [vikett, "suite", "--tag", "exact", "--format", "json"],
-        text=True,
-    )
-    report = json.loads(raw)
-    rows = []
-    for row in report.get("results", []):
-        rows.append(
-            {
-                "id": row["id"],
-                "snap": row["snap"],
-                "utterance": row["utterance"],
-                "expectPage": row.get("expected"),
-                "notes": "",
-            }
-        )
-    return rows
 
 
 def guest_snaps(path: Path) -> set[str]:
@@ -70,34 +51,27 @@ def criteria_probe(vikett: str, utterance: str, snap: str) -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build a Laya JSONL from train inputs")
-    parser.add_argument("--train", type=Path, default=Path("ontology/train.json"))
-    parser.add_argument("--goldens", type=Path, default=Path("ontology/goldens.json"))
+    parser = argparse.ArgumentParser(description="Build a Laya JSONL from the train file")
+    parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--snaps", type=Path, default=Path("ontology/snaps.json"))
     parser.add_argument("--pages", type=Path, default=Path("ontology/pages.json"))
     parser.add_argument("--vikett", default="vikett")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
-    merged: list[dict] = []
-    seen: set[str] = set()
-    for row in (
-        load_rows(args.train) + load_rows(args.goldens) + exact_rows(args.vikett)
-    ):
-        snap = row.get("snap")
-        if snap == "live":
+    rows = load_rows(args.train)
+    for row in rows:
+        if row.get("snap") == "live":
             raise SystemExit("snap id live is refused")
-        rid = row.get("id")
-        if not rid or rid in seen:
-            continue
-        seen.add(rid)
-        merged.append(row)
+        if not row.get("id") or "utterance" not in row:
+            raise SystemExit("train row missing id or utterance")
 
     guests = guest_snaps(args.snaps)
     private = private_pages(args.pages)
     args.out.parent.mkdir(parents=True, exist_ok=True)
+    written = 0
     with args.out.open("w", encoding="utf-8") as fh:
-        for row in merged:
+        for row in rows:
             probe = criteria_probe(args.vikett, row["utterance"], row["snap"])
             criteria = probe.get("criteria") or {}
             for text in criteria.values():
@@ -109,7 +83,11 @@ def main() -> None:
                 "answer": {"page": {"choice": choice_for(row, guests, private)}},
             }
             fh.write(json.dumps(body, ensure_ascii=False) + "\n")
-    print(f"wrote {len(merged)} rows to {args.out}", file=sys.stderr)
+            written += 1
+    # JSONL line count must equal the train file. Do not drop rows.
+    if written != len(rows):
+        raise SystemExit(f"jsonl rows {written} != train file {len(rows)}")
+    print(f"wrote {written} rows to {args.out}", file=sys.stderr)
 
 
 if __name__ == "__main__":
