@@ -172,6 +172,8 @@ pub fn live_snap() -> Result<Snap> {
         on_ac: false,
         disk_free: None,
         updates_pending: None,
+        secrets_unlocked: None,
+        solaar_battery: None,
     }
     .with_active_workspace())
 }
@@ -189,13 +191,14 @@ pub fn output_class(name: &str) -> Option<&'static str> {
     }
 }
 
-/// Bookmark folder titles, project directory names, and VPN connection names.
-/// `game` lands with that family. Fixtures do not call this.
+/// Bookmark folder titles, project directory names, VPN connection names,
+/// and installed game titles. Fixtures do not call this.
 pub fn discover_lists() -> BTreeMap<String, Vec<String>> {
     let mut lists = BTreeMap::new();
     lists.insert("bookmark_folder".into(), bookmark_folders());
     lists.insert("project".into(), project_names());
     lists.insert("vpn".into(), vpn_names());
+    lists.insert("game".into(), game_names());
     lists
 }
 
@@ -322,7 +325,229 @@ fn project_names() -> Vec<String> {
     out
 }
 
+/// Normed installed-game id. No path, URL, or store scheme.
+pub fn game_id_ok(id: &str) -> bool {
+    let mut chars = id.chars();
+    let Some(first) = chars.next() else {
+        return false;
+    };
+    if !first.is_ascii_lowercase() && !first.is_ascii_digit() {
+        return false;
+    }
+    let len = id.chars().count();
+    if !(2..=64).contains(&len) {
+        return false;
+    }
+    if id.contains("http") || id.contains("://") {
+        return false;
+    }
+    let mut prev_space = false;
+    for c in id.chars() {
+        let ok = c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-' || c == '_' || c == ' ';
+        if !ok || (c == ' ' && prev_space) {
+            return false;
+        }
+        prev_space = c == ' ';
+    }
+    !id.ends_with(' ')
+}
+
+/// `"name"` fields from one `appmanifest_*.acf`. `installdir` is not a title.
+pub fn game_names_from_acf(text: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    for line in text.lines() {
+        let line = line.trim();
+        let Some(rest) = line.strip_prefix("\"name\"") else {
+            continue;
+        };
+        let rest = rest.trim().trim_start_matches('\t');
+        let Some(rest) = rest.strip_prefix('"') else {
+            continue;
+        };
+        let Some((name, _)) = rest.split_once('"') else {
+            continue;
+        };
+        let Some(id) = game_store_name(name) else {
+            continue;
+        };
+        push_game(&mut out, id);
+    }
+    out.sort();
+    out
+}
+
+/// Installed Heroic or Legendary titles. A `title` without an install path
+/// or executable is a store entry and is dropped. No network.
+pub fn game_names_from_heroic(text: &str) -> Vec<String> {
+    let Ok(value) = serde_json::from_str::<serde_json::Value>(text) else {
+        return Vec::new();
+    };
+    let mut out = Vec::new();
+    collect_installed_titles(&value, &mut out);
+    out.sort();
+    out
+}
+
+/// `"path"` values from `libraryfolders.vdf`. Absolute paths only. `..` is dropped.
+pub fn steam_library_paths(text: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    for line in text.lines() {
+        let line = line.trim();
+        let Some(rest) = line.strip_prefix("\"path\"") else {
+            continue;
+        };
+        let rest = rest.trim().trim_start_matches('\t');
+        let Some(rest) = rest.strip_prefix('"') else {
+            continue;
+        };
+        let Some((path, _)) = rest.split_once('"') else {
+            continue;
+        };
+        let path = path.replace("\\\\", "\\");
+        if !path.starts_with('/') || path.contains("..") || path.contains('\0') {
+            continue;
+        }
+        if out.iter().any(|e| e == &path) {
+            continue;
+        }
+        out.push(path);
+    }
+    out
+}
+
+fn game_store_name(raw: &str) -> Option<String> {
+    let raw = raw.trim();
+    if raw.is_empty()
+        || raw.contains("://")
+        || raw.contains('/')
+        || raw.contains('\\')
+        || raw.contains("..")
+        || raw.starts_with('-')
+    {
+        return None;
+    }
+    if raw.chars().any(|c| {
+        matches!(
+            c,
+            '"' | '\'' | '`' | '$' | ';' | '|' | '&' | '*' | '<' | '>' | '(' | ')'
+        )
+    }) {
+        return None;
+    }
+    let id = crate::text::norm(raw);
+    if !game_id_ok(&id) {
+        return None;
+    }
+    Some(id)
+}
+
+fn collect_installed_titles(v: &serde_json::Value, out: &mut Vec<String>) {
+    match v {
+        serde_json::Value::Array(items) => {
+            for item in items {
+                collect_installed_titles(item, out);
+            }
+        }
+        serde_json::Value::Object(map) => {
+            let installed = ["install_path", "installPath", "executable"]
+                .iter()
+                .any(|k| map.contains_key(*k));
+            if installed {
+                if let Some(id) = map
+                    .get("title")
+                    .and_then(|t| t.as_str())
+                    .and_then(game_store_name)
+                {
+                    push_game(out, id);
+                }
+            }
+            for (k, child) in map {
+                if matches!(
+                    k.as_str(),
+                    "title" | "install_path" | "installPath" | "executable"
+                ) {
+                    continue;
+                }
+                if child.is_object() || child.is_array() {
+                    collect_installed_titles(child, out);
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+fn push_game(out: &mut Vec<String>, id: String) {
+    if !out.iter().any(|e| e == &id) {
+        out.push(id);
+    }
+}
+
+/// Steam `appmanifest_*.acf` names plus Heroic/Legendary installed titles.
+/// Missing files yield nothing. This does not query a store.
+fn game_names() -> Vec<String> {
+    let Some(home) = std::env::var_os("HOME").map(std::path::PathBuf::from) else {
+        return Vec::new();
+    };
+    let mut roots = Vec::new();
+    for rel in [
+        ".steam/steam/steamapps",
+        ".steam/root/steamapps",
+        ".local/share/Steam/steamapps",
+        ".var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps",
+    ] {
+        roots.push(home.join(rel));
+    }
+    let mut extra = Vec::new();
+    for root in &roots {
+        let Ok(text) = std::fs::read_to_string(root.join("libraryfolders.vdf")) else {
+            continue;
+        };
+        for path in steam_library_paths(&text) {
+            extra.push(std::path::PathBuf::from(path).join("steamapps"));
+        }
+    }
+    roots.extend(extra);
+    let mut out = Vec::new();
+    for root in roots {
+        let Ok(rd) = std::fs::read_dir(&root) else {
+            continue;
+        };
+        for ent in rd.flatten() {
+            let name = ent.file_name();
+            let Some(name) = name.to_str() else {
+                continue;
+            };
+            if !(name.starts_with("appmanifest_") && name.ends_with(".acf")) {
+                continue;
+            }
+            let Ok(text) = std::fs::read_to_string(ent.path()) else {
+                continue;
+            };
+            for id in game_names_from_acf(&text) {
+                push_game(&mut out, id);
+            }
+        }
+    }
+    for rel in [
+        ".config/legendary/installed.json",
+        ".config/heroic/gog_store/installed.json",
+        ".var/app/com.heroicgameslauncher.hgl/config/legendary/installed.json",
+        ".var/app/com.heroicgameslauncher.hgl/config/heroic/gog_store/installed.json",
+    ] {
+        let Ok(text) = std::fs::read_to_string(home.join(rel)) else {
+            continue;
+        };
+        for id in game_names_from_heroic(&text) {
+            push_game(&mut out, id);
+        }
+    }
+    out.sort();
+    out
+}
+
 /// `which` of known names for the live snap. Not `nvidia-smi` and not a monitor list.
+/// Secrets, boxes, games, OBS, print, and Solaar are not probed.
 fn present_bins() -> Vec<String> {
     [
         "zen-browser",
@@ -569,10 +794,17 @@ mod tests {
     #[test]
     fn discover_lists_has_folders_and_projects() {
         let lists = discover_lists();
-        assert_eq!(lists.len(), 3);
+        assert_eq!(lists.len(), 4);
         assert!(lists.contains_key("bookmark_folder"));
         assert!(lists.contains_key("project"));
         assert!(lists.contains_key("vpn"));
+        assert!(lists.contains_key("game"));
+        for id in &lists["game"] {
+            assert!(game_id_ok(id), "{id}");
+            assert!(!id.contains('/'), "{id}");
+            assert!(!id.contains("http"), "{id}");
+            assert!(!id.contains("steam://"), "{id}");
+        }
         let projects = &lists["project"];
         assert!(projects.iter().all(|id| !id.contains('/')));
         assert!(projects.iter().all(|id| !id.starts_with('.')));
@@ -619,5 +851,48 @@ wifi:vpn
         assert_eq!(output_class("eDP-1"), Some("edp"));
         assert_eq!(output_class("DP-1"), None);
         assert_eq!(output_class("VGA-1"), None);
+    }
+
+    #[test]
+    fn game_titles_come_from_manifests_not_a_store() {
+        let acf = "\
+\"AppState\"
+{
+\t\"appid\"\t\t\"504230\"
+\t\"name\"\t\t\"Celeste\"
+\t\"installdir\"\t\t\"DoNotUse\"
+}
+\"name\"\t\t\"../x\"
+\"name\"\t\t\"http://evil\"
+\"name\"\t\t\"Portal 2\"
+\"name\"\t\t\"steam://rungameid/1\"
+";
+        assert_eq!(
+            game_names_from_acf(acf),
+            vec!["celeste".to_string(), "portal 2".to_string()]
+        );
+        assert!(game_id_ok("portal 2"));
+        assert!(!game_id_ok("http://evil"));
+        assert!(!game_id_ok("../x"));
+
+        let heroic = r#"{
+            "Celeste": {"title": "Celeste", "install_path": "/home/jim/Games/Celeste"},
+            "Catalog": {"title": "Hades"},
+            "Path": {"title": "/tmp/game", "executable": "game"}
+        }"#;
+        assert_eq!(game_names_from_heroic(heroic), vec!["celeste".to_string()]);
+        let listed = r#"[{"title": "Into the Breach", "executable": "breach"}]"#;
+        assert_eq!(
+            game_names_from_heroic(listed),
+            vec!["into the breach".to_string()]
+        );
+        assert!(game_names_from_heroic("not json").is_empty());
+
+        let vdf = "\
+\"path\"\t\t\"/mnt/games\"
+\"path\"\t\t\"../etc\"
+\"path\"\t\t\"relative\"
+";
+        assert_eq!(steam_library_paths(vdf), vec!["/mnt/games".to_string()]);
     }
 }

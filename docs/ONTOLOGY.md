@@ -36,6 +36,13 @@ Schema: [`schemas/page.schema.json`](../schemas/page.schema.json).
 | power | `powerprofilesctl set` of power-saver, balanced, or performance. Battery is a bucket | `lists.power_profile`, `battery`, `onAc`, `bins` |
 | disk | free-space bucket. Timeshift create is owner and confirm | `diskFree`, `bins` |
 | updates | pending bucket. Full upgrade is owner and confirm | `updatesPending`, `bins` |
+| secrets | unlocked bool. Lock and autotype reserved. Autotype is private and confirm | `secretsUnlocked` |
+| sync | status and ping reserved. Send-file stays refused | clients |
+| boxes | start/stop an id in `lists.box`. Stop confirms. Runtime not claimed | `lists.box` |
+| games | focus a mapped window. Play binds `lists.game` and stays reserved | clients, `lists.game` |
+| obs | record confirms and stays reserved. Scene is `desk` or `cam` | `lists.obs_scene` |
+| print | print and scan confirm and stay reserved. N copies stay refused | none |
+| input | Solaar battery bucket. DPI reserved | `solaarBattery` |
 
 ## Page kinds
 
@@ -128,6 +135,18 @@ A page that cannot happen is not offered:
 | disk.timeshift | guest, empty or unknown who, who is not the owner, or `timeshift` is not in `bins`. Confirm. Not format or delete |
 | updates.ask | `updatesPending` is null |
 | updates.upgrade | guest, empty or unknown who, who is not the owner, or no full-upgrade binary is in `bins`. Confirm. Not a package name |
+| secrets.ask_unlocked | `secretsUnlocked` is null, or the caller is a guest. The body is `{ unlocked }` only |
+| secrets.lock | reserved. No vault lock chord. Not `session.lock` |
+| secrets.autotype | always reserved. Private and confirm. It would send secret bytes |
+| sync.ask / sync.ping | reserved. No sync command is claimed |
+| boxes.start / boxes.stop | name missing or not in `lists.box`, or the runtime is unclaimed. Stop is confirm. An image is refused |
+| games.focus | no matching client. Unmapped does not exec |
+| games.play | title missing or not in `lists.game`. Reserved. No store URL. Buy stays refused |
+| obs.record | reserved. Confirm. Does not steal `capture.record_start`. Stream stays refused |
+| obs.scene | scene not in `lists.obs_scene`, or no chord |
+| print.print / print.scan | reserved. Confirm. N copies stay refused |
+| input.ask_battery | `solaarBattery` is null or outside 0..=1. Not `power.ask_battery` |
+| input.dpi | reserved. No solaar chord |
 
 Missing focus on “switch to jellyfin” **promotes** to `launch.app` if jellyfin is allowlisted — that is an engine rule, not a new page.
 
@@ -139,7 +158,7 @@ Kitchen: scene kitchen-cook, timer, climate notch, lights, weather.
 
 Living + guest: media, volume, guest mode / lock private. Mail and calendar gone.
 
-House-scale later (not v0 pages): vacuum, locks, cameras, printer. VPN connect is a named confirm. Bluetooth pair, wifi off, DNS, format, and a free package upgrade stay refused. Do not add a page whose walk is “the LLM will figure it out.”
+House-scale later (not v0 pages): vacuum, locks, cameras. Print and scan are confirm and reserved. VPN connect is a named confirm. Bluetooth pair, wifi off, DNS, format, a free package upgrade, revealing a password, buying a game, streaming, and running an image stay refused. Do not add a page whose walk is “the LLM will figure it out.”
 
 ## Adding a page
 

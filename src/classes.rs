@@ -56,6 +56,15 @@ const ARMS: &[(&str, &[&str])] = &[
     ("jellyfin", &["jellyfin"]),
     ("code", &["codium", "code"]),
     ("thunderbird", &["thunderbird"]),
+    ("keepassxc", &["org.keepassxc.keepassxc", "keepassxc"]),
+    ("bitwarden", &["bitwarden"]),
+    ("syncthing", &["syncthing"]),
+    ("kdeconnect", &["org.kde.kdeconnect", "kdeconnect"]),
+    ("steam", &["steam"]),
+    ("heroic", &["com.heroicgameslauncher.hgl", "heroic"]),
+    // `obsidian` contains `obs`. The longer substr wins.
+    ("obs", &["obs"]),
+    ("solaar", &["solaar"]),
 ];
 
 pub fn app_for_class(class: &str) -> Option<&'static str> {
@@ -234,6 +243,18 @@ mod tests {
         assert_eq!(bin_for_app("vesktop"), None);
         assert_eq!(bin_for_app("foot"), Some("foot"));
         assert_eq!(bin_for_app("wezterm"), Some("wezterm"));
+        assert_eq!(class_to_app("obsidian"), "obsidian");
+        assert_eq!(class_to_app("obs"), "obs");
+        assert_eq!(class_to_app("obs-studio"), "obs");
+        assert_eq!(class_to_app("org.keepassxc.KeePassXC"), "keepassxc");
+        assert_eq!(class_to_app("Bitwarden"), "bitwarden");
+        assert_eq!(class_to_app("steam"), "steam");
+        assert_eq!(class_to_app("heroic"), "heroic");
+        assert_eq!(class_to_app("solaar"), "solaar");
+        assert_eq!(bin_for_app("obs"), None);
+        assert_eq!(bin_for_app("steam"), None);
+        assert_eq!(bin_for_app("keepassxc"), None);
+        assert_eq!(bin_for_app("solaar"), None);
     }
 
     #[test]

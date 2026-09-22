@@ -57,6 +57,17 @@ pub fn fill(page: &Page, utterance: &str, snap: &Snap) -> SlotFill {
         if slot.id == "vpn" {
             hit = list_hit(snap, "vpn", utterance);
         }
+        // Game titles, box names, and OBS scenes are list ids. A name that is
+        // not in the list does not fill, including a page-enum value.
+        if slot.id == "title" && page.id == "games.play" {
+            hit = list_hit(snap, "game", utterance);
+        }
+        if slot.id == "name" && page.module == "boxes" {
+            hit = list_hit(snap, "box", utterance);
+        }
+        if slot.id == "scene" && page.id == "obs.scene" {
+            hit = list_hit(snap, "obs_scene", utterance);
+        }
         if let Some(id) = hit {
             slots.insert(slot.id.clone(), id);
         } else if slot.id == "app" && crate::drivers::is_family(&page.module) {

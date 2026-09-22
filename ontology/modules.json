@@ -262,5 +262,61 @@
     "driver": "pacman -Syu, else dnf upgrade, else apt full-upgrade.",
     "snap": "updatesPending, bins",
     "priority": 12
+  },
+  {
+    "id": "secrets",
+    "title": "Secrets",
+    "summary": "Ask whether the vault is unlocked. Lock and autotype stay reserved. Autotype is private and confirm because it would send secret bytes. Never the secret.",
+    "driver": "reserved — no vault chord. ask_unlocked is an ask.",
+    "snap": "secretsUnlocked",
+    "priority": 11
+  },
+  {
+    "id": "sync",
+    "title": "Sync",
+    "summary": "Syncthing and KDE Connect status and ping. Reserved until a command exists. Send-file stays refused.",
+    "driver": "reserved — sync command unknown",
+    "snap": "clients",
+    "priority": 10
+  },
+  {
+    "id": "boxes",
+    "title": "Boxes",
+    "summary": "Start or stop an allowlisted box name from lists.box. Stop confirms. The runtime is not claimed. An image is refused.",
+    "driver": "reserved — box runtime unknown",
+    "snap": "lists.box",
+    "priority": 9
+  },
+  {
+    "id": "games",
+    "title": "Games",
+    "summary": "Focus a mapped Steam or Heroic window. Play binds lists.game and stays reserved. The fixture title is celeste. Buy stays refused.",
+    "driver": "hl.dsp.focus when mapped. Play is reserved.",
+    "snap": "clients, lists.game",
+    "priority": 8
+  },
+  {
+    "id": "obs",
+    "title": "OBS",
+    "summary": "Record confirms and stays reserved. Scene is desk or cam from lists.obs_scene. Stream stays refused.",
+    "driver": "reserved — no obs command or chord",
+    "snap": "lists.obs_scene",
+    "priority": 7
+  },
+  {
+    "id": "print",
+    "title": "Print",
+    "summary": "Print and scan confirm and stay reserved. N copies stay refused.",
+    "driver": "reserved — printer command unknown",
+    "snap": "none",
+    "priority": 6
+  },
+  {
+    "id": "input",
+    "title": "Input",
+    "summary": "Solaar battery is a bucket and dead when the fraction is missing. DPI stays reserved.",
+    "driver": "reserved — no solaar chord. Battery is an ask.",
+    "snap": "solaarBattery",
+    "priority": 5
   }
 ]

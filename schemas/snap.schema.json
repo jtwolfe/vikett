@@ -48,6 +48,8 @@
     "battery": { "type": ["number", "null"] },
     "onAc": { "type": "boolean" },
     "diskFree": { "type": ["number", "null"] },
-    "updatesPending": { "type": ["number", "null"] }
+    "updatesPending": { "type": ["number", "null"] },
+    "secretsUnlocked": { "type": ["boolean", "null"] },
+    "solaarBattery": { "type": ["number", "null"] }
   }
 }

@@ -8971,5 +8971,549 @@
     "walk": "pacman -Syu",
     "examples": ["upgrade the system"],
     "refuse": ["upgrade firefox", "partial upgrade", "install the package"]
+  },
+  {
+    "id": "secrets.ask_unlocked",
+    "module": "secrets",
+    "kind": "ask",
+    "title": "Vault unlocked",
+    "summary": "Bool from secretsUnlocked. Dead when the field is missing. Private. Never a password, a secret, or ok.",
+    "aliases": [
+      "is the vault unlocked",
+      "is the password vault unlocked",
+      "vault unlocked",
+      "is keepassxc unlocked",
+      "is keepass unlocked",
+      "is bitwarden unlocked"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "vault",
+        "required": false,
+        "values": [
+          {
+            "id": "keepassxc",
+            "label": "KeePassXC",
+            "aliases": ["keepassxc", "keepass"]
+          },
+          {
+            "id": "bitwarden",
+            "label": "Bitwarden",
+            "aliases": ["bitwarden"]
+          }
+        ]
+      }
+    ],
+    "when": "secretsUnlocked is Some. None is dead. Guest and empty who do not see it.",
+    "policy": "private",
+    "askShape": "{ unlocked }",
+    "examples": ["is the vault unlocked"],
+    "refuse": ["what's my password", "reveal the password", "copy the password"]
+  },
+  {
+    "id": "secrets.lock",
+    "module": "secrets",
+    "kind": "act",
+    "title": "Lock the vault",
+    "summary": "Private. Reserved until a lock chord exists. Not the screen lock.",
+    "aliases": [
+      "lock the vault",
+      "lock the password vault",
+      "lock keepassxc",
+      "lock bitwarden"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "vault",
+        "required": false,
+        "values": [
+          {
+            "id": "keepassxc",
+            "label": "KeePassXC",
+            "aliases": ["keepassxc", "keepass"]
+          },
+          {
+            "id": "bitwarden",
+            "label": "Bitwarden",
+            "aliases": ["bitwarden"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No vault lock chord is authored.",
+    "policy": "private",
+    "walk": "reserved",
+    "examples": ["lock the vault"],
+    "refuse": ["lock the screen", "reveal the password"]
+  },
+  {
+    "id": "secrets.autotype",
+    "module": "secrets",
+    "kind": "act",
+    "title": "Autotype",
+    "summary": "Private and confirm. Reserved because autotype would send secret bytes. Not a password and not a keystroke sequence.",
+    "aliases": [
+      "autotype from the vault",
+      "vault autotype",
+      "keepassxc autotype",
+      "bitwarden autotype"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "vault",
+        "required": false,
+        "values": [
+          {
+            "id": "keepassxc",
+            "label": "KeePassXC",
+            "aliases": ["keepassxc", "keepass"]
+          },
+          {
+            "id": "bitwarden",
+            "label": "Bitwarden",
+            "aliases": ["bitwarden"]
+          }
+        ]
+      }
+    ],
+    "when": "Always reserved. A chord that types the secret is not a door.",
+    "policy": "private",
+    "confirm": true,
+    "walk": "reserved",
+    "examples": ["autotype from the vault"],
+    "refuse": ["what's my password", "copy the password", "reveal the password"]
+  },
+  {
+    "id": "sync.ask",
+    "module": "sync",
+    "kind": "ask",
+    "title": "Sync status",
+    "summary": "Syncthing or KDE Connect status. Reserved. No binary is claimed and no status is invented.",
+    "aliases": [
+      "syncthing status",
+      "is syncthing running",
+      "kdeconnect status"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "sync",
+        "required": true,
+        "values": [
+          {
+            "id": "syncthing",
+            "label": "Syncthing",
+            "aliases": ["syncthing"]
+          },
+          {
+            "id": "kdeconnect",
+            "label": "KDE Connect",
+            "aliases": ["kdeconnect", "kde connect"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. There is no sync status field.",
+    "policy": "household",
+    "askShape": "{ unarmed }",
+    "examples": ["syncthing status"],
+    "refuse": ["send a file", "send the file"]
+  },
+  {
+    "id": "sync.ping",
+    "module": "sync",
+    "kind": "act",
+    "title": "Ping a paired device",
+    "summary": "Reserved. KDE Connect ping is not claimed. Send-file stays refused.",
+    "aliases": [
+      "ping kdeconnect",
+      "kdeconnect ping",
+      "ping my phone"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "sync",
+        "required": true,
+        "values": [
+          {
+            "id": "syncthing",
+            "label": "Syncthing",
+            "aliases": ["syncthing"]
+          },
+          {
+            "id": "kdeconnect",
+            "label": "KDE Connect",
+            "aliases": ["kdeconnect", "kde connect", "my phone"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No ping command is authored.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["ping kdeconnect"],
+    "refuse": ["send a file", "send the file"]
+  },
+  {
+    "id": "boxes.start",
+    "module": "boxes",
+    "kind": "act",
+    "title": "Start a box",
+    "summary": "Name from lists.box. Reserved because no box runtime is claimed. Not an image.",
+    "aliases": [
+      "start the arch box",
+      "start the fedora box",
+      "start arch box",
+      "start fedora box"
+    ],
+    "slots": [
+      {
+        "id": "name",
+        "label": "box",
+        "required": true,
+        "values": [
+          {
+            "id": "arch",
+            "label": "arch",
+            "aliases": ["arch", "arch box", "the arch box"]
+          },
+          {
+            "id": "fedora",
+            "label": "fedora",
+            "aliases": ["fedora", "fedora box", "the fedora box"]
+          }
+        ]
+      }
+    ],
+    "when": "The name is in lists.box. The walk stays reserved.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["start the arch box"],
+    "refuse": ["run the ubuntu image", "podman run ubuntu"]
+  },
+  {
+    "id": "boxes.stop",
+    "module": "boxes",
+    "kind": "act",
+    "title": "Stop a box",
+    "summary": "Confirm. Name from lists.box. Reserved because no box runtime is claimed.",
+    "aliases": [
+      "stop the arch box",
+      "stop the fedora box",
+      "stop arch box",
+      "stop fedora box"
+    ],
+    "slots": [
+      {
+        "id": "name",
+        "label": "box",
+        "required": true,
+        "values": [
+          {
+            "id": "arch",
+            "label": "arch",
+            "aliases": ["arch", "arch box", "the arch box"]
+          },
+          {
+            "id": "fedora",
+            "label": "fedora",
+            "aliases": ["fedora", "fedora box", "the fedora box"]
+          }
+        ]
+      }
+    ],
+    "when": "The name is in lists.box. Confirm, and the walk stays reserved.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "reserved",
+    "examples": ["stop the arch box"],
+    "refuse": ["run the ubuntu image", "docker run ubuntu"]
+  },
+  {
+    "id": "games.focus",
+    "module": "games",
+    "kind": "act",
+    "title": "Focus a game library",
+    "summary": "Focus a mapped Steam or Heroic window. Unmapped stays reserved. Does not exec a binary.",
+    "aliases": [
+      "steam window",
+      "heroic window",
+      "focus the steam window",
+      "focus the heroic window"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "library",
+        "required": true,
+        "values": [
+          {
+            "id": "steam",
+            "label": "Steam",
+            "aliases": ["steam", "steam window"]
+          },
+          {
+            "id": "heroic",
+            "label": "Heroic",
+            "aliases": ["heroic", "heroic window"]
+          }
+        ]
+      }
+    ],
+    "when": "A client class matches the app. Otherwise reserved. No exec.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["steam window"],
+    "refuse": ["buy the game", "buy celeste"]
+  },
+  {
+    "id": "games.play",
+    "module": "games",
+    "kind": "act",
+    "title": "Play a game",
+    "summary": "Title from lists.game. The fixture id is celeste. Reserved: no launch command and no store URL. Buy stays refused.",
+    "aliases": [
+      "play celeste",
+      "play the game celeste"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "library",
+        "required": false,
+        "values": [
+          {
+            "id": "steam",
+            "label": "Steam",
+            "aliases": ["steam"]
+          },
+          {
+            "id": "heroic",
+            "label": "Heroic",
+            "aliases": ["heroic"]
+          }
+        ]
+      },
+      {
+        "id": "title",
+        "label": "title",
+        "required": true,
+        "values": [
+          {
+            "id": "celeste",
+            "label": "Celeste",
+            "aliases": ["celeste"]
+          }
+        ]
+      }
+    ],
+    "when": "The title is in lists.game. The walk stays reserved.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["play celeste"],
+    "refuse": ["buy celeste", "buy the game"]
+  },
+  {
+    "id": "obs.record",
+    "module": "obs",
+    "kind": "act",
+    "title": "Record in OBS",
+    "summary": "Confirm. Reserved because the OBS record command is not claimed. Aliases include obs so this does not steal screen recording. Stream stays refused.",
+    "aliases": [
+      "start obs recording",
+      "obs record",
+      "record in obs"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "obs",
+        "required": true,
+        "values": [
+          {
+            "id": "obs",
+            "label": "OBS",
+            "aliases": ["obs"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. Not wf-recorder and not a stream.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "reserved",
+    "examples": ["start obs recording"],
+    "refuse": ["start streaming", "start streaming the screen"]
+  },
+  {
+    "id": "obs.scene",
+    "module": "obs",
+    "kind": "act",
+    "title": "OBS scene",
+    "summary": "Scene enum desk or cam from lists.obs_scene. Reserved until a chord exists.",
+    "aliases": [
+      "obs scene desk",
+      "obs desk scene",
+      "obs scene cam",
+      "obs cam scene"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "obs",
+        "required": true,
+        "values": [
+          {
+            "id": "obs",
+            "label": "OBS",
+            "aliases": ["obs"]
+          }
+        ]
+      },
+      {
+        "id": "scene",
+        "label": "scene",
+        "required": true,
+        "values": [
+          {
+            "id": "desk",
+            "label": "desk",
+            "aliases": ["desk", "desk scene"]
+          },
+          {
+            "id": "cam",
+            "label": "cam",
+            "aliases": ["cam", "cam scene"]
+          }
+        ]
+      }
+    ],
+    "when": "The scene is in lists.obs_scene. No chord, so reserved.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["obs scene desk"],
+    "refuse": ["start streaming"]
+  },
+  {
+    "id": "print.print",
+    "module": "print",
+    "kind": "act",
+    "title": "Print",
+    "summary": "Confirm. Reserved because the printer command is not claimed. N copies stay refused.",
+    "aliases": [
+      "print this page",
+      "print the page"
+    ],
+    "slots": [],
+    "when": "Reserved. A copy count is refused before the page.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "reserved",
+    "examples": ["print this page"],
+    "refuse": ["print 3 copies", "print two copies"]
+  },
+  {
+    "id": "print.scan",
+    "module": "print",
+    "kind": "act",
+    "title": "Scan",
+    "summary": "Confirm. Reserved because the scanner command is not claimed. N copies stay refused.",
+    "aliases": [
+      "scan this page",
+      "scan a page"
+    ],
+    "slots": [],
+    "when": "Reserved. A copy count is refused before the page.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "reserved",
+    "examples": ["scan this page"],
+    "refuse": ["scan 2 copies", "print 3 copies"]
+  },
+  {
+    "id": "input.ask_battery",
+    "module": "input",
+    "kind": "ask",
+    "title": "Solaar battery",
+    "summary": "Bucket full, high, mid, low, or critical from solaarBattery. Dead when the fraction is missing. Not the system battery and not a percent.",
+    "aliases": [
+      "solaar battery",
+      "mouse battery",
+      "keyboard battery",
+      "how is the mouse battery"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "solaar",
+        "required": true,
+        "values": [
+          {
+            "id": "solaar",
+            "label": "Solaar",
+            "aliases": ["solaar", "mouse battery", "keyboard battery", "mouse", "keyboard"]
+          }
+        ]
+      }
+    ],
+    "when": "solaarBattery is a fraction from 0 to 1. None is dead.",
+    "policy": "household",
+    "askShape": "{ bucket }",
+    "examples": ["mouse battery"],
+    "refuse": ["set the fan"]
+  },
+  {
+    "id": "input.dpi",
+    "module": "input",
+    "kind": "act",
+    "title": "Solaar DPI",
+    "summary": "Amount notch. Reserved until a chord exists. Not a solaar config line and not a percent.",
+    "aliases": [
+      "raise solaar dpi",
+      "lower solaar dpi",
+      "solaar dpi",
+      "mouse dpi up",
+      "mouse dpi down"
+    ],
+    "slots": [
+      {
+        "id": "app",
+        "label": "solaar",
+        "required": true,
+        "values": [
+          {
+            "id": "solaar",
+            "label": "Solaar",
+            "aliases": ["solaar", "mouse dpi", "mouse"]
+          }
+        ]
+      },
+      {
+        "id": "amount",
+        "label": "amount",
+        "required": false,
+        "values": [
+          {
+            "id": "little",
+            "label": "a bit",
+            "aliases": ["a bit", "a little", "slightly"]
+          },
+          {
+            "id": "lot",
+            "label": "a lot",
+            "aliases": ["a lot", "way"]
+          }
+        ]
+      }
+    ],
+    "when": "Reserved. No solaar chord.",
+    "policy": "household",
+    "walk": "reserved",
+    "examples": ["raise solaar dpi"],
+    "refuse": ["set the fan"]
   }
 ]

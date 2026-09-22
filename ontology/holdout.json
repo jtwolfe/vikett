@@ -1032,5 +1032,110 @@
     "utterance": "bring the whole system up to date",
     "expectPage": "updates.upgrade",
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-secrets-unlocked",
+    "snap": "desk-rig",
+    "utterance": "is the password vault open",
+    "expectPage": "secrets.ask_unlocked",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-secrets-lock",
+    "snap": "desk-rig",
+    "utterance": "shut the password vault",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-secrets-autotype",
+    "snap": "desk-rig",
+    "utterance": "type the login from the vault",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-sync-ask",
+    "snap": "desk-rig",
+    "utterance": "is syncthing up",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-sync-ping",
+    "snap": "desk-rig",
+    "utterance": "ping the phone",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-boxes-start",
+    "snap": "desk-rig",
+    "utterance": "boot the arch container",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-boxes-stop",
+    "snap": "desk-rig",
+    "utterance": "shut down the arch container",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-games-focus",
+    "snap": "desk-rig",
+    "utterance": "show the steam library",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-games-play",
+    "snap": "desk-rig",
+    "utterance": "launch celeste",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-obs-record",
+    "snap": "desk-shelf",
+    "utterance": "record with obs",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-obs-scene",
+    "snap": "desk-rig",
+    "utterance": "switch obs to the cam scene",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-print",
+    "snap": "desk-rig",
+    "utterance": "print the document",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-scan",
+    "snap": "desk-rig",
+    "utterance": "scan the page",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-input-battery",
+    "snap": "desk-rig",
+    "utterance": "how charged is the mouse",
+    "expectPage": "input.ask_battery",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-input-dpi",
+    "snap": "desk-rig",
+    "utterance": "bump the mouse dpi",
+    "expectPage": null,
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]
