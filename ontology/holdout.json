@@ -965,5 +965,72 @@
     "utterance": "finish the screen recording",
     "expectPage": "capture.record_stop",
     "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-net-vpn",
+    "snap": "desk-rig",
+    "utterance": "bring the home vpn online",
+    "expectPage": "network.vpn",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": { "vpn": "home" }
+  },
+  {
+    "id": "h-bt-connect",
+    "snap": "desk-rig",
+    "utterance": "hook up the headphones",
+    "expectPage": "bluetooth.connect",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": { "device": "headphones" }
+  },
+  {
+    "id": "h-bt-disconnect",
+    "snap": "desk-rig",
+    "utterance": "drop the headphone link",
+    "expectPage": "bluetooth.disconnect",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": { "device": "headphones" }
+  },
+  {
+    "id": "h-power-profile",
+    "snap": "desk-rig",
+    "utterance": "use the saver power mode",
+    "expectPage": "power.profile",
+    "notes": "holdout paraphrase; not loaded by Catalog",
+    "expectSlots": { "profile": "power-saver" }
+  },
+  {
+    "id": "h-power-battery",
+    "snap": "desk-rig",
+    "utterance": "how charged is the battery",
+    "expectPage": "power.ask_battery",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-disk-ask",
+    "snap": "desk-rig",
+    "utterance": "is there room on the disk",
+    "expectPage": "disk.ask",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-disk-timeshift",
+    "snap": "desk-rig",
+    "utterance": "make a timeshift backup",
+    "expectPage": "disk.timeshift",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-updates-ask",
+    "snap": "desk-rig",
+    "utterance": "are there packages waiting",
+    "expectPage": "updates.ask",
+    "notes": "holdout paraphrase; not loaded by Catalog"
+  },
+  {
+    "id": "h-updates-upgrade",
+    "snap": "desk-rig",
+    "utterance": "bring the whole system up to date",
+    "expectPage": "updates.upgrade",
+    "notes": "holdout paraphrase; not loaded by Catalog"
   }
 ]

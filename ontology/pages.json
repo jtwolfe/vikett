@@ -8763,5 +8763,213 @@
     "walk": "pkill -INT -x wf-recorder",
     "examples": ["stop screen recording"],
     "refuse": ["start streaming", "screenshot"]
+  },
+  {
+    "id": "network.vpn",
+    "module": "network",
+    "kind": "act",
+    "title": "Connect VPN",
+    "summary": "Confirm, then nmcli connection up for a name in lists.vpn. Not down, not an SSID, not DNS. The fixture name is home. Live names come from nmcli type vpn or wireguard.",
+    "aliases": [
+      "connect the home vpn",
+      "connect home vpn",
+      "turn on the home vpn",
+      "bring up the home vpn",
+      "connect the vpn",
+      "connect vpn",
+      "turn on the vpn"
+    ],
+    "slots": [
+      {
+        "id": "vpn",
+        "label": "vpn",
+        "required": true,
+        "values": [
+          {"id": "home", "label": "home", "aliases": ["home", "home vpn"]}
+        ]
+      }
+    ],
+    "when": "The name is in lists.vpn and nmcli is in bins. Empty list or any other name is dead.",
+    "policy": "household",
+    "confirm": true,
+    "walk": "nmcli connection up home",
+    "examples": ["connect the home vpn"],
+    "refuse": ["join the wifi", "turn off wifi", "change dns", "change the ssid"]
+  },
+  {
+    "id": "bluetooth.connect",
+    "module": "bluetooth",
+    "kind": "act",
+    "title": "Connect bluetooth device",
+    "summary": "bluetoothctl connect for the allowlisted device id. headphones is the enum. Not pair and not a MAC from the utterance.",
+    "aliases": ["connect the headphones", "connect headphones"],
+    "slots": [
+      {
+        "id": "device",
+        "label": "device",
+        "required": true,
+        "values": [
+          {"id": "headphones", "label": "headphones", "aliases": ["headphones", "the headphones"]}
+        ]
+      }
+    ],
+    "when": "Adapter is on, bluetoothctl is in bins, and the id is in lists.bt_device.",
+    "policy": "household",
+    "walk": "bluetoothctl connect headphones",
+    "examples": ["connect the headphones"],
+    "refuse": ["pair the headphones", "pair a device"]
+  },
+  {
+    "id": "bluetooth.disconnect",
+    "module": "bluetooth",
+    "kind": "act",
+    "title": "Disconnect bluetooth device",
+    "summary": "bluetoothctl disconnect for the same allowlisted device. Not pair.",
+    "aliases": ["disconnect the headphones", "disconnect headphones"],
+    "slots": [
+      {
+        "id": "device",
+        "label": "device",
+        "required": true,
+        "values": [
+          {"id": "headphones", "label": "headphones", "aliases": ["headphones", "the headphones"]}
+        ]
+      }
+    ],
+    "when": "Adapter is on, bluetoothctl is in bins, and the id is in lists.bt_device.",
+    "policy": "household",
+    "walk": "bluetoothctl disconnect headphones",
+    "examples": ["disconnect the headphones"],
+    "refuse": ["pair the headphones", "pair a device"]
+  },
+  {
+    "id": "power.profile",
+    "module": "power",
+    "kind": "act",
+    "title": "Power profile",
+    "summary": "powerprofilesctl set of power-saver, balanced, or performance from lists.power_profile. No fan percent.",
+    "aliases": [
+      "power saver profile",
+      "set power saver",
+      "balanced power profile",
+      "set balanced profile",
+      "performance power profile",
+      "set performance profile"
+    ],
+    "slots": [
+      {
+        "id": "profile",
+        "label": "profile",
+        "required": true,
+        "values": [
+          {"id": "power-saver", "label": "power saver", "aliases": ["power saver", "power-saver", "saver profile"]},
+          {"id": "balanced", "label": "balanced", "aliases": ["balanced profile", "balanced power"]},
+          {"id": "performance", "label": "performance", "aliases": ["performance profile", "performance power"]}
+        ]
+      }
+    ],
+    "when": "The id is in lists.power_profile and powerprofilesctl is in bins.",
+    "policy": "household",
+    "walk": "powerprofilesctl set balanced",
+    "examples": ["power saver profile", "balanced power profile"],
+    "refuse": ["set the fan", "set fan speed", "fan percent"]
+  },
+  {
+    "id": "power.ask_battery",
+    "module": "power",
+    "kind": "ask",
+    "title": "Battery",
+    "summary": "Bucket full, high, mid, low, critical, or ac. Dead when battery is missing. Not a percent and not a fan.",
+    "aliases": [
+      "how's the battery",
+      "how is the battery",
+      "battery status",
+      "how much battery",
+      "what's the battery"
+    ],
+    "slots": [],
+    "when": "battery is a fraction from 0 to 1. None is dead, including when on AC.",
+    "policy": "household",
+    "askShape": "{ bucket }",
+    "examples": ["how's the battery"],
+    "refuse": ["set the fan", "fan percent"]
+  },
+  {
+    "id": "disk.ask",
+    "module": "disk",
+    "kind": "ask",
+    "title": "Disk space",
+    "summary": "Bucket ok, low, or full from the free fraction. Dead when diskFree is missing. Not a path.",
+    "aliases": [
+      "how's the disk",
+      "how is the disk",
+      "disk space",
+      "how much disk space",
+      "how full is the disk"
+    ],
+    "slots": [],
+    "when": "diskFree is a fraction from 0 to 1. None is dead.",
+    "policy": "household",
+    "askShape": "{ bucket }",
+    "examples": ["how's the disk"],
+    "refuse": ["format the disk", "format the drive"]
+  },
+  {
+    "id": "disk.timeshift",
+    "module": "disk",
+    "kind": "act",
+    "title": "Timeshift snapshot",
+    "summary": "Owner and confirm. timeshift --create --scripted when that binary is in bins. Not format and not delete.",
+    "aliases": [
+      "take a snapshot",
+      "timeshift snapshot",
+      "create a snapshot",
+      "snapshot the disk"
+    ],
+    "slots": [],
+    "when": "Caller is the owner and timeshift is in bins. Guest is not the owner.",
+    "policy": "owner",
+    "confirm": true,
+    "walk": "timeshift --create --scripted",
+    "examples": ["take a snapshot"],
+    "refuse": ["format the disk", "delete the snapshot", "delete snapshots"]
+  },
+  {
+    "id": "updates.ask",
+    "module": "updates",
+    "kind": "ask",
+    "title": "Pending updates",
+    "summary": "Bucket none, few, or many from updatesPending. Dead when the field is missing. Not a package list.",
+    "aliases": [
+      "how many updates",
+      "pending updates",
+      "update status"
+    ],
+    "slots": [],
+    "when": "updatesPending is a count. None is dead. Zero is the none bucket.",
+    "policy": "household",
+    "askShape": "{ bucket }",
+    "examples": ["how many updates"],
+    "refuse": ["upgrade firefox", "partial upgrade"]
+  },
+  {
+    "id": "updates.upgrade",
+    "module": "updates",
+    "kind": "act",
+    "title": "Upgrade the system",
+    "summary": "Owner and confirm. One fixed full-upgrade command: pacman -Syu, else dnf upgrade, else apt full-upgrade. No package name.",
+    "aliases": [
+      "upgrade the system",
+      "update the system",
+      "upgrade everything",
+      "full system upgrade"
+    ],
+    "slots": [],
+    "when": "Caller is the owner and one of those binaries is in bins. Guest is not the owner.",
+    "policy": "owner",
+    "confirm": true,
+    "walk": "pacman -Syu",
+    "examples": ["upgrade the system"],
+    "refuse": ["upgrade firefox", "partial upgrade", "install the package"]
   }
 ]

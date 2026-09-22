@@ -44,6 +44,10 @@
     "chatUnread": { "type": "object" },
     "clipboardKind": { "type": ["string", "null"] },
     "clipboardCount": { "type": ["number", "null"] },
-    "pickedHex": { "type": ["string", "null"] }
+    "pickedHex": { "type": ["string", "null"] },
+    "battery": { "type": ["number", "null"] },
+    "onAc": { "type": "boolean" },
+    "diskFree": { "type": ["number", "null"] },
+    "updatesPending": { "type": ["number", "null"] }
   }
 }

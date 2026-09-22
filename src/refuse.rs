@@ -28,6 +28,15 @@ static REFUSE_RE: LazyLock<Regex> = LazyLock::new(|| {
         | \b\d+\s+copies\b
         | \b\d{3,4}x\d{3,4}\b
         | \b\d+\s*hz\b
+        | \bjoin\b.*\b(?:wifi|ssid)\b
+        | \bconnect\s+to\b.*\b(?:wifi|ssid)\b
+        | \bssid\b
+        | \bdns\b
+        | \bpair\b
+        | \bformat\b.*\b(?:disk|drive)\b
+        | \b(?:delete|remove)\b.*\bsnapshots?\b
+        | \bset\s+(?:the\s+)?fan\b
+        | \bfan\s+(?:speed|percent)\b
         ",
     )
     .expect("refuse regex")
@@ -47,8 +56,42 @@ const ADVERSARIAL: &[&str] = &[
     "wake me at seven",
     "email that screenshot",
     "turn off wifi",
+    "turn wifi off",
+    "disable wifi",
+    "wifi off",
     "change dns",
+    "change the dns",
+    "set the dns",
+    "set dns",
+    "join the wifi",
+    "join wifi",
+    "join the ssid",
+    "join ssid",
+    "connect to wifi",
+    "connect to the wifi",
+    "change the ssid",
+    "change ssid",
     "pair the headphones",
+    "pair a device",
+    "pair the device",
+    "pair bluetooth",
+    "format the disk",
+    "format this disk",
+    "format the drive",
+    "wipe the disk",
+    "delete the snapshot",
+    "delete snapshots",
+    "delete a snapshot",
+    "remove the snapshot",
+    "remove snapshots",
+    "set the fan",
+    "set fan",
+    "fan speed",
+    "fan percent",
+    "partial upgrade",
+    "upgrade the package",
+    "upgrade a package",
+    "install the package",
     "close everything",
     "set the resolution",
     "change the refresh rate",
@@ -114,7 +157,7 @@ pub fn refused(utterance: &str) -> Option<&'static str> {
     {
         return Some("refused — no free title");
     }
-    if has_percent || REFUSE_RE.is_match(&n) {
+    if has_percent || REFUSE_RE.is_match(&n) || named_package(&n) {
         return Some("refused — no page for compose/send/buy/click/free-number");
     }
     for phrase in ADVERSARIAL {
@@ -123,6 +166,32 @@ pub fn refused(utterance: &str) -> Option<&'static str> {
         }
     }
     None
+}
+
+/// A full upgrade may only use these words. Any other token is a package name,
+/// including one that follows "the system" or "everything".
+const UPGRADE_WORDS: &[&str] = &[
+    "upgrade",
+    "update",
+    "install",
+    "the",
+    "system",
+    "everything",
+    "all",
+    "now",
+    "status",
+    "full",
+];
+
+fn named_package(n: &str) -> bool {
+    let words: Vec<&str> = n.split_whitespace().collect();
+    if !words
+        .iter()
+        .any(|w| matches!(*w, "upgrade" | "install" | "update"))
+    {
+        return false;
+    }
+    words.iter().any(|w| !UPGRADE_WORDS.contains(w))
 }
 
 /// `..`, `~/`, a backslash, or an absolute path. Enum dirs never look like this.
@@ -213,5 +282,44 @@ mod tests {
         assert!(refused("save in code").is_none());
         assert!(refused("next libreoffice sheet").is_none());
         assert!(refused("undo in gimp").is_none());
+        assert!(refused("join the wifi").is_some());
+        assert!(refused("join the office wifi").is_some());
+        assert!(refused("connect to the wifi").is_some());
+        assert!(refused("change the ssid").is_some());
+        assert!(refused("set the dns").is_some());
+        assert!(refused("disable wifi").is_some());
+        assert!(refused("pair a device").is_some());
+        assert!(refused("format the disk").is_some());
+        assert!(refused("format my drive").is_some());
+        assert!(refused("delete the snapshot").is_some());
+        assert!(refused("delete snapshots").is_some());
+        assert!(refused("set the fan").is_some());
+        assert!(refused("set fan speed").is_some());
+        assert!(refused("set the fan to 40%").is_some());
+        assert!(refused("upgrade firefox").is_some());
+        assert!(refused("update firefox").is_some());
+        assert!(refused("install firefox").is_some());
+        assert!(refused("partial upgrade").is_some());
+        assert!(refused("apt install firefox").is_some());
+        assert!(refused("upgrade the system").is_none());
+        assert!(refused("update the system").is_none());
+        assert!(refused("update status").is_none());
+        assert!(refused("full system upgrade").is_none());
+        assert!(refused("upgrade the system firefox").is_some());
+        assert!(refused("update the system vim").is_some());
+        assert!(refused("upgrade everything firefox").is_some());
+        assert!(refused("partial system upgrade").is_some());
+        assert!(refused("upgrade the firefox package").is_some());
+        assert!(refused("how's the battery").is_none());
+        assert!(refused("connect the home vpn").is_none());
+        assert!(refused("connect the headphones").is_none());
+        assert!(refused("disconnect the headphones").is_none());
+        assert!(refused("take a snapshot").is_none());
+        assert!(refused("power saver profile").is_none());
+        assert!(refused("how's the disk").is_none());
+        assert!(refused("how many updates").is_none());
+        assert!(refused("screenshot").is_none());
+        assert!(refused("lock the screen").is_none());
+        assert!(refused("screens off").is_none());
     }
 }

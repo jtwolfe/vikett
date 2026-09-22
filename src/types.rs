@@ -169,7 +169,7 @@ pub struct Snap {
     /// Binaries an unmapped family focus may `exec_cmd`.
     #[serde(default)]
     pub bins: Vec<String>,
-    /// Closed name lists. `bookmark_folder` and `project` are discovered on the live snap.
+    /// Closed name lists. `bookmark_folder`, `project`, and `vpn` are discovered on the live snap.
     #[serde(default)]
     pub lists: BTreeMap<String, Vec<String>>,
     /// `browser.downloads` bucket. `None` keeps that ask dead (not `{ok:true}`).
@@ -187,6 +187,18 @@ pub struct Snap {
     /// Fixture hex for `look.pick`. This repo does not run hyprpicker.
     #[serde(default)]
     pub picked_hex: Option<String>,
+    /// Fraction 0.0..=1.0. `None` keeps `power.ask_battery` dead.
+    #[serde(default)]
+    pub battery: Option<f32>,
+    /// Plugged in. Does not revive a missing battery fraction.
+    #[serde(default)]
+    pub on_ac: bool,
+    /// Fraction free. `None` keeps `disk.ask` dead.
+    #[serde(default)]
+    pub disk_free: Option<f32>,
+    /// Pending package count. `None` keeps `updates.ask` dead.
+    #[serde(default)]
+    pub updates_pending: Option<u32>,
 }
 
 fn default_owner() -> String {

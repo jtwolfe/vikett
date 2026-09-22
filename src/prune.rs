@@ -323,24 +323,6 @@ pub fn is_live(page: &Page, snap: &Snap, slots: &BTreeMap<String, String>) -> Li
                 why: "no notification history".into(),
             },
         },
-        "network.ask" => match &snap.network {
-            Some(n) => Liveness {
-                ok: true,
-                why: n.clone(),
-            },
-            None => Liveness {
-                ok: false,
-                why: "network snap empty".into(),
-            },
-        },
-        "bluetooth.ask" => Liveness {
-            ok: snap.bluetooth_on,
-            why: if snap.bluetooth_on {
-                "adapter on".into()
-            } else {
-                "bluetooth off or missing".into()
-            },
-        },
         _ => Liveness {
             ok: true,
             why: "default live".into(),

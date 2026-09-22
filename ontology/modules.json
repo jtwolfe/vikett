@@ -238,5 +238,29 @@
     "driver": "reserved — no chord",
     "snap": "clients, lists.fx_preset, lists.source",
     "priority": 22
+  },
+  {
+    "id": "power",
+    "title": "Power",
+    "summary": "Profile enum power-saver, balanced, or performance. Battery ask is a bucket and dead when the fraction is missing. No fan percent.",
+    "driver": "powerprofilesctl set <profile>. Battery is an ask.",
+    "snap": "lists.power_profile, bins, battery, onAc",
+    "priority": 14
+  },
+  {
+    "id": "disk",
+    "title": "Disk",
+    "summary": "Free-space bucket. Timeshift create is owner and confirm. Format and delete stay refused.",
+    "driver": "timeshift --create --scripted. disk.ask is an ask.",
+    "snap": "diskFree, bins",
+    "priority": 13
+  },
+  {
+    "id": "updates",
+    "title": "Updates",
+    "summary": "Pending bucket. Full upgrade is owner and confirm. A free package name is refused.",
+    "driver": "pacman -Syu, else dnf upgrade, else apt full-upgrade.",
+    "snap": "updatesPending, bins",
+    "priority": 12
   }
 ]

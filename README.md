@@ -53,8 +53,11 @@ Vikett authors every legal move as a **page**. A snapshot of the world **prunes*
 | `capture` | screenshot, region (grim+slurp) | email the PNG |
 | `weather` | condition string | packing advice |
 | `session` | lock (hyprlock), screens off (dpms), owner+confirm suspend / reboot / poweroff | idle inhibit (`force_idle` is not an inhibitor). Guests are not the owner |
-| `network` | am I online | turn off wifi, free SSID |
-| `bluetooth` | is bluetooth on | pair / connect |
+| `network` | am I online; connect a named VPN (confirm) | turn off wifi, join an SSID, change DNS |
+| `bluetooth` | is bluetooth on; connect or disconnect an allowlisted device | pair |
+| `power` | power-saver / balanced / performance; battery bucket | fan percent. Battery ask is dead when the fraction is missing |
+| `disk` | free-space bucket; timeshift create (owner + confirm) | format, delete snapshots |
+| `updates` | pending bucket; full upgrade (owner + confirm) | upgrade a named package |
 
 Amounts are **notches** (`little` / `lot`), never model-invented numbers. Slots are **enums**. Policy is `household` | `private` | `owner` | `confirm`. Guests hide `private` and the whole `mail` module.
 

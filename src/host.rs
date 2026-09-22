@@ -168,6 +168,10 @@ pub fn live_snap() -> Result<Snap> {
         clipboard_kind: None,
         clipboard_count: None,
         picked_hex: None,
+        battery: None,
+        on_ac: false,
+        disk_free: None,
+        updates_pending: None,
     }
     .with_active_workspace())
 }
@@ -185,13 +189,104 @@ pub fn output_class(name: &str) -> Option<&'static str> {
     }
 }
 
-/// Bookmark folder titles and project directory names.
-/// `vpn` and `game` land with their families.
+/// Bookmark folder titles, project directory names, and VPN connection names.
+/// `game` lands with that family. Fixtures do not call this.
 pub fn discover_lists() -> BTreeMap<String, Vec<String>> {
     let mut lists = BTreeMap::new();
     lists.insert("bookmark_folder".into(), bookmark_folders());
     lists.insert("project".into(), project_names());
+    lists.insert("vpn".into(), vpn_names());
     lists
+}
+
+/// Normed `nmcli` name: lowercase words, no shell metacharacters, not a flag.
+pub fn vpn_id_ok(id: &str) -> bool {
+    let mut chars = id.chars();
+    let Some(first) = chars.next() else {
+        return false;
+    };
+    if !first.is_ascii_lowercase() && !first.is_ascii_digit() {
+        return false;
+    }
+    let len = id.chars().count();
+    if !(2..=64).contains(&len) {
+        return false;
+    }
+    if matches!(id, "wifi" | "ssid" | "dns" | "down" | "delete" | "radio") {
+        return false;
+    }
+    let mut prev_space = false;
+    for c in id.chars() {
+        let ok = c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-' || c == '_' || c == ' ';
+        if !ok || (c == ' ' && prev_space) {
+            return false;
+        }
+        prev_space = c == ' ';
+    }
+    !id.ends_with(' ')
+}
+
+/// `nmcli -t -f NAME,TYPE connection show`. Type `vpn` or `wireguard` only.
+/// The last colon separates name and type. Escaped names fail `vpn_id_ok`.
+pub fn vpn_names_from_nmcli(text: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    for line in text.lines() {
+        let line = line.trim().trim_end_matches('\r');
+        let Some((name, kind)) = line.rsplit_once(':') else {
+            continue;
+        };
+        if !matches!(
+            kind.trim().to_ascii_lowercase().as_str(),
+            "vpn" | "wireguard"
+        ) {
+            continue;
+        }
+        let Some(id) = vpn_store_name(name) else {
+            continue;
+        };
+        if out.iter().any(|e| e == &id) {
+            continue;
+        }
+        out.push(id);
+    }
+    out.sort();
+    out
+}
+
+fn vpn_names() -> Vec<String> {
+    let Ok(out) = Command::new("nmcli")
+        .args(["-t", "-f", "NAME,TYPE", "connection", "show"])
+        .output()
+    else {
+        return Vec::new();
+    };
+    if !out.status.success() {
+        return Vec::new();
+    }
+    vpn_names_from_nmcli(&String::from_utf8_lossy(&out.stdout))
+}
+
+fn vpn_store_name(raw: &str) -> Option<String> {
+    let raw = raw.trim();
+    if raw.is_empty()
+        || raw.starts_with('-')
+        || raw.starts_with(' ')
+        || raw.ends_with(' ')
+        || raw.contains("  ")
+    {
+        return None;
+    }
+    if raw
+        .chars()
+        .any(|c| !(c.is_ascii_alphanumeric() || c == ' ' || c == '-' || c == '_'))
+    {
+        return None;
+    }
+    let id = raw.to_lowercase();
+    if id != crate::text::norm(raw) || !vpn_id_ok(&id) {
+        return None;
+    }
+    Some(id)
 }
 
 /// Immediate child directory names of `~/storage` and `~/src`. No recursion.
@@ -242,6 +337,13 @@ fn present_bins() -> Vec<String> {
         "wl-copy",
         "cliphist",
         "swww",
+        "nmcli",
+        "bluetoothctl",
+        "powerprofilesctl",
+        "timeshift",
+        "pacman",
+        "dnf",
+        "apt",
     ]
     .into_iter()
     .filter(|bin| which(bin))
@@ -467,12 +569,48 @@ mod tests {
     #[test]
     fn discover_lists_has_folders_and_projects() {
         let lists = discover_lists();
-        assert_eq!(lists.len(), 2);
+        assert_eq!(lists.len(), 3);
         assert!(lists.contains_key("bookmark_folder"));
         assert!(lists.contains_key("project"));
+        assert!(lists.contains_key("vpn"));
         let projects = &lists["project"];
         assert!(projects.iter().all(|id| !id.contains('/')));
         assert!(projects.iter().all(|id| !id.starts_with('.')));
+        let vpns = &lists["vpn"];
+        assert!(vpns.iter().all(|id| vpn_id_ok(id)));
+        assert!(vpns.iter().all(|id| !id.contains('/')));
+        assert!(vpns.iter().all(|id| !id.contains(':')));
+    }
+
+    #[test]
+    fn vpn_names_are_vpn_or_wireguard_only() {
+        let text = "\
+home:vpn
+wg0:wireguard
+cafe:802-11-wireless
+Wired connection 1:802-3-ethernet
+lo:loopback
+Home:vpn
+Work VPN:vpn
+my\\:vpn:vpn
+wifi:vpn
+-evil:vpn
+";
+        let names = vpn_names_from_nmcli(text);
+        assert_eq!(
+            names,
+            vec![
+                "home".to_string(),
+                "wg0".to_string(),
+                "work vpn".to_string()
+            ]
+        );
+        assert!(!names.iter().any(|id| id.contains(':')));
+        assert!(vpn_id_ok("work vpn"));
+        assert!(!vpn_id_ok("home'"));
+        assert!(!vpn_id_ok("-flag"));
+        assert!(!vpn_id_ok("wifi"));
+        assert!(!vpn_id_ok("a"));
     }
 
     #[test]
