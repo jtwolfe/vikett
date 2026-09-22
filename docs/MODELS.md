@@ -119,6 +119,20 @@ The split is files, not a tag on `Golden`. `ontology/train.json` holds the publi
 
 Do not fine-tune so hard that lexical aliases regress — run L1 after every export.
 
+## L2 holdout gate
+
+`VIKETT_LAYA_GATE=1 ./scripts/run_prompt_suite.sh` is the specialised-referee check. Leave the variable unset for the current non-strict Laya compare: a down `:8009` skips, a miss into silence does not fail, and a `wrong_act` still does.
+
+With `VIKETT_LAYA_GATE=1` the script fails if any of these is true:
+
+- Laya is down. `http://127.0.0.1:8009/health` must answer. A skip is not a pass.
+- Holdout `wrong_act` > 0. The false-walk bar is under 1%. Any holdout wrong walk fails the gate, which is stricter than that bar.
+- Holdout take-match is under 85%. Take-match is page id plus required slots (`pass` / `total` on tag `holdout`). Exactly 85% passes.
+
+Those cases are `Catalog` holdouts from `ontology/holdout.json`, loaded beside goldens and tagged `holdout` by `from_holdout`. They are not goldens. An empty tag still fails (`holdout tag matched nothing`) and cannot look like `must_fail = 0` on zero rows.
+
+No page in this tree is household-traversable. That claim would require the page's holdout rows to clear this bar on a specialised INT8. This tree has not produced that bundle. `./jev-int8` is unchanged, no second bundle is committed, and no FP32 twin was measured. This document does not publish a holdout accuracy. A green lexical suite is not the 85% bar.
+
 ## Recommended Omarchy box
 
 1. Warm whisper.cpp, `small.en` or `tiny.en`, silence gate from BuckyBoi.
